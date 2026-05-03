@@ -975,11 +975,11 @@
       <p class="hero-sub">Daily AI-curated geopolitical briefings covering the conflicts, alliances, and power shifts that shape our world. 8 stories. 8 minutes. Delivered free, every weekday.</p>
 
       <div class="subscribe-wrap">
-        <form class="subscribe-form" action="https://buttondown.email/api/emails/embed-subscribe/simy" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/simy', 'popupwindow')">
+        <form class="subscribe-form" id="hero-form" onsubmit="handleSubscribe(event, 'hero-form')">
           <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
           <button type="submit">Subscribe Free →</button>
         </form>
-        <p class="subscribe-note">No spam. Unsubscribe anytime.</p>
+        <p class="subscribe-note" id="hero-note">No spam. Unsubscribe anytime.</p>
       </div>
     </div>
   </section>
@@ -1185,10 +1185,11 @@
         <p>Join readers who start every weekday<br>with a clear picture of the world.</p>
       </div>
       <div class="cta-form-wrap">
-        <form class="cta-form" action="https://buttondown.email/api/emails/embed-subscribe/simy" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/simy', 'popupwindow')">
+        <form class="cta-form" id="cta-form" onsubmit="handleSubscribe(event, 'cta-form')">
           <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
           <button type="submit">Subscribe — it's free →</button>
         </form>
+        <p class="subscribe-note" id="cta-note" style="text-align:center;margin-top:10px;"></p>
       </div>
     </div>
   </section>
@@ -1204,5 +1205,49 @@
     </div>
   </footer>
 
+<script>
+async function handleSubscribe(event, formId) {
+  event.preventDefault();
+  const form = document.getElementById(formId);
+  const noteId = formId === 'hero-form' ? 'hero-note' : 'cta-note';
+  const note = document.getElementById(noteId);
+  const email = form.querySelector('input[type="email"]').value;
+  const btn = form.querySelector('button');
+
+  btn.disabled = true;
+  btn.textContent = 'Subscribing...';
+  note.style.color = '';
+  note.textContent = '';
+
+  try {
+    const resp = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await resp.json();
+
+    if (resp.status === 201) {
+      form.style.display = 'none';
+      note.style.color = '#2a7a2a';
+      note.textContent = '✅ Check your inbox — a confirmation email is on its way!';
+    } else if (resp.status === 409) {
+      form.style.display = 'none';
+      note.style.color = '#b36b00';
+      note.textContent = '📬 You\'re already subscribed! Check your inbox — if you haven\'t confirmed yet, look for our confirmation email.';
+    } else {
+      note.style.color = '#cc0000';
+      note.textContent = '⚠️ Something went wrong. Please try again.';
+      btn.disabled = false;
+      btn.textContent = formId === 'hero-form' ? 'Subscribe Free →' : 'Subscribe — it\'s free →';
+    }
+  } catch (e) {
+    note.style.color = '#cc0000';
+    note.textContent = '⚠️ Network error. Please try again.';
+    btn.disabled = false;
+    btn.textContent = formId === 'hero-form' ? 'Subscribe Free →' : 'Subscribe — it\'s free →';
+  }
+}
+</script>
 </body>
 </html>

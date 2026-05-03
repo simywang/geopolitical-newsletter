@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geopolitical Briefing — Daily Intelligence Digest</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a1a2e;
+      --navy-mid: #16213e;
+      --blue: #3a5fc8;
+      --blue-light: #5579e0;
+      --cream: #faf9f6;
+      --ink: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e5e1d8;
+      --gold: #c9a84c;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--navy);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-brand {
+      color: #fff;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-issue {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-cods {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      padding: 100px 40px 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Grid texture overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(58,95,200,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,95,200,0.08) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridShift 20s linear infinite;
+    }
+
+    @keyframes gridShift {
+      from { transform: translateY(0); }
+      to   { transform: translateY(60px); }
+    }
+
+    /* Radial glow */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(ellipse, rgba(58,95,200,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .hero-headline {
+      font-size: clamp(44px, 7vw, 80px);
+      font-weight: 700;
+      line-height: 1.08;
+      color: #fff;
+      letter-spacing: -1.5px;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.65);
+      max-width: 560px;
+      margin: 0 auto 44px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.35s forwards;
+    }
+
+    /* ── SUBSCRIBE FORM ── */
+    .subscribe-wrap {
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.5s forwards;
+    }
+
+    .subscribe-form {
+      display: flex;
+      max-width: 480px;
+      margin: 0 auto;
+      gap: 0;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.2s;
+    }
+
+    .subscribe-form:focus-within {
+      border-color: rgba(58,95,200,0.7);
+      box-shadow: 0 0 0 3px rgba(58,95,200,0.15);
+    }
+
+    .subscribe-form input[type="email"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 16px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 15px;
+      color: #fff;
+      min-width: 0;
+    }
+
+    .subscribe-form input::placeholder { color: rgba(255,255,255,0.35); }
+
+    .subscribe-form button {
+      background: var(--blue);
+      border: none;
+      padding: 16px 28px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .subscribe-form button:hover { background: var(--blue-light); }
+
+    .subscribe-note {
+      margin-top: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.3px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── DIVIDER BAND ── */
+    .band {
+      background: var(--navy-mid);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .band-stat {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .band-stat strong {
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    /* ── TOPICS ── */
+    .section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .section-label {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      color: var(--navy);
+      margin-bottom: 48px;
+    }
+
+    .topics-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .topic-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 2px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      background: #fff;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .topic-chip:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: rgba(58,95,200,0.04);
+      transform: translateY(-1px);
+    }
+
+    .topic-chip .chip-icon { font-size: 16px; }
+
+    /* ── DIVIDER LINE ── */
+    .rule {
+      max-width: 900px;
+      margin: 0 auto;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 0;
+    }
+
+    .step {
+      background: #fff;
+      padding: 40px 36px;
+      position: relative;
+    }
+
+    .step-num {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-num::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(58,95,200,0.2);
+    }
+
+    .step-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+
+    .step h3 {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+      color: var(--navy);
+    }
+
+    .step p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--muted);
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    }
+
+    /* ── SAMPLE CTA ── */
+    .cta-section {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(58,95,200,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58,95,200,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 60px;
+    }
+
+    .cta-text h2 {
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.15;
+    }
+
+    .cta-text p {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+    }
+
+    .cta-form-wrap { flex-shrink: 0; width: 320px; }
+
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cta-form input[type="email"] {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 3px;
+      padding: 14px 18px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 15px;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .cta-form input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .cta-form input:focus {
+      border-color: var(--blue);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .cta-form button {
+      background: var(--blue);
+      border: none;
+      border-radius: 3px;
+      padding: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+
+    .cta-form button:hover { background: var(--blue-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #111120;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 32px 40px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-size: 15px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 10px;
+    }
+
+    .footer-meta {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.3px;
+    }
+
+    .footer-meta span {
+      display: inline-block;
+      padding: 0 12px;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-meta span:last-child { border-right: none; }
+
+    /* ── CEO QUOTE ── */
+    .quote-section {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .quote-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      display: flex;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .ceo-photo {
+      flex-shrink: 0;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 3px solid var(--border);
+      box-shadow: 0 8px 32px rgba(26,26,46,0.12);
+    }
+
+    .quote-body blockquote {
+      font-size: 22px;
+      line-height: 1.55;
+      font-style: italic;
+      color: var(--navy);
+      letter-spacing: -0.2px;
+      margin-bottom: 24px;
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .quote-body blockquote::before {
+      content: '\201C';
+      position: absolute;
+      left: 0;
+      top: -4px;
+      font-size: 48px;
+      color: var(--blue);
+      line-height: 1;
+      font-style: normal;
+    }
+
+    .quote-attr {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .quote-attr-line {
+      width: 32px;
+      height: 2px;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+
+    .quote-attr-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    }
+
+    .quote-attr-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 0.2px;
+    }
+
+    .quote-attr-title {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .cods-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 20px;
+    }
+
+    .cods-badge::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    @media (max-width: 768px) {
+      .quote-inner {
+        flex-direction: column;
+        gap: 32px;
+        padding: 60px 24px;
+        text-align: center;
+      }
+      .quote-body blockquote { font-size: 18px; }
+      .quote-attr { justify-content: center; }
+    }
+
+    /* ── EMAIL PREVIEW ── */
+    .preview-section {
+      background: #f1f3f4;
+      padding: 80px 40px;
+    }
+
+    .preview-section > .section-label { display: block; max-width: 1100px; margin: 0 auto 16px; color: var(--blue); }
+    .preview-section > .section-title { display: block; max-width: 1100px; margin: 0 auto 48px; color: var(--navy); }
+
+    .gmail-window {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 32px 100px rgba(0,0,0,0.22), 0 4px 20px rgba(0,0,0,0.1);
+      border: 1px solid #dadce0;
+    }
+
+    /* Gmail chrome top bar */
+    .gmail-chrome {
+      background: #fff;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .gmail-dots { display: flex; gap: 6px; flex-shrink: 0; margin-right: 4px; }
+    .gmail-dots span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+    .gmail-dots span:nth-child(1) { background: #ff5f57; }
+    .gmail-dots span:nth-child(2) { background: #febc2e; }
+    .gmail-dots span:nth-child(3) { background: #28c840; }
+
+    .gmail-hamburger {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: default; flex-shrink: 0;
+    }
+    .gmail-hamburger svg { width: 18px; height: 18px; fill: #444; }
+
+    .gmail-logo {
+      display: flex; align-items: center; gap: 4px;
+      font-family: 'Product Sans', -apple-system, sans-serif;
+      font-size: 22px; font-weight: 400; color: #5f6368;
+      flex-shrink: 0; margin-right: 8px;
+      user-select: none;
+    }
+    .gmail-logo-g { color: #4285f4; }
+    .gmail-logo-m { color: #ea4335; }
+    .gmail-logo-a { color: #fbbc05; }
+    .gmail-logo-i { color: #4285f4; }
+    .gmail-logo-l { color: #34a853; }
+
+    .gmail-search-bar {
+      flex: 1;
+      background: #eaf1fb;
+      border-radius: 24px;
+      padding: 9px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 16px;
+      color: #202124;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .gmail-search-bar svg { width: 20px; height: 20px; fill: #444; flex-shrink: 0; }
+    .gmail-search-text { color: #202124; font-size: 15px; }
+    .gmail-search-filter { margin-left: auto; }
+    .gmail-search-filter svg { width: 20px; height: 20px; fill: #444; }
+
+    .gmail-chrome-right {
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 8px;
+    }
+    .gmail-icon-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .gmail-icon-btn svg { width: 20px; height: 20px; fill: #444; }
+    .gmail-user-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #8ab4f8; color: #fff;
+      font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Gmail 3-column body */
+    .gmail-body {
+      display: flex;
+      background: #fff;
+      height: 560px;
+    }
+
+    /* Sidebar */
+    .gmail-sidebar {
+      width: 256px;
+      flex-shrink: 0;
+      background: #fff;
+      padding: 8px 0;
+      border-right: 1px solid #e0e0e0;
+      overflow-y: auto;
+    }
+
+    .gmail-compose-btn {
+      margin: 4px 12px 8px;
+      background: #c2e7ff;
+      border-radius: 16px;
+      padding: 14px 24px 14px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 14px; font-weight: 600; color: #001d35;
+      display: flex; align-items: center; gap: 12px;
+      cursor: default; letter-spacing: 0.1px;
+    }
+    .gmail-compose-btn svg { width: 20px; height: 20px; fill: #001d35; flex-shrink: 0; }
+
+    .gmail-nav-item {
+      padding: 4px 16px 4px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 14px; color: #202124;
+      display: flex; align-items: center; gap: 16px;
+      border-radius: 0 24px 24px 0;
+      margin-right: 16px;
+      min-height: 36px;
+      cursor: default;
+    }
+    .gmail-nav-item.active { background: #d3e3fd; font-weight: 600; }
+    .gmail-nav-item svg { width: 20px; height: 20px; fill: #444; flex-shrink: 0; }
+    .gmail-nav-item.active svg { fill: #001d35; }
+    .gmail-nav-count {
+      margin-left: auto;
+      font-size: 12px; font-weight: 400; color: #202124;
+    }
+
+    /* Inbox list */
+    .gmail-inbox {
+      width: 320px;
+      flex-shrink: 0;
+      border-right: 1px solid #e0e0e0;
+      overflow-y: auto;
+      background: #fff;
+    }
+
+    .gmail-inbox-toolbar {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #fff;
+    }
+
+    .gmail-inbox-toolbar svg { width: 18px; height: 18px; fill: #444; }
+
+    .gmail-tab-bar {
+      display: flex;
+      border-bottom: 1px solid #e0e0e0;
+      background: #fff;
+    }
+    .gmail-tab {
+      padding: 12px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 13px; color: #444;
+      display: flex; align-items: center; gap: 8px;
+      cursor: default; border-bottom: 2px solid transparent;
+    }
+    .gmail-tab.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 500; }
+    .gmail-tab svg { width: 16px; height: 16px; fill: currentColor; }
+
+    .gmail-email-row {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #f1f3f4;
+      cursor: default;
+      position: relative;
+    }
+    .gmail-email-row.selected { background: #e8f0fe; }
+    .gmail-email-row.unread .gmail-row-sender { font-weight: 700; }
+    .gmail-email-row.unread .gmail-row-subject { font-weight: 700; color: #202124; }
+
+    .gmail-row-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: -apple-system, sans-serif; font-size: 14px; font-weight: 600;
+      color: #fff; flex-shrink: 0;
+    }
+
+    .gmail-row-content { flex: 1; min-width: 0; }
+    .gmail-row-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2px; }
+    .gmail-row-sender { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-size: 13px; color: #202124; }
+    .gmail-row-time { font-family: -apple-system, sans-serif; font-size: 12px; color: #5f6368; flex-shrink: 0; margin-left: 8px; }
+    .gmail-row-subject { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-size: 13px; color: #202124; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .gmail-row-preview { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-size: 12px; color: #5f6368; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .gmail-row-star { font-size: 14px; color: #f5a623; flex-shrink: 0; }
+
+    /* Email content */
+    .gmail-email-panel {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    .gmail-email-header {
+      padding: 16px 24px 14px;
+      border-bottom: 1px solid #e0e0e0;
+      flex-shrink: 0;
+    }
+
+    .gmail-subject-line {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: 20px; font-weight: 400; color: #202124;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    }
+
+    .gmail-meta { display: flex; align-items: center; gap: 10px; }
+    .gmail-sender-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--navy); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      font-family: -apple-system, sans-serif; flex-shrink: 0;
+    }
+    .gmail-from { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; }
+    .gmail-from-name { font-size: 13px; font-weight: 600; color: #202124; }
+    .gmail-from-addr { font-size: 12px; color: #5f6368; }
+    .gmail-time { margin-left: auto; font-family: -apple-system, sans-serif; font-size: 12px; color: #5f6368; flex-shrink: 0; }
+
+    .gmail-email-body {
+      flex: 1;
+      padding: 20px 24px;
+      overflow-y: auto;
+      background: #f6f8fc;
+    }
+
+    .email-card {
+      max-width: 580px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      font-family: Georgia, serif;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .email-card-header {
+      background: #fff; border-bottom: 3px solid var(--navy);
+      padding: 20px 28px 16px;
+    }
+    .email-card-header h2 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .email-card-header p { font-family: -apple-system, sans-serif; font-size: 11px; color: #888; }
+
+    .email-overview { background: #f0f4ff; border-left: 4px solid var(--blue); padding: 14px 28px; }
+    .email-overview-label {
+      font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 6px;
+    }
+    .email-overview p { font-size: 12px; line-height: 1.65; color: #333; }
+
+    .email-articles { padding: 0 28px; }
+    .email-article { padding: 16px 0; border-bottom: 1px solid #eee; }
+    .email-article:last-child { border-bottom: none; }
+    .email-article-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .email-article-num { font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 700; color: #999; }
+    .email-article-source {
+      font-family: -apple-system, sans-serif; font-size: 10px;
+      background: #eef2ff; color: var(--blue); padding: 2px 7px;
+      border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .email-article h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 5px; line-height: 1.4; }
+    .email-article p { font-size: 12px; line-height: 1.65; color: #555; }
+    .email-why { background: #fffbf0; border-left: 3px solid #f0a500; padding: 8px 12px; margin-top: 8px; }
+    .email-why strong {
+      font-family: -apple-system, sans-serif; font-size: 9px; text-transform: uppercase;
+      letter-spacing: 0.5px; color: #c07800; display: block; margin-bottom: 3px;
+    }
+    .email-why p { font-size: 11px; color: #666; margin: 0; }
+
+    .email-fade {
+      background: linear-gradient(to bottom, transparent, #f6f8fc);
+      height: 60px; margin-top: -60px; position: relative; pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      .preview-section { padding: 60px 16px; }
+      .gmail-sidebar, .gmail-inbox { display: none; }
+      .gmail-body { height: 480px; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .hero { padding: 70px 24px 90px; }
+      .section { padding: 60px 24px; }
+      .band { gap: 20px; padding: 16px 24px; }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-inner {
+        flex-direction: column;
+        gap: 40px;
+        padding: 60px 24px;
+      }
+
+      .cta-form-wrap { width: 100%; }
+
+      footer { padding: 28px 24px; }
+      .footer-meta span { display: block; border-right: none; padding: 4px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .subscribe-form {
+        flex-direction: column;
+        border-radius: 4px;
+      }
+      .subscribe-form input[type="email"] {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      .subscribe-form button {
+        border-radius: 0;
+      }
+      .nav-issue { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-brand">🌍 Geopolitical Briefing</a>
+    <div class="nav-right">
+      <span class="nav-issue">Daily Intelligence</span>
+      <span class="nav-cods">CODS</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">AI-Curated · Free · Every Weekday</div>
+      <h1 class="hero-headline">Stay <em>Ahead</em><br>of the World.</h1>
+      <p class="hero-sub">Daily AI-curated geopolitical briefings covering the conflicts, alliances, and power shifts that shape our world. 8 stories. 8 minutes. Delivered free, every weekday.</p>
+
+      <div class="subscribe-wrap">
+        <form class="subscribe-form" action="https://buttondown.email/api/emails/embed-subscribe/CODS_" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/CODS_', 'popupwindow')">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Subscribe Free →</button>
+        </form>
+        <p class="subscribe-note">No spam. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CEO QUOTE -->
+  <section class="quote-section">
+    <div class="quote-inner">
+      <img class="ceo-photo" src="ceo.jpg" alt="Tejinder Singh Saraon" onerror="this.style.display='none'">
+      <div class="quote-body">
+        <blockquote>
+          Geopolitical awareness is no longer a privilege of the few. When AI distills the world's noise into signal, informed decision-making becomes possible for everyone.
+        </blockquote>
+        <div class="quote-attr">
+          <div class="quote-attr-line"></div>
+          <div class="quote-attr-text">
+            <div class="quote-attr-name">Tejinder Singh Saraon</div>
+            <div class="quote-attr-title">Managing Director & CEO, Cocoa</div>
+          </div>
+        </div>
+        <div class="cods-badge">A CODS Production</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL PREVIEW -->
+  <section class="preview-section">
+    <p class="section-label">In your inbox</p>
+    <h2 class="section-title">This is what you'll receive.</h2>
+
+    <div class="gmail-window">
+      <div class="gmail-chrome">
+        <div class="gmail-dots"><span></span><span></span><span></span></div>
+        <div class="gmail-hamburger"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
+        <div class="gmail-logo"><span class="gmail-logo-g">G</span><span class="gmail-logo-m">m</span><span class="gmail-logo-a">a</span><span class="gmail-logo-i">i</span><span class="gmail-logo-l">l</span></div>
+        <div class="gmail-search-bar">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <span class="gmail-search-text">Search in mail</span>
+          <span class="gmail-search-filter"><svg viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg></span>
+        </div>
+        <div class="gmail-chrome-right">
+          <div class="gmail-icon-btn"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div>
+          <div class="gmail-icon-btn"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
+          <div class="gmail-icon-btn"><svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></div>
+          <div class="gmail-user-avatar">Y</div>
+        </div>
+      </div>
+      <div class="gmail-body">
+        <div class="gmail-sidebar">
+          <div class="gmail-compose-btn"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Compose</div>
+          <div class="gmail-nav-item active"><svg viewBox="0 0 24 24"><path d="M19 3H4.99C3.89 3 3 3.9 3 5L3.01 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg> Inbox <span class="gmail-nav-count">24</span></div>
+          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> Starred</div>
+          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Sent</div>
+          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg> Drafts <span class="gmail-nav-count">3</span></div>
+          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> More</div>
+        </div>
+        <div class="gmail-inbox">
+          <div class="gmail-tab-bar">
+            <div class="gmail-tab active"><svg viewBox="0 0 24 24"><path d="M19 3H4.99C3.89 3 3 3.9 3 5L3.01 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg> Primary</div>
+            <div class="gmail-tab"><svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z"/></svg> Promotions</div>
+            <div class="gmail-tab"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> Updates</div>
+          </div>
+          <div class="gmail-email-row selected unread">
+            <div class="gmail-row-avatar" style="background:#1a1a2e">🌍</div>
+            <div class="gmail-row-content">
+              <div class="gmail-row-header"><span class="gmail-row-sender">Geopolitical Briefing</span><span class="gmail-row-time">8:00 AM</span></div>
+              <div class="gmail-row-subject">🌍 Geopolitical Briefing — May 3, 2026</div>
+              <div class="gmail-row-preview">Today's Overview: US–Iran ceasefire, NATO troop withdrawal, China sanctions...</div>
+            </div>
+            <span class="gmail-row-star">★</span>
+          </div>
+          <div class="gmail-email-row">
+            <div class="gmail-row-avatar" style="background:#0f9d58">L</div>
+            <div class="gmail-row-content">
+              <div class="gmail-row-header"><span class="gmail-row-sender">LinkedIn</span><span class="gmail-row-time">7:42 AM</span></div>
+              <div class="gmail-row-subject">3 new connection requests</div>
+              <div class="gmail-row-preview">Sarah Chen and 2 others want to connect with you</div>
+            </div>
+          </div>
+          <div class="gmail-email-row">
+            <div class="gmail-row-avatar" style="background:#4285f4">G</div>
+            <div class="gmail-row-content">
+              <div class="gmail-row-header"><span class="gmail-row-sender">Google Workspace</span><span class="gmail-row-time">Yesterday</span></div>
+              <div class="gmail-row-subject">Your May storage report</div>
+              <div class="gmail-row-preview">You're using 8.2 GB of your 15 GB storage</div>
+            </div>
+          </div>
+          <div class="gmail-email-row">
+            <div class="gmail-row-avatar" style="background:#ea4335">N</div>
+            <div class="gmail-row-content">
+              <div class="gmail-row-header"><span class="gmail-row-sender">Netflix</span><span class="gmail-row-time">May 2</span></div>
+              <div class="gmail-row-subject">New this week on Netflix</div>
+              <div class="gmail-row-preview">Watch what's new — curated just for you this weekend</div>
+            </div>
+          </div>
+          <div class="gmail-email-row">
+            <div class="gmail-row-avatar" style="background:#9c27b0">S</div>
+            <div class="gmail-row-content">
+              <div class="gmail-row-header"><span class="gmail-row-sender">Slack</span><span class="gmail-row-time">May 1</span></div>
+              <div class="gmail-row-subject">You have 5 unread messages</div>
+              <div class="gmail-row-preview">Messages from #general and #design channels</div>
+            </div>
+          </div>
+        </div>
+        <div class="gmail-email-panel">
+          <div class="gmail-email-header">
+            <div class="gmail-subject-line">🌍 Geopolitical Briefing — May 3, 2026</div>
+            <div class="gmail-meta">
+              <div class="gmail-sender-avatar">GB</div>
+              <div class="gmail-from">
+                <div class="gmail-from-name">Geopolitical Briefing</div>
+                <div class="gmail-from-addr">briefing@buttondown.email · to me</div>
+              </div>
+              <div class="gmail-time">8:00 AM</div>
+            </div>
+          </div>
+          <div class="gmail-email-body">
+            <div class="email-card">
+              <div class="email-card-header"><h2>🌍 Geopolitical Briefing</h2><p>May 3, 2026</p></div>
+              <div class="email-overview">
+                <div class="email-overview-label">Today's Overview</div>
+                <p>Today's geopolitical landscape is dominated by overlapping crises. The US–Iran ceasefire remains fragile as Trump argues congressional approval is unnecessary. The US has authorized $8.6B in emergency arms sales to Middle Eastern allies. In Europe, withdrawal of 5,000 US troops from Germany has alarmed NATO partners...</p>
+              </div>
+              <div class="email-articles">
+                <div class="email-article">
+                  <div class="email-article-meta"><span class="email-article-num">#1</span><span class="email-article-source">Reuters</span></div>
+                  <h4>Trump Claims Ceasefire Eliminates Need for Congressional War Authorization</h4>
+                  <p>President Trump argued that the US–Iran ceasefire obviates the need for congressional approval, as Iran proposed a new 14-point peace plan.</p>
+                  <div class="email-why"><strong>Why it matters</strong><p>A precedent on executive war powers could reshape US foreign policy for decades.</p></div>
+                </div>
+                <div class="email-article">
+                  <div class="email-article-meta"><span class="email-article-num">#2</span><span class="email-article-source">BBC</span></div>
+                  <h4>US Withdraws 5,000 Troops from Germany, NATO Partners Alarmed</h4>
+                  <p>The Pentagon announced withdrawal of troops from Germany with hints of deeper cuts, alarming NATO partners and senior Republicans.</p>
+                  <div class="email-why"><strong>Why it matters</strong><p>NATO cohesion faces its most serious stress test since the Cold War.</p></div>
+                </div>
+              </div>
+            </div>
+            <div class="email-fade"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <div class="band">
+    <span class="band-stat"><strong>13</strong> global sources</span>
+    <span class="band-stat"><strong>8</strong> stories selected daily</span>
+    <span class="band-stat"><strong>AI</strong> analysis & context</span>
+    <span class="band-stat"><strong>08:00</strong> Amsterdam time</span>
+  </div>
+
+  <!-- TOPICS -->
+  <section class="section">
+    <p class="section-label">Coverage</p>
+    <h2 class="section-title">What we track,<br>so you don't have to.</h2>
+    <div class="topics-grid">
+      <div class="topic-chip"><span class="chip-icon">🕌</span> Middle East</div>
+      <div class="topic-chip"><span class="chip-icon">⚔️</span> Russia–Ukraine</div>
+      <div class="topic-chip"><span class="chip-icon">🐉</span> US–China Relations</div>
+      <div class="topic-chip"><span class="chip-icon">🛡️</span> NATO & Alliances</div>
+      <div class="topic-chip"><span class="chip-icon">🚫</span> Sanctions & Diplomacy</div>
+      <div class="topic-chip"><span class="chip-icon">☢️</span> Nuclear & Security</div>
+      <div class="topic-chip"><span class="chip-icon">📦</span> Trade Wars</div>
+      <div class="topic-chip"><span class="chip-icon">⚡</span> Energy & Resources</div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Intelligence, automated.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">Step 01</div>
+        <span class="step-icon">📡</span>
+        <h3>13 global sources monitored daily</h3>
+        <p>Reuters, BBC, Al Jazeera, The Guardian, CFR, Reddit, and Google News — scanned every morning for breaking developments.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 02</div>
+        <span class="step-icon">🤖</span>
+        <h3>AI selects the 8 most important stories</h3>
+        <p>Our AI ranks by geopolitical significance and writes concise, analyst-quality summaries with context and implications.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 03</div>
+        <span class="step-icon">📬</span>
+        <h3>Delivered to your inbox by 8am</h3>
+        <p>Every weekday morning, your briefing arrives before the workday starts — ready to read in under 10 minutes.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <h2>Start your morning<br>briefing today.</h2>
+        <p>Join readers who start every weekday<br>with a clear picture of the world.</p>
+      </div>
+      <div class="cta-form-wrap">
+        <form class="cta-form" action="https://buttondown.email/api/emails/embed-subscribe/CODS_" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/CODS_', 'popupwindow')">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Subscribe — it's free →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">🌍 Geopolitical Briefing</div>
+    <div class="footer-meta">
+      <span>Free</span>
+      <span>Every weekday</span>
+      <span>Unsubscribe anytime</span>
+      <span>Powered by AI</span>
+    </div>
+  </footer>
+
+</body>
+</html>

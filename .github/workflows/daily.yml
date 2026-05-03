@@ -1,0 +1,49 @@
+name: Daily Geopolitical Briefing
+
+on:
+  schedule:
+    # UTC 06:00 = Amsterdam summer time (CEST) 08:00
+    # Change to '0 7 * * 1-5' in winter (CET, UTC+1)
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'DRY_RUN (true = skip Buttondown)'
+        required: false
+        default: 'false'
+      send_mode:
+        description: 'SEND_MODE (draft | send)'
+        required: false
+        default: 'draft'
+
+jobs:
+  send-briefing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run briefing
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          AI_MODEL: ${{ vars.AI_MODEL || 'claude' }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514' }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-v4-flash' }}
+          GLM_MODEL: ${{ vars.GLM_MODEL || 'glm-4.7-flash' }}
+          SEND_MODE: ${{ github.event.inputs.send_mode || vars.SEND_MODE || 'draft' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: python src/main.py

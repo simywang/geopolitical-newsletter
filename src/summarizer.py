@@ -85,7 +85,7 @@ def _call_claude(prompt: str) -> str:
     client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
     message = client.messages.create(
         model=config.ANTHROPIC_MODEL,
-        max_tokens=4096,
+        max_tokens=8192,
         system=_SYSTEM,
         messages=[{"role": "user", "content": prompt}],
     )
@@ -101,7 +101,7 @@ def _call_openai_compat(prompt: str, base_url: str, api_key: str, model: str) ->
             {"role": "system", "content": _SYSTEM},
             {"role": "user", "content": prompt},
         ],
-        max_tokens=4096,
+        max_tokens=8192,
         temperature=0.3,
     )
     return response.choices[0].message.content

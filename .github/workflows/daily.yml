@@ -1,11 +1,9 @@
 name: Daily Geopolitical Briefing
 
 on:
-  schedule:
-    # UTC 06:00 = Amsterdam summer time (CEST) 08:00
-    # Change to '0 7 * * 1-5' in winter (CET, UTC+1)
-    - cron: '0 6 * * 1-5'
   workflow_dispatch:
+    # Triggered daily by cron-job.org at UTC 06:00 (Amsterdam 08:00 CEST)
+    # cron-job.org is the sole scheduler — no GitHub schedule to avoid duplicate sends
     inputs:
       dry_run:
         description: 'DRY_RUN (true = skip Buttondown)'

@@ -14,7 +14,7 @@ on:
       send_mode:
         description: 'SEND_MODE (draft | send)'
         required: false
-        default: 'draft'
+        default: ''
 
 jobs:
   send-briefing:

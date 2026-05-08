@@ -59,15 +59,18 @@ jobs:
           GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VOLC_TTS_APP_ID: ${{ secrets.VOLC_TTS_APP_ID }}
-          VOLC_TTS_ACCESS_TOKEN: ${{ secrets.VOLC_TTS_ACCESS_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VOLC_API_KEY: ${{ secrets.VOLC_API_KEY }}
           AI_MODEL: ${{ vars.AI_MODEL || 'claude' }}
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514' }}
           DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-v4-flash' }}
           GLM_MODEL: ${{ vars.GLM_MODEL || 'glm-4.7-flash' }}
-          VOLC_TTS_CLUSTER: ${{ vars.VOLC_TTS_CLUSTER || 'volcano_tts' }}
-          VOLC_VOICE_A: ${{ vars.VOLC_VOICE_A || 'en_female_sarah' }}
-          VOLC_VOICE_B: ${{ vars.VOLC_VOICE_B || 'en_male_adam' }}
+          VOLC_TTS_RESOURCE_ID: ${{ vars.VOLC_TTS_RESOURCE_ID || 'seed-tts-2.0' }}
+          VOLC_VOICE_A: ${{ vars.VOLC_VOICE_A || 'en_female_dacey_uranus_bigtts' }}
+          VOLC_VOICE_B: ${{ vars.VOLC_VOICE_B || 'en_male_tim_uranus_bigtts' }}
+          PODCAST_TTS_MODEL: ${{ vars.PODCAST_TTS_MODEL || 'tts-1-hd' }}
+          PODCAST_VOICE_A: ${{ vars.PODCAST_VOICE_A || 'nova' }}
+          PODCAST_VOICE_B: ${{ vars.PODCAST_VOICE_B || 'onyx' }}
           PODCAST_SITE_URL: ${{ vars.PODCAST_SITE_URL || 'https://geopolitical-newsletter.vercel.app' }}
           GITHUB_REPO: ${{ vars.GITHUB_REPO || 'simywang/geopolitical-newsletter' }}
           SEND_MODE: ${{ github.event.inputs.send_mode || vars.SEND_MODE || 'draft' }}

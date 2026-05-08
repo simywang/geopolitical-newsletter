@@ -17,24 +17,39 @@ RSS_PATH = REPO_ROOT / "podcast.xml"
 
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
 
-# Volcengine TTS endpoint
-_VOLC_TTS_URL = "https://openspeech.bytedance.com/api/v1/tts"
-# Max bytes per Volcengine TTS request
-_VOLC_MAX_BYTES = 900  # conservative, limit is 1024
-
-_DIALOGUE_SYSTEM = """You are a podcast script writer for a daily geopolitical briefing show.
-Convert the provided news briefing JSON into a natural two-host dialogue.
+_DIALOGUE_SYSTEM = """You are a podcast script writer for a fast-paced, emotionally engaging daily geopolitical show.
+Write a two-host dialogue that sounds like a real conversation — NOT a news read.
 
 Hosts:
-- Sarah (speaker A): reports headlines and key facts clearly and concisely
-- James (speaker B): adds context, analysis, and explains why each story matters
+- Sarah (speaker A): sharp, opinionated, emotionally reactive. Gets surprised, worried, excited. Pushes back. Asks pointed questions. Short punchy lines.
+- James (speaker B): analytical but passionate — not dry. Builds on Sarah's reactions, drops context like a revelation, uses rhetorical questions to draw listeners in.
 
-Rules:
-- Conversational and engaging — not a news reading
-- Total length: ~700-800 words when spoken aloud (~5 minutes)
+CRITICAL rules for emotional, natural speech:
+- Keep each turn SHORT: 1-3 sentences maximum. Rapid back-and-forth. No monologues.
+- Sarah reacts with GENUINE emotion every story: "Wait — seriously?", "That's wild.", "Okay, that's actually terrifying.", "Hold on —", "No way."
+- James matches energy: "Right? And here's the thing nobody's talking about —", "Exactly. And it gets worse.", "So think about it this way —"
+- Use contractions everywhere: it's, we're, didn't, you'd, that's, what's, who's, I'd
+- Use trailing em dashes for natural interruptions/pauses: "And look —", "The thing is —", "But here's what I keep thinking —"
+- Use ellipsis for hesitation: "I mean... where do you even start with this?"
+- Vary energy: some exchanges fast (2-word reactions), some slow (a beat of reflection)
+- NO reading lists. Convert every bullet into a natural sentence in conversation.
+- Open with a punchy hook. Close with a genuine "see you tomorrow" warmth.
+- Total: ~600-750 words spoken aloud (~5 minutes)
 - Do NOT mention URLs, source names, or publication names
 - Return ONLY a valid JSON array, no markdown fences, no extra text:
-[{"speaker": "A", "text": "..."}, {"speaker": "B", "text": "..."}, ...]"""
+[{"speaker": "A", "text": "..."}, {"speaker": "B", "text": "..."}, ...]
+
+EXAMPLE of the right energy:
+[
+  {"speaker": "A", "text": "Okay, I have to say — this week has been a lot."},
+  {"speaker": "B", "text": "It really has. And it's only going to get more intense."},
+  {"speaker": "A", "text": "Let's get into it. First up —"},
+  {"speaker": "B", "text": "Right, so here's what happened —"},
+  {"speaker": "A", "text": "Wait, seriously? That fast?"},
+  {"speaker": "B", "text": "That fast. And look — this isn't the first time we've seen this play out."},
+  {"speaker": "A", "text": "Okay, so what does that mean for —"},
+  {"speaker": "B", "text": "That's exactly the right question."}
+]"""
 
 _DIALOGUE_USER = """Convert this briefing into a podcast dialogue. Date: {date}
 
@@ -51,9 +66,9 @@ def build_dialogue_script(data: dict, date_str: str) -> list[dict]:
         "overview": data.get("overview", ""),
         "stories": [
             {
-                "title": a["title"],
-                "summary": a["summary"],
-                "why_it_matters": a["why_it_matters"],
+                "title": a.get("title", ""),
+                "summary": a.get("summary", ""),
+                "why_it_matters": a.get("why_it_matters", ""),
             }
             for a in data.get("articles", [])
         ],
@@ -109,94 +124,71 @@ def build_dialogue_script(data: dict, date_str: str) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Step 2: Text-to-speech → MP3  (Volcengine TTS)
+# Step 2: Text-to-speech → MP3
 # ---------------------------------------------------------------------------
 
-def _split_text(text: str, max_bytes: int = _VOLC_MAX_BYTES) -> list[str]:
-    """Split text into chunks that fit within Volcengine's byte limit.
-
-    Splits on sentence boundaries (. ! ?) first, then on commas, then hard-cuts.
-    """
-    if len(text.encode("utf-8")) <= max_bytes:
-        return [text]
-
-    chunks: list[str] = []
-    # Split on sentence-ending punctuation
-    sentences = re.split(r"(?<=[.!?])\s+", text)
-    current = ""
-    for sentence in sentences:
-        candidate = (current + " " + sentence).strip() if current else sentence
-        if len(candidate.encode("utf-8")) <= max_bytes:
-            current = candidate
-        else:
-            if current:
-                chunks.append(current)
-            # If a single sentence is still too long, split on commas
-            if len(sentence.encode("utf-8")) > max_bytes:
-                parts = re.split(r",\s*", sentence)
-                sub = ""
-                for part in parts:
-                    cand2 = (sub + ", " + part).strip(", ") if sub else part
-                    if len(cand2.encode("utf-8")) <= max_bytes:
-                        sub = cand2
-                    else:
-                        if sub:
-                            chunks.append(sub)
-                        sub = part
-                if sub:
-                    chunks.append(sub)
-            else:
-                current = sentence
-    if current:
-        chunks.append(current)
-    return chunks
+_VOLC_TTS_URL = "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
+_volc_session = requests.Session()
 
 
-def _volc_tts_chunk(text: str, voice: str) -> bytes:
-    """Call Volcengine TTS for a single text chunk. Returns raw MP3 bytes."""
+_VOLC_CONTEXT_A = "Speak as Sarah, a sharp and emotionally reactive podcast host. React with genuine surprise, concern, or excitement. Use natural rising and falling intonation. Short punchy sentences. Sound like you're actually talking to your co-host, not reading. Vary your pace — speed up when excited, slow down on key words."
+_VOLC_CONTEXT_B = "Speak as James, a passionate analyst who loves revealing hidden angles. Sound like you're letting someone in on something important. Build energy as the sentence progresses. Pause naturally before key insights. Warm but confident — never monotone or lecture-like."
+
+
+def _volc_tts(text: str, voice: str, context: str = "") -> bytes:
+    """Call Volcengine 豆包 TTS V3 (API Key only). Returns raw MP3 bytes."""
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer;{config.VOLC_TTS_ACCESS_TOKEN}",
+        "X-Api-Key": config.VOLC_API_KEY,
+        "X-Api-Resource-Id": config.VOLC_TTS_RESOURCE_ID,
+        "X-Api-Request-Id": str(uuid.uuid4()),
     }
+    req_params: dict = {
+        "text": text,
+        "speaker": voice,
+        "audio_params": {"format": "mp3", "sample_rate": 24000},
+    }
+    if context:
+        req_params["additions"] = json.dumps({"context_texts": [context]})
     body = {
-        "app": {
-            "appid": config.VOLC_TTS_APP_ID,
-            "token": config.VOLC_TTS_ACCESS_TOKEN,
-            "cluster": config.VOLC_TTS_CLUSTER,
-        },
         "user": {"uid": "podcast_bot"},
-        "audio": {
-            "voice_type": voice,
-            "encoding": "mp3",
-            "speed_ratio": 1.0,
-            "rate": 24000,
-            "loudness_ratio": 1.0,
-        },
-        "request": {
-            "reqid": str(uuid.uuid4()),
-            "text": text,
-            "operation": "query",
-        },
+        "req_params": req_params,
     }
-    resp = requests.post(_VOLC_TTS_URL, headers=headers, json=body, timeout=30)
+    resp = _volc_session.post(_VOLC_TTS_URL, headers=headers, json=body, stream=True, timeout=60)
     resp.raise_for_status()
-    result = resp.json()
-    if result.get("code") != 3000:
-        raise RuntimeError(
-            f"Volcengine TTS error code={result.get('code')}: {result.get('message')}"
-        )
-    return base64.b64decode(result["data"])
+
+    chunks: list[bytes] = []
+    for line in resp.iter_lines():
+        if not line:
+            continue
+        data = json.loads(line)
+        code = data.get("code", 0)
+        if code == 20000000:
+            break
+        if code != 0:
+            raise RuntimeError(f"Volcengine TTS error code={code}: {data.get('message')}")
+        if data.get("data"):
+            chunks.append(base64.b64decode(data["data"]))
+    return b"".join(chunks)
 
 
 def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
-    """Convert dialogue to a single MP3 using Volcengine TTS.
+    """Convert dialogue to a single MP3 using OpenAI TTS.
 
     Returns (mp3_bytes, duration_seconds).
     """
     from pydub import AudioSegment
 
-    voice_a = config.VOLC_VOICE_A   # en_female_sarah
-    voice_b = config.VOLC_VOICE_B   # en_male_adam
+    use_volc = bool(config.VOLC_API_KEY)
+    if use_volc:
+        voice_a = config.VOLC_VOICE_A
+        voice_b = config.VOLC_VOICE_B
+        print(f"[podcast] TTS provider: Volcengine ({config.VOLC_TTS_RESOURCE_ID})")
+    else:
+        import openai
+        _openai_client = openai.OpenAI(api_key=config.OPENAI_API_KEY)
+        voice_a = config.PODCAST_VOICE_A
+        voice_b = config.PODCAST_VOICE_B
+        print(f"[podcast] TTS provider: OpenAI ({config.PODCAST_TTS_MODEL})")
 
     segments: list[AudioSegment] = []
     silence_short = AudioSegment.silent(duration=300)
@@ -210,14 +202,19 @@ def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
             continue
 
         voice = voice_a if speaker == "A" else voice_b
-
-        # Split long text into chunks (Volcengine limit: 1024 bytes)
-        chunks = _split_text(text)
-        for chunk in chunks:
-            mp3 = _volc_tts_chunk(chunk, voice)
-            seg = AudioSegment.from_mp3(io.BytesIO(mp3))
-            segments.append(seg)
-
+        if use_volc:
+            context = _VOLC_CONTEXT_A if speaker == "A" else _VOLC_CONTEXT_B
+            mp3_bytes_chunk = _volc_tts(text, voice, context)
+        else:
+            response = _openai_client.audio.speech.create(
+                model=config.PODCAST_TTS_MODEL,
+                voice=voice,
+                input=text,
+                response_format="mp3",
+            )
+            mp3_bytes_chunk = response.read()
+        seg = AudioSegment.from_mp3(io.BytesIO(mp3_bytes_chunk))
+        segments.append(seg)
         segments.append(silence_long if speaker == "B" else silence_short)
 
         if (i + 1) % 10 == 0:
@@ -368,8 +365,10 @@ def generate_podcast(data: dict, date_str: str) -> None:
     mp3_bytes, duration_sec = generate_audio(dialogue)
 
     if config.PODCAST_DRY_RUN:
+        out_path = REPO_ROOT / f"podcast-preview-{date_str}.mp3"
+        out_path.write_bytes(mp3_bytes)
         print(
-            f"[podcast] PODCAST_DRY_RUN=true — skipping upload. "
+            f"[podcast] PODCAST_DRY_RUN=true — saved locally to {out_path.name}. "
             f"Audio: {len(mp3_bytes)//1024} KB, {duration_sec}s"
         )
         return

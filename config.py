@@ -4,6 +4,7 @@ import os
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
 GLM_API_KEY = os.getenv("GLM_API_KEY", "")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 BUTTONDOWN_API_KEY = os.getenv("BUTTONDOWN_API_KEY", "")
 
 # --- AI Provider & Model ---
@@ -23,12 +24,16 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 GITHUB_REPO = os.getenv("GITHUB_REPO", "simywang/geopolitical-newsletter")
 PODCAST_SITE_URL = os.getenv("PODCAST_SITE_URL", "https://geopolitical-newsletter.vercel.app")
 
-# Volcengine TTS (火山引擎语音合成)
-VOLC_TTS_APP_ID = os.getenv("VOLC_TTS_APP_ID", "")
-VOLC_TTS_ACCESS_TOKEN = os.getenv("VOLC_TTS_ACCESS_TOKEN", "")
-VOLC_TTS_CLUSTER = os.getenv("VOLC_TTS_CLUSTER", "volcano_tts")
-VOLC_VOICE_A = os.getenv("VOLC_VOICE_A", "en_female_sarah")   # Sarah — Host A
-VOLC_VOICE_B = os.getenv("VOLC_VOICE_B", "en_male_adam")      # James — Host B
+# Volcengine TTS — primary (豆包语音合成, V3 HTTP API, API Key only)
+VOLC_API_KEY = os.getenv("VOLC_API_KEY", "")
+VOLC_TTS_RESOURCE_ID = os.getenv("VOLC_TTS_RESOURCE_ID", "seed-tts-2.0")
+VOLC_VOICE_A = os.getenv("VOLC_VOICE_A", "en_female_dacey_uranus_bigtts")  # Dacey — Sarah
+VOLC_VOICE_B = os.getenv("VOLC_VOICE_B", "en_male_tim_uranus_bigtts")      # Tim — James
+
+# OpenAI TTS — fallback (used when VOLC_API_KEY is not set)
+PODCAST_TTS_MODEL = os.getenv("PODCAST_TTS_MODEL", "tts-1-hd")
+PODCAST_VOICE_A = os.getenv("PODCAST_VOICE_A", "nova")   # Sarah — Host A
+PODCAST_VOICE_B = os.getenv("PODCAST_VOICE_B", "onyx")   # James — Host B
 
 # --- Fetcher Settings ---
 MAX_ARTICLES_PER_FEED = 10
@@ -79,11 +84,11 @@ def validate():
         print(f"[config] WARNING: Unknown AI_MODEL '{AI_MODEL}', defaulting to claude")
     if SEND_MODE not in ("draft", "send"):
         print(f"[config] WARNING: Unknown SEND_MODE '{SEND_MODE}', defaulting to draft")
-    if PODCAST_ENABLED and not VOLC_TTS_APP_ID:
-        print("[config] WARNING: VOLC_TTS_APP_ID is not set (required for podcast TTS)")
+    if PODCAST_ENABLED and not ANTHROPIC_API_KEY and not DEEPSEEK_API_KEY and not GLM_API_KEY:
+        print("[config] WARNING: No AI API key set (required for podcast dialogue generation)")
         ok = False
-    if PODCAST_ENABLED and not VOLC_TTS_ACCESS_TOKEN:
-        print("[config] WARNING: VOLC_TTS_ACCESS_TOKEN is not set (required for podcast TTS)")
+    if PODCAST_ENABLED and not VOLC_API_KEY and not OPENAI_API_KEY:
+        print("[config] WARNING: Neither VOLC_API_KEY nor OPENAI_API_KEY is set (one required for podcast TTS)")
         ok = False
     if PODCAST_ENABLED and not PODCAST_DRY_RUN and not GITHUB_TOKEN:
         print("[config] WARNING: GITHUB_TOKEN is not set (required to upload podcast to Releases)")

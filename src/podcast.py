@@ -2,6 +2,8 @@ import sys
 import io
 import re
 import json
+import base64
+import uuid
 import requests
 from datetime import datetime, timezone
 from pathlib import Path
@@ -13,10 +15,12 @@ import config
 REPO_ROOT = Path(__file__).parent.parent
 RSS_PATH = REPO_ROOT / "podcast.xml"
 
-VOICE_A = "nova"   # Sarah — reports headlines and facts
-VOICE_B = "onyx"   # James — provides analysis
-
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
+
+# Volcengine TTS endpoint
+_VOLC_TTS_URL = "https://openspeech.bytedance.com/api/v1/tts"
+# Max bytes per Volcengine TTS request
+_VOLC_MAX_BYTES = 900  # conservative, limit is 1024
 
 _DIALOGUE_SYSTEM = """You are a podcast script writer for a daily geopolitical briefing show.
 Convert the provided news briefing JSON into a natural two-host dialogue.
@@ -105,49 +109,119 @@ def build_dialogue_script(data: dict, date_str: str) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Step 2: Text-to-speech → MP3
+# Step 2: Text-to-speech → MP3  (Volcengine TTS)
 # ---------------------------------------------------------------------------
 
+def _split_text(text: str, max_bytes: int = _VOLC_MAX_BYTES) -> list[str]:
+    """Split text into chunks that fit within Volcengine's byte limit.
+
+    Splits on sentence boundaries (. ! ?) first, then on commas, then hard-cuts.
+    """
+    if len(text.encode("utf-8")) <= max_bytes:
+        return [text]
+
+    chunks: list[str] = []
+    # Split on sentence-ending punctuation
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    current = ""
+    for sentence in sentences:
+        candidate = (current + " " + sentence).strip() if current else sentence
+        if len(candidate.encode("utf-8")) <= max_bytes:
+            current = candidate
+        else:
+            if current:
+                chunks.append(current)
+            # If a single sentence is still too long, split on commas
+            if len(sentence.encode("utf-8")) > max_bytes:
+                parts = re.split(r",\s*", sentence)
+                sub = ""
+                for part in parts:
+                    cand2 = (sub + ", " + part).strip(", ") if sub else part
+                    if len(cand2.encode("utf-8")) <= max_bytes:
+                        sub = cand2
+                    else:
+                        if sub:
+                            chunks.append(sub)
+                        sub = part
+                if sub:
+                    chunks.append(sub)
+            else:
+                current = sentence
+    if current:
+        chunks.append(current)
+    return chunks
+
+
+def _volc_tts_chunk(text: str, voice: str) -> bytes:
+    """Call Volcengine TTS for a single text chunk. Returns raw MP3 bytes."""
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer;{config.VOLC_TTS_ACCESS_TOKEN}",
+    }
+    body = {
+        "app": {
+            "appid": config.VOLC_TTS_APP_ID,
+            "token": config.VOLC_TTS_ACCESS_TOKEN,
+            "cluster": config.VOLC_TTS_CLUSTER,
+        },
+        "user": {"uid": "podcast_bot"},
+        "audio": {
+            "voice_type": voice,
+            "encoding": "mp3",
+            "speed_ratio": 1.0,
+            "rate": 24000,
+            "loudness_ratio": 1.0,
+        },
+        "request": {
+            "reqid": str(uuid.uuid4()),
+            "text": text,
+            "operation": "query",
+        },
+    }
+    resp = requests.post(_VOLC_TTS_URL, headers=headers, json=body, timeout=30)
+    resp.raise_for_status()
+    result = resp.json()
+    if result.get("code") != 3000:
+        raise RuntimeError(
+            f"Volcengine TTS error code={result.get('code')}: {result.get('message')}"
+        )
+    return base64.b64decode(result["data"])
+
+
 def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
-    """Call OpenAI TTS for each dialogue line, concatenate into a single MP3.
+    """Convert dialogue to a single MP3 using Volcengine TTS.
 
     Returns (mp3_bytes, duration_seconds).
     """
-    import openai
     from pydub import AudioSegment
 
-    client = openai.OpenAI(api_key=config.OPENAI_API_KEY)
-    model = config.PODCAST_TTS_MODEL
-    supports_instructions = model == "gpt-4o-mini-tts"
+    voice_a = config.VOLC_VOICE_A   # en_female_sarah
+    voice_b = config.VOLC_VOICE_B   # en_male_adam
 
     segments: list[AudioSegment] = []
     silence_short = AudioSegment.silent(duration=300)
     silence_long = AudioSegment.silent(duration=600)
 
+    total = len(dialogue)
     for i, line in enumerate(dialogue):
         speaker = line.get("speaker", "A")
         text = line.get("text", "").strip()
         if not text:
             continue
 
-        voice = VOICE_A if speaker == "A" else VOICE_B
-        kwargs: dict = {"model": model, "voice": voice, "input": text}
-        if supports_instructions:
-            kwargs["instructions"] = (
-                "Speak as a professional, calm news anchor."
-                if speaker == "A"
-                else "Speak as a thoughtful, warm analyst adding context."
-            )
+        voice = voice_a if speaker == "A" else voice_b
 
-        response = client.audio.speech.create(**kwargs)
-        seg = AudioSegment.from_mp3(io.BytesIO(response.content))
-        segments.append(seg)
+        # Split long text into chunks (Volcengine limit: 1024 bytes)
+        chunks = _split_text(text)
+        for chunk in chunks:
+            mp3 = _volc_tts_chunk(chunk, voice)
+            seg = AudioSegment.from_mp3(io.BytesIO(mp3))
+            segments.append(seg)
 
-        # Longer pause at end of each story (every even B line)
         segments.append(silence_long if speaker == "B" else silence_short)
 
         if (i + 1) % 10 == 0:
-            print(f"[podcast] TTS: {i+1}/{len(dialogue)} lines done")
+            print(f"[podcast] TTS: {i+1}/{total} lines done")
 
     full = sum(segments, AudioSegment.empty())
     duration_sec = int(len(full) / 1000)

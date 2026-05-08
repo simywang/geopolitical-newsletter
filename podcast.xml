@@ -10,6 +10,15 @@
     <itunes:image href="https://geopolitical-newsletter.vercel.app/podcast-cover.png" />
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
-    <!-- Episodes are prepended here automatically each weekday -->
+    <item>
+      <title>Geopolitical Briefing — May 8, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-08</guid>
+      <pubDate>Fri, 08 May 2026 23:38:09 +0000</pubDate>
+      <description>Today's global landscape is dominated by escalating military confrontation between the United States and Iran, with direct exchanges of fire in the Strait of Hormuz and a collapse of the agreed ceasefire, sending oil prices sharply higher. The Pentagon's release of strike footage and Iran's accusations of US 'reckless military adventure' underscore the fragility of regional stability. Meanwhile, a potential diplomatic breakthrough emerges on the Ukraine front, as President Trump announces a three-day ceasefire between Russia and Ukraine, including a prisoner swap, coinciding with WWII commemoration. Other notable developments include Israeli airstrikes on southern Lebanon, raising fears of a second front; a no-confidence vote ousting the Solomon Islands' prime minister, impacting China's Pacific influence; the conviction of four men in the US for the assassination of Haiti's president; and a deadly volcanic eruption in Indonesia. The world thus faces simultaneous crises in the Middle East, Europe, and the Indo-Pacific, with energy markets and global security under severe strain.</description>
+      <itunes:summary>Today's global landscape is dominated by escalating military confrontation between the United States and Iran, with direct exchanges of fire in the Strait of Hormuz and a collapse of the agreed ceasefire, sending oil prices sharply higher. The Pentagon's release of strike footage and Iran's accusations of US 'reckless military adventure' underscore the fragility of regional stability. Meanwhile, a potential diplomatic breakthrough emerges on the Ukraine front, as President Trump announces a three-day ceasefire between Russia and Ukraine, including a prisoner swap, coinciding with WWII commemoration. Other notable developments include Israeli airstrikes on southern Lebanon, raising fears of a second front; a no-confidence vote ousting the Solomon Islands' prime minister, impacting China's Pacific influence; the conviction of four men in the US for the assassination of Haiti's president; and a deadly volcanic eruption in Indonesia. The world thus faces simultaneous crises in the Middle East, Europe, and the Indo-Pacific, with energy markets and global security under severe strain.</itunes:summary>
+      <itunes:duration>04:01</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-08/briefing-2026-05-08.mp3" length="3866925" type="audio/mpeg" />
+    </item>
   </channel>
 </rss>

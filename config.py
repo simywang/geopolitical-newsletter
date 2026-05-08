@@ -16,6 +16,15 @@ GLM_MODEL = os.getenv("GLM_MODEL", "glm-4.7-flash")
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() == "true"
 SEND_MODE = os.getenv("SEND_MODE", "draft").lower()  # draft | send
 
+# --- Podcast ---
+PODCAST_ENABLED = os.getenv("PODCAST_ENABLED", "false").lower() == "true"
+PODCAST_DRY_RUN = os.getenv("PODCAST_DRY_RUN", "true").lower() == "true"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+PODCAST_TTS_MODEL = os.getenv("PODCAST_TTS_MODEL", "gpt-4o-mini-tts")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
+GITHUB_REPO = os.getenv("GITHUB_REPO", "simywang/geopolitical-newsletter")
+PODCAST_SITE_URL = os.getenv("PODCAST_SITE_URL", "https://geopolitical-newsletter.vercel.app")
+
 # --- Fetcher Settings ---
 MAX_ARTICLES_PER_FEED = 10
 ARTICLES_TO_SELECT = 8
@@ -65,4 +74,10 @@ def validate():
         print(f"[config] WARNING: Unknown AI_MODEL '{AI_MODEL}', defaulting to claude")
     if SEND_MODE not in ("draft", "send"):
         print(f"[config] WARNING: Unknown SEND_MODE '{SEND_MODE}', defaulting to draft")
+    if PODCAST_ENABLED and not OPENAI_API_KEY:
+        print("[config] WARNING: OPENAI_API_KEY is not set (required for podcast TTS)")
+        ok = False
+    if PODCAST_ENABLED and not PODCAST_DRY_RUN and not GITHUB_TOKEN:
+        print("[config] WARNING: GITHUB_TOKEN is not set (required to upload podcast to Releases)")
+        ok = False
     return ok

@@ -237,8 +237,9 @@ def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
 
 def upload_mp3(mp3_bytes: bytes, date_str: str) -> str:
     """Upload MP3 to a dated GitHub Release. Returns public download URL."""
-    tag = f"briefing-{date_str}"
-    filename = f"briefing-{date_str}.mp3"
+    iso_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    tag = f"briefing-{iso_date}"
+    filename = f"briefing-{iso_date}.mp3"
     base = f"https://api.github.com/repos/{config.GITHUB_REPO}"
     headers = {
         "Authorization": f"Bearer {config.GITHUB_TOKEN}",
@@ -317,7 +318,8 @@ def update_rss_feed(
     mins, secs = divmod(duration_sec, 60)
     duration_str = f"{mins:02d}:{secs:02d}"
     pub_date = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")
-    guid = f"briefing-{date_str}"
+    iso_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    guid = f"briefing-{iso_date}"
     title = f"Geopolitical Briefing — {date_str}"
 
     item = ET.Element("item")

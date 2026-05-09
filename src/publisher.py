@@ -40,6 +40,12 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #e8e4dc; marg
 .market-impact { background: #fffbf0; border-left: 3px solid #755b00; padding: 10px 14px; margin-top: 10px; }
 .market-impact strong { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #755b00; display: block; margin-bottom: 4px; }
 .market-impact p { margin: 0; font-size: 13px; color: #555; line-height: 1.6; font-family: Arial, sans-serif; }
+.second-order { background: #f5f5f5; border-left: 3px solid #aaaaaa; padding: 10px 14px; margin-top: 8px; }
+.second-order strong { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; display: block; margin-bottom: 4px; }
+.second-order p { margin: 0; font-size: 13px; color: #666; line-height: 1.6; font-family: Arial, sans-serif; }
+.watch-next { background: #fff; border: 1px dashed #ccb97a; padding: 8px 14px; margin-top: 8px; display: flex; align-items: flex-start; gap: 8px; }
+.watch-next-label { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #755b00; white-space: nowrap; margin-top: 2px; }
+.watch-next p { margin: 0; font-size: 13px; color: #555; line-height: 1.6; font-family: Arial, sans-serif; }
 
 .podcast-banner { background: #0a0a0a; padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .podcast-banner-label { font-size: 10px; color: rgba(255,255,255,0.4); font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 5px 0; }
@@ -56,10 +62,21 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #e8e4dc; marg
 def render_html(data: dict, date_str: str) -> str:
     articles_html = ""
     for i, article in enumerate(data.get("articles", []), 1):
-        impact = article.get("why_it_matters", "").strip()
+        impact = (article.get("market_impact") or article.get("why_it_matters", "")).strip()
+        second = article.get("second_order_effect", "").strip()
+        watch = article.get("watch_next", "").strip()
+
         impact_block = (
             f'<div class="market-impact"><strong>Market Impact</strong><p>{impact}</p></div>'
             if impact else ""
+        )
+        second_block = (
+            f'<div class="second-order"><strong>Second-Order Effect</strong><p>{second}</p></div>'
+            if second else ""
+        )
+        watch_block = (
+            f'<div class="watch-next"><span class="watch-next-label">Watch&nbsp;Next</span><p>{watch}</p></div>'
+            if watch else ""
         )
         articles_html += f"""
         <div class="article">
@@ -70,6 +87,8 @@ def render_html(data: dict, date_str: str) -> str:
           <h3><a href="{article.get("url", "#")}">{article.get("title", "")}</a></h3>
           <p>{article.get("summary", "")}</p>
           {impact_block}
+          {second_block}
+          {watch_block}
         </div>
         """
 

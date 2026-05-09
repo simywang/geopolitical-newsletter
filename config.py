@@ -38,7 +38,7 @@ PODCAST_VOICE_B = os.getenv("PODCAST_VOICE_B", "onyx")   # James — Host B
 
 # --- Fetcher Settings ---
 MAX_ARTICLES_PER_FEED = 10
-ARTICLES_TO_SELECT = 8
+ARTICLES_TO_SELECT = 5
 LOOKBACK_HOURS = 24
 
 # --- Buttondown ---
@@ -46,19 +46,33 @@ BUTTONDOWN_API_BASE = "https://api.buttondown.email/v1"
 
 # --- RSS Sources ---
 RSS_FEEDS = [
-    {"url": "https://feeds.reuters.com/reuters/worldNews", "name": "Reuters"},
-    {"url": "https://feeds.bbci.co.uk/news/world/rss.xml", "name": "BBC"},
-    {"url": "https://www.aljazeera.com/xml/rss/all.xml", "name": "Al Jazeera"},
-    {"url": "https://www.theguardian.com/world/rss", "name": "The Guardian"},
-    {"url": "https://feeds.cfr.org/dailybrief", "name": "CFR Daily Brief"},
-    {"url": "https://news.google.com/rss/search?q=geopolitical+crisis&hl=en", "name": "Google News: Geopolitical Crisis"},
-    {"url": "https://news.google.com/rss/search?q=global+conflict&hl=en", "name": "Google News: Global Conflict"},
-    {"url": "https://news.google.com/rss/search?q=international+sanctions&hl=en", "name": "Google News: Sanctions"},
-    {"url": "https://news.google.com/rss/search?q=US+China+relations&hl=en", "name": "Google News: US-China"},
-    {"url": "https://news.google.com/rss/search?q=Middle+East+war&hl=en", "name": "Google News: Middle East"},
-    {"url": "https://news.google.com/rss/search?q=Russia+Ukraine&hl=en", "name": "Google News: Russia-Ukraine"},
-    {"url": "https://www.reddit.com/r/geopolitics.rss", "name": "Reddit: r/geopolitics"},
-    {"url": "https://www.reddit.com/r/worldnews.rss", "name": "Reddit: r/worldnews"},
+    # Macro / geopolitical (kept lean — wars, sanctions, shipping disruptions)
+    {"url": "https://feeds.reuters.com/reuters/businessNews", "name": "Reuters Business"},
+    {"url": "https://feeds.bbci.co.uk/news/world/rss.xml", "name": "BBC World"},
+
+    # Energy
+    {"url": "https://oilprice.com/rss/main", "name": "OilPrice.com"},
+    {"url": "https://www.eia.gov/rss/news.xml", "name": "EIA News"},
+
+    # Agriculture / soft commodities
+    {"url": "https://www.agrimoney.com/feed/", "name": "Agrimoney"},
+    {"url": "https://www.icco.org/feed/", "name": "ICCO"},
+    {"url": "https://dailycoffeenews.com/feed/", "name": "Daily Coffee News"},
+    {"url": "https://perfectdailygrind.com/feed/", "name": "Perfect Daily Grind"},
+
+    # Weather / climate
+    {"url": "https://droughtmonitor.unl.edu/rss.xml", "name": "NOAA Drought Monitor"},
+    {"url": "https://public.wmo.int/en/rss.xml", "name": "WMO"},
+
+    # Google News — commodity keywords
+    {"url": "https://news.google.com/rss/search?q=cocoa+futures+west+africa&hl=en", "name": "Google News: Cocoa"},
+    {"url": "https://news.google.com/rss/search?q=crude+oil+supply+OPEC&hl=en", "name": "Google News: Oil"},
+    {"url": "https://news.google.com/rss/search?q=wheat+prices+Black+Sea&hl=en", "name": "Google News: Wheat"},
+    {"url": "https://news.google.com/rss/search?q=LNG+shipping+reroute&hl=en", "name": "Google News: LNG"},
+    {"url": "https://news.google.com/rss/search?q=drought+Brazil+soybean&hl=en", "name": "Google News: Brazil Soy"},
+    {"url": "https://news.google.com/rss/search?q=El+Nino+crop+damage&hl=en", "name": "Google News: El Nino"},
+    {"url": "https://news.google.com/rss/search?q=arabica+coffee+futures+brazil&hl=en", "name": "Google News: Coffee"},
+    {"url": "https://news.google.com/rss/search?q=EUDR+cocoa+coffee+supply+chain&hl=en", "name": "Google News: EUDR"},
 ]
 
 # --- Validation ---

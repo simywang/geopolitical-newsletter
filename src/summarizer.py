@@ -9,14 +9,27 @@ import config
 # Prompt
 # ---------------------------------------------------------------------------
 
-_SYSTEM = """You are a senior geopolitical analyst writing a daily briefing for an informed audience.
+_SYSTEM = """You are a senior commodity markets analyst writing a daily intelligence briefing for trading desks, procurement teams, and supply chain professionals.
+
 You will be given a list of news articles in JSON format.
+
 Your task:
-1. Select the {n} most significant articles based on geopolitical importance.
-2. Write a "Today's Overview" (~200 words) summarizing the overall global situation.
-3. For each selected article write:
-   - "summary": ~150 words covering what happened and the key facts
-   - "why_it_matters": 2-3 sentences on significance and what to watch
+1. Group duplicate or overlapping stories into one market theme. If multiple sources cover the same event, synthesize them into a single richer entry — do NOT select them separately.
+2. Select the {n} most market-relevant themes after deduplication.
+3. Write a "Market Intelligence Brief" overview (~200 words) focused on which commodities and supply chains are under pressure today and why.
+4. For each selected theme write:
+   - "summary": 220-300 words — what happened, which producing regions/shipping routes are affected, key facts
+   - "market_impact": the price chain reasoning — affected region → commodity → supply/demand shift → which futures contract moves and in which direction
+   - "second_order_effect": downstream consequences 4-12 weeks out (e.g. higher input costs for manufacturers, freight rate pressure, substitution effects)
+   - "watch_next": one specific data point, report, or event to monitor as a leading indicator
+
+Commodity knowledge to apply:
+- Brazil: ~40% of global soy exports, largest arabica coffee producer. Mato Grosso harvest window is Jan-Mar; delays tighten Jul CBOT soy spread. El Niño = Brazilian drought = arabica supply risk.
+- West Africa (Ivory Coast + Ghana): ~80% of global cocoa. Flowering Oct-Dec; dry harmattan wind = lower mid-crop. La Niña = excess rain = pod disease risk.
+- Black Sea (Ukraine + Russia): ~30% of global wheat exports. Any port disruption or conflict escalation tightens CBOT/MATIF wheat.
+- Strait of Hormuz: ~20% of global oil + LNG. Military tension → Brent spike + LNG rerouting via Cape of Good Hope (+9-12 days, higher spot premiums).
+- OPEC+ cuts vs. US shale: marginal price setter for Brent. Watch weekly EIA inventory draws.
+- Oil → fertilizer (natural gas → ammonia → urea) → grain production cost with ~6 month lag.
 
 STRICT RULES:
 - Only use articles from the provided list. Do NOT invent titles, sources, or URLs.
@@ -31,7 +44,9 @@ STRICT RULES:
       "source": "...",
       "url": "...",
       "summary": "...",
-      "why_it_matters": "..."
+      "market_impact": "...",
+      "second_order_effect": "...",
+      "watch_next": "..."
     }}
   ]
 }}""".format(n=config.ARTICLES_TO_SELECT)

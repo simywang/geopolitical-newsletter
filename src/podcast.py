@@ -58,6 +58,39 @@ EXAMPLE of the right energy:
 
 _DIALOGUE_USER = """Convert this briefing into a podcast dialogue. Date: {date}
 
+Follow this narrative structure:
+
+OPEN (2-3 exchanges)
+- Sarah sets the scene using the "overview" — what kind of day is it for markets?
+- James gives the one-line "biggest story" hook to pull listeners in.
+
+FOR EACH STORY — follow this arc every time:
+1. WHAT HAPPENED (2-3 exchanges)
+   Sarah introduces the story in plain terms. James fills in the key facts.
+   Use the "title" and "summary" fields. Keep it accessible — what actually happened?
+
+2. MARKET IMPACT (3-4 exchanges)
+   Now they go deeper — like two analysts at a trading desk.
+   James uses "market_impact" to walk through the price chain: which region, which commodity, which futures contract, which direction.
+   Sarah asks the sharp trader questions: "So who gets squeezed first?", "How fast does that move through?"
+
+3. SECOND-ORDER EFFECT (2-3 exchanges)
+   James uses "second_order_effect" to reveal the downstream angle most people aren't talking about yet.
+   Sarah reacts with genuine surprise or concern: "Wait — so that hits [downstream industry] too?"
+
+CLOSE (3-4 exchanges)
+- Sarah asks: "So what are you watching this week?"
+- James picks 2-3 items from "watch_this_week" and explains why each one matters.
+- Warm sign-off: "See you tomorrow."
+
+RULES:
+- Each turn: 1-3 sentences max. No monologues.
+- Maintain rapid back-and-forth throughout.
+- Do NOT mention URLs, source names, or publication names.
+- Return ONLY a valid JSON array, no markdown, no extra text:
+[{{"speaker": "A", "text": "..."}}, {{"speaker": "B", "text": "..."}}]
+
+BRIEFING:
 {briefing_json}"""
 
 

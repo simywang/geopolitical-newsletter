@@ -1,1209 +1,536 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="scroll-smooth" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geopolitical Briefing — Daily Intelligence Digest</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy: #1a1a2e;
-      --navy-mid: #16213e;
-      --blue: #3a5fc8;
-      --blue-light: #5579e0;
-      --cream: #faf9f6;
-      --ink: #1a1a2e;
-      --muted: #6b7280;
-      --border: #e5e1d8;
-      --gold: #c9a84c;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: var(--cream);
-      color: var(--ink);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      background: var(--navy);
-      padding: 0 40px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .nav-brand {
-      color: #fff;
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .nav-issue {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    .nav-cods {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.4);
-      padding: 4px 10px;
-      border-radius: 2px;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      background: var(--navy);
-      position: relative;
-      overflow: hidden;
-      padding: 100px 40px 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Grid texture overlay */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(58,95,200,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(58,95,200,0.08) 1px, transparent 1px);
-      background-size: 60px 60px;
-      animation: gridShift 20s linear infinite;
-    }
-
-    @keyframes gridShift {
-      from { transform: translateY(0); }
-      to   { transform: translateY(60px); }
-    }
-
-    /* Radial glow */
-    .hero::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(ellipse, rgba(58,95,200,0.18) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      max-width: 780px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 24px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.1s forwards;
-    }
-
-    .hero-eyebrow::before,
-    .hero-eyebrow::after {
-      content: '';
-      display: block;
-      width: 32px;
-      height: 1px;
-      background: var(--gold);
-      opacity: 0.6;
-    }
-
-    .hero-headline {
-      font-size: clamp(44px, 7vw, 80px);
-      font-weight: 700;
-      line-height: 1.08;
-      color: #fff;
-      letter-spacing: -1.5px;
-      margin-bottom: 28px;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 0.2s forwards;
-    }
-
-    .hero-headline em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    .hero-sub {
-      font-size: 18px;
-      line-height: 1.7;
-      color: rgba(255,255,255,0.65);
-      max-width: 560px;
-      margin: 0 auto 44px;
-      opacity: 0;
-      animation: fadeUp 0.7s ease 0.35s forwards;
-    }
-
-    /* ── SUBSCRIBE FORM ── */
-    .subscribe-wrap {
-      opacity: 0;
-      animation: fadeUp 0.7s ease 0.5s forwards;
-    }
-
-    .subscribe-form {
-      display: flex;
-      max-width: 480px;
-      margin: 0 auto;
-      gap: 0;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 4px;
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-      transition: border-color 0.2s;
-    }
-
-    .subscribe-form:focus-within {
-      border-color: rgba(58,95,200,0.7);
-      box-shadow: 0 0 0 3px rgba(58,95,200,0.15);
-    }
-
-    .subscribe-form input[type="email"] {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      padding: 16px 20px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 15px;
-      color: #fff;
-      min-width: 0;
-    }
-
-    .subscribe-form input::placeholder { color: rgba(255,255,255,0.35); }
-
-    .subscribe-form button {
-      background: var(--blue);
-      border: none;
-      padding: 16px 28px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      color: #fff;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-
-    .subscribe-form button:hover { background: var(--blue-light); }
-
-    .subscribe-note {
-      margin-top: 14px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 12px;
-      color: rgba(255,255,255,0.3);
-      letter-spacing: 0.3px;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── DIVIDER BAND ── */
-    .band {
-      background: var(--navy-mid);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding: 20px 40px;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .band-stat {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .band-stat strong {
-      color: rgba(255,255,255,0.85);
-      font-size: 14px;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-
-    /* ── TOPICS ── */
-    .section {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 80px 40px;
-    }
-
-    .section-label {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-      color: var(--navy);
-      margin-bottom: 48px;
-    }
-
-    .topics-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .topic-chip {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border: 1.5px solid var(--border);
-      border-radius: 2px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink);
-      background: #fff;
-      transition: all 0.2s;
-      cursor: default;
-    }
-
-    .topic-chip:hover {
-      border-color: var(--blue);
-      color: var(--blue);
-      background: rgba(58,95,200,0.04);
-      transform: translateY(-1px);
-    }
-
-    .topic-chip .chip-icon { font-size: 16px; }
-
-    /* ── DIVIDER LINE ── */
-    .rule {
-      max-width: 900px;
-      margin: 0 auto;
-      border: none;
-      border-top: 1px solid var(--border);
-    }
-
-    /* ── HOW IT WORKS ── */
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-top: 0;
-    }
-
-    .step {
-      background: #fff;
-      padding: 40px 36px;
-      position: relative;
-    }
-
-    .step-num {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .step-num::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: rgba(58,95,200,0.2);
-    }
-
-    .step-icon { font-size: 28px; margin-bottom: 16px; display: block; }
-
-    .step h3 {
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      margin-bottom: 10px;
-      color: var(--navy);
-    }
-
-    .step p {
-      font-size: 14px;
-      line-height: 1.65;
-      color: var(--muted);
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-    }
-
-    /* ── SAMPLE CTA ── */
-    .cta-section {
-      background: var(--navy);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(58,95,200,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(58,95,200,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    .cta-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 80px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 60px;
-    }
-
-    .cta-text h2 {
-      font-size: clamp(28px, 3.5vw, 40px);
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: #fff;
-      margin-bottom: 12px;
-      line-height: 1.15;
-    }
-
-    .cta-text p {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 15px;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.6;
-    }
-
-    .cta-form-wrap { flex-shrink: 0; width: 320px; }
-
-    .cta-form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .cta-form input[type="email"] {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 3px;
-      padding: 14px 18px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 15px;
-      color: #fff;
-      outline: none;
-      transition: border-color 0.2s;
-      width: 100%;
-    }
-
-    .cta-form input::placeholder { color: rgba(255,255,255,0.3); }
-
-    .cta-form input:focus {
-      border-color: var(--blue);
-      background: rgba(255,255,255,0.1);
-    }
-
-    .cta-form button {
-      background: var(--blue);
-      border: none;
-      border-radius: 3px;
-      padding: 14px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.2s;
-      width: 100%;
-    }
-
-    .cta-form button:hover { background: var(--blue-light); }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #111120;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 32px 40px;
-      text-align: center;
-    }
-
-    .footer-brand {
-      font-size: 15px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 10px;
-    }
-
-    .footer-meta {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 12px;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.3px;
-    }
-
-    .footer-meta span {
-      display: inline-block;
-      padding: 0 12px;
-      border-right: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .footer-meta span:last-child { border-right: none; }
-
-    /* ── CEO QUOTE ── */
-    .quote-section {
-      background: #fff;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .quote-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 80px 40px;
-      display: flex;
-      align-items: center;
-      gap: 64px;
-    }
-
-    .ceo-photo {
-      flex-shrink: 0;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: center top;
-      border: 3px solid var(--border);
-      box-shadow: 0 8px 32px rgba(26,26,46,0.12);
-    }
-
-    .quote-body blockquote {
-      font-size: 22px;
-      line-height: 1.55;
-      font-style: italic;
-      color: var(--navy);
-      letter-spacing: -0.2px;
-      margin-bottom: 24px;
-      position: relative;
-      padding-left: 24px;
-    }
-
-    .quote-body blockquote::before {
-      content: '\201C';
-      position: absolute;
-      left: 0;
-      top: -4px;
-      font-size: 48px;
-      color: var(--blue);
-      line-height: 1;
-      font-style: normal;
-    }
-
-    .quote-attr {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .quote-attr-line {
-      width: 32px;
-      height: 2px;
-      background: var(--blue);
-      flex-shrink: 0;
-    }
-
-    .quote-attr-text {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-    }
-
-    .quote-attr-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--navy);
-      letter-spacing: 0.2px;
-    }
-
-    .quote-attr-title {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .cods-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 20px;
-    }
-
-    .cods-badge::before {
-      content: '';
-      display: block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--blue);
-    }
-
-    @media (max-width: 768px) {
-      .quote-inner {
-        flex-direction: column;
-        gap: 32px;
-        padding: 60px 24px;
-        text-align: center;
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Commodity Frontier News | Professional Grade Market Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-tertiary-fixed": "#101c2c","on-primary-fixed": "#141b2c","error-container": "#ffdad6",
+          "on-background": "#191c1d","on-secondary-container": "#785d00","primary-fixed-dim": "#bfc6dc",
+          "on-secondary": "#ffffff","on-tertiary-fixed-variant": "#3c4859","on-secondary-fixed": "#241a00",
+          "surface-container-high": "#e7e8e9","on-primary-fixed-variant": "#3f4759",
+          "surface-container-highest": "#e1e3e4","primary-fixed": "#dbe2f9","on-tertiary": "#ffffff",
+          "inverse-on-surface": "#f0f1f2","error": "#ba1a1a","surface-dim": "#d9dadb",
+          "on-surface": "#191c1d","surface-container-low": "#f3f4f5","inverse-primary": "#bfc6dc",
+          "surface-container-lowest": "#ffffff","surface-tint": "#565e71","primary-container": "#141b2c",
+          "outline": "#76777d","on-error-container": "#93000a","surface": "#f8f9fa",
+          "tertiary-container": "#101c2c","secondary": "#755b00","secondary-container": "#fed977",
+          "on-tertiary-container": "#788598","primary": "#000000","secondary-fixed-dim": "#e6c364",
+          "on-error": "#ffffff","inverse-surface": "#2e3132","tertiary": "#000000","on-primary": "#ffffff",
+          "surface-variant": "#e1e3e4","outline-variant": "#c6c6cd","background": "#f8f9fa",
+          "tertiary-fixed-dim": "#bbc7dc","secondary-fixed": "#ffe08f","on-secondary-fixed-variant": "#584400",
+          "surface-bright": "#f8f9fa","surface-container": "#edeeef","on-surface-variant": "#45474c",
+          "tertiary-fixed": "#d7e3f9","on-primary-container": "#7c8498"
+        },
+        borderRadius: { "DEFAULT": "0.125rem","lg": "0.25rem","xl": "0.5rem","full": "0.75rem" },
+        spacing: {
+          "stack-xl": "64px","stack-md": "16px","stack-lg": "32px","margin-mobile": "20px",
+          "stack-sm": "8px","gutter": "24px","margin-desktop": "64px","container-max": "1280px"
+        },
+        fontFamily: {
+          "ui-button": ["Inter"],"label-caps": ["Inter"],"headline-lg-mobile": ["Playfair Display"],
+          "headline-lg": ["Playfair Display"],"display-lg": ["Playfair Display"],"body-lg": ["Inter"],
+          "headline-md": ["Playfair Display"],"body-md": ["Inter"]
+        },
+        fontSize: {
+          "ui-button": ["14px",{"lineHeight":"20px","fontWeight":"500"}],
+          "label-caps": ["12px",{"lineHeight":"16px","letterSpacing":"0.08em","fontWeight":"600"}],
+          "headline-lg-mobile": ["28px",{"lineHeight":"34px","fontWeight":"700"}],
+          "headline-lg": ["36px",{"lineHeight":"44px","fontWeight":"700"}],
+          "display-lg": ["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"700"}],
+          "body-lg": ["18px",{"lineHeight":"28px","fontWeight":"400"}],
+          "headline-md": ["24px",{"lineHeight":"32px","fontWeight":"600"}],
+          "body-md": ["16px",{"lineHeight":"24px","fontWeight":"400"}]
+        }
       }
-      .quote-body blockquote { font-size: 18px; }
-      .quote-attr { justify-content: center; }
     }
-
-    /* ── EMAIL PREVIEW ── */
-    .preview-section {
-      background: #f1f3f4;
-      padding: 80px 40px;
-    }
-
-    .preview-section > .section-label { display: block; max-width: 1100px; margin: 0 auto 16px; color: var(--blue); }
-    .preview-section > .section-title { display: block; max-width: 1100px; margin: 0 auto 48px; color: var(--navy); }
-
-    .gmail-window {
-      max-width: 1100px;
-      margin: 0 auto;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 32px 100px rgba(0,0,0,0.22), 0 4px 20px rgba(0,0,0,0.1);
-      border: 1px solid #dadce0;
-    }
-
-    /* Gmail chrome top bar */
-    .gmail-chrome {
-      background: #fff;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    .gmail-dots { display: flex; gap: 6px; flex-shrink: 0; margin-right: 4px; }
-    .gmail-dots span { width: 12px; height: 12px; border-radius: 50%; display: block; }
-    .gmail-dots span:nth-child(1) { background: #ff5f57; }
-    .gmail-dots span:nth-child(2) { background: #febc2e; }
-    .gmail-dots span:nth-child(3) { background: #28c840; }
-
-    .gmail-hamburger {
-      width: 40px; height: 40px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      cursor: default; flex-shrink: 0;
-    }
-    .gmail-hamburger svg { width: 18px; height: 18px; fill: #444; }
-
-    .gmail-logo {
-      display: flex; align-items: center; gap: 4px;
-      font-family: 'Product Sans', -apple-system, sans-serif;
-      font-size: 22px; font-weight: 400; color: #5f6368;
-      flex-shrink: 0; margin-right: 8px;
-      user-select: none;
-    }
-    .gmail-logo-g { color: #4285f4; }
-    .gmail-logo-m { color: #ea4335; }
-    .gmail-logo-a { color: #fbbc05; }
-    .gmail-logo-i { color: #4285f4; }
-    .gmail-logo-l { color: #34a853; }
-
-    .gmail-search-bar {
-      flex: 1;
-      background: #eaf1fb;
-      border-radius: 24px;
-      padding: 9px 20px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 16px;
-      color: #202124;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .gmail-search-bar svg { width: 20px; height: 20px; fill: #444; flex-shrink: 0; }
-    .gmail-search-text { color: #202124; font-size: 15px; }
-    .gmail-search-filter { margin-left: auto; }
-    .gmail-search-filter svg { width: 20px; height: 20px; fill: #444; }
-
-    .gmail-chrome-right {
-      display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 8px;
-    }
-    .gmail-icon-btn {
-      width: 40px; height: 40px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .gmail-icon-btn svg { width: 20px; height: 20px; fill: #444; }
-    .gmail-user-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #8ab4f8; color: #fff;
-      font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    /* Gmail 3-column body */
-    .gmail-body {
-      display: flex;
-      background: #fff;
-      height: 560px;
-    }
-
-    /* Sidebar */
-    .gmail-sidebar {
-      width: 256px;
-      flex-shrink: 0;
-      background: #fff;
-      padding: 8px 0;
-      border-right: 1px solid #e0e0e0;
-      overflow-y: auto;
-    }
-
-    .gmail-compose-btn {
-      margin: 4px 12px 8px;
-      background: #c2e7ff;
-      border-radius: 16px;
-      padding: 14px 24px 14px 16px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 14px; font-weight: 600; color: #001d35;
-      display: flex; align-items: center; gap: 12px;
-      cursor: default; letter-spacing: 0.1px;
-    }
-    .gmail-compose-btn svg { width: 20px; height: 20px; fill: #001d35; flex-shrink: 0; }
-
-    .gmail-nav-item {
-      padding: 4px 16px 4px 16px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 14px; color: #202124;
-      display: flex; align-items: center; gap: 16px;
-      border-radius: 0 24px 24px 0;
-      margin-right: 16px;
-      min-height: 36px;
-      cursor: default;
-    }
-    .gmail-nav-item.active { background: #d3e3fd; font-weight: 600; }
-    .gmail-nav-item svg { width: 20px; height: 20px; fill: #444; flex-shrink: 0; }
-    .gmail-nav-item.active svg { fill: #001d35; }
-    .gmail-nav-count {
-      margin-left: auto;
-      font-size: 12px; font-weight: 400; color: #202124;
-    }
-
-    /* Inbox list */
-    .gmail-inbox {
-      width: 320px;
-      flex-shrink: 0;
-      border-right: 1px solid #e0e0e0;
-      overflow-y: auto;
-      background: #fff;
-    }
-
-    .gmail-inbox-toolbar {
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px solid #e0e0e0;
-      background: #fff;
-    }
-
-    .gmail-inbox-toolbar svg { width: 18px; height: 18px; fill: #444; }
-
-    .gmail-tab-bar {
-      display: flex;
-      border-bottom: 1px solid #e0e0e0;
-      background: #fff;
-    }
-    .gmail-tab {
-      padding: 12px 16px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 13px; color: #444;
-      display: flex; align-items: center; gap: 8px;
-      cursor: default; border-bottom: 2px solid transparent;
-    }
-    .gmail-tab.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 500; }
-    .gmail-tab svg { width: 16px; height: 16px; fill: currentColor; }
-
-    .gmail-email-row {
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid #f1f3f4;
-      cursor: default;
-      position: relative;
-    }
-    .gmail-email-row.selected { background: #e8f0fe; }
-    .gmail-email-row.unread .gmail-row-sender { font-weight: 700; }
-    .gmail-email-row.unread .gmail-row-subject { font-weight: 700; color: #202124; }
-
-    .gmail-row-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-family: -apple-system, sans-serif; font-size: 14px; font-weight: 600;
-      color: #fff; flex-shrink: 0;
-    }
-
-    .gmail-row-content { flex: 1; min-width: 0; }
-    .gmail-row-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2px; }
-    .gmail-row-sender { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-size: 13px; color: #202124; }
-    .gmail-row-time { font-family: -apple-system, sans-serif; font-size: 12px; color: #5f6368; flex-shrink: 0; margin-left: 8px; }
-    .gmail-row-subject { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-size: 13px; color: #202124; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .gmail-row-preview { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; font-size: 12px; color: #5f6368; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .gmail-row-star { font-size: 14px; color: #f5a623; flex-shrink: 0; }
-
-    /* Email content */
-    .gmail-email-panel {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      background: #fff;
-    }
-
-    .gmail-email-header {
-      padding: 16px 24px 14px;
-      border-bottom: 1px solid #e0e0e0;
-      flex-shrink: 0;
-    }
-
-    .gmail-subject-line {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: 20px; font-weight: 400; color: #202124;
-      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
-    }
-
-    .gmail-meta { display: flex; align-items: center; gap: 10px; }
-    .gmail-sender-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--navy); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700;
-      font-family: -apple-system, sans-serif; flex-shrink: 0;
-    }
-    .gmail-from { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; }
-    .gmail-from-name { font-size: 13px; font-weight: 600; color: #202124; }
-    .gmail-from-addr { font-size: 12px; color: #5f6368; }
-    .gmail-time { margin-left: auto; font-family: -apple-system, sans-serif; font-size: 12px; color: #5f6368; flex-shrink: 0; }
-
-    .gmail-email-body {
-      flex: 1;
-      padding: 20px 24px;
-      overflow-y: auto;
-      background: #f6f8fc;
-    }
-
-    .email-card {
-      max-width: 580px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 4px;
-      overflow: hidden;
-      font-family: Georgia, serif;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-    .email-card-header {
-      background: #fff; border-bottom: 3px solid var(--navy);
-      padding: 20px 28px 16px;
-    }
-    .email-card-header h2 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
-    .email-card-header p { font-family: -apple-system, sans-serif; font-size: 11px; color: #888; }
-
-    .email-overview { background: #f0f4ff; border-left: 4px solid var(--blue); padding: 14px 28px; }
-    .email-overview-label {
-      font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 700;
-      letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 6px;
-    }
-    .email-overview p { font-size: 12px; line-height: 1.65; color: #333; }
-
-    .email-articles { padding: 0 28px; }
-    .email-article { padding: 16px 0; border-bottom: 1px solid #eee; }
-    .email-article:last-child { border-bottom: none; }
-    .email-article-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-    .email-article-num { font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 700; color: #999; }
-    .email-article-source {
-      font-family: -apple-system, sans-serif; font-size: 10px;
-      background: #eef2ff; color: var(--blue); padding: 2px 7px;
-      border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .email-article h4 { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 5px; line-height: 1.4; }
-    .email-article p { font-size: 12px; line-height: 1.65; color: #555; }
-    .email-why { background: #fffbf0; border-left: 3px solid #f0a500; padding: 8px 12px; margin-top: 8px; }
-    .email-why strong {
-      font-family: -apple-system, sans-serif; font-size: 9px; text-transform: uppercase;
-      letter-spacing: 0.5px; color: #c07800; display: block; margin-bottom: 3px;
-    }
-    .email-why p { font-size: 11px; color: #666; margin: 0; }
-
-    .email-fade {
-      background: linear-gradient(to bottom, transparent, #f6f8fc);
-      height: 60px; margin-top: -60px; position: relative; pointer-events: none;
-    }
-
-    @media (max-width: 900px) {
-      .preview-section { padding: 60px 16px; }
-      .gmail-sidebar, .gmail-inbox { display: none; }
-      .gmail-body { height: 480px; }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 0 20px; }
-      .hero { padding: 70px 24px 90px; }
-      .section { padding: 60px 24px; }
-      .band { gap: 20px; padding: 16px 24px; }
-
-      .steps {
-        grid-template-columns: 1fr;
-      }
-
-      .cta-inner {
-        flex-direction: column;
-        gap: 40px;
-        padding: 60px 24px;
-      }
-
-      .cta-form-wrap { width: 100%; }
-
-      footer { padding: 28px 24px; }
-      .footer-meta span { display: block; border-right: none; padding: 4px 0; }
-    }
-
-    @media (max-width: 480px) {
-      .subscribe-form {
-        flex-direction: column;
-        border-radius: 4px;
-      }
-      .subscribe-form input[type="email"] {
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-      }
-      .subscribe-form button {
-        border-radius: 0;
-      }
-      .nav-issue { display: none; }
-    }
-  </style>
+  }
+</script>
+<style>
+  .glass-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0px 12px 32px rgba(16,24,40,0.05);
+  }
+  .data-grid-bg {
+    background-image:
+      linear-gradient(rgba(16,24,40,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16,24,40,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+  .premium-gold-border {
+    border: 1px solid transparent;
+    background: linear-gradient(white,white) padding-box,
+                linear-gradient(to right,#755b00,#ffe08f,#e6c364) border-box;
+  }
+  .archive-scroll::-webkit-scrollbar { width: 4px; }
+  .archive-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+  .archive-scroll::-webkit-scrollbar-thumb { background: #bfc6dc; border-radius: 10px; }
+</style>
 </head>
-<body>
+<body class="bg-surface text-on-surface font-body-md selection:bg-secondary-container">
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-brand">🌍 Geopolitical Briefing</a>
-    <div class="nav-right">
-      <span class="nav-issue">Daily Intelligence</span>
-      <span class="nav-cods">CODS</span>
+<!-- HEADER -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-primary/10 shadow-sm">
+  <nav class="max-w-container-max mx-auto px-margin-desktop flex items-center justify-between h-20">
+    <div class="font-display-lg text-headline-md font-bold text-primary">Commodity Frontier News</div>
+    <div class="flex items-center gap-stack-md">
+      <button onclick="document.getElementById('hero-email').focus()" class="bg-primary text-on-primary px-6 py-2 rounded-lg font-ui-button text-ui-button uppercase tracking-wider hover:opacity-80 transition-all">Subscribe</button>
     </div>
   </nav>
+</header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-eyebrow">AI-Curated · Free · Every Weekday</div>
-      <h1 class="hero-headline">Stay <em>Ahead</em><br>of the World.</h1>
-      <p class="hero-sub">Daily AI-curated geopolitical briefings covering the conflicts, alliances, and power shifts that shape our world. 8 stories. 8 minutes. Delivered free, every weekday.</p>
-
-      <div class="subscribe-wrap">
-        <form class="subscribe-form" id="hero-form" onsubmit="handleSubscribe(event, 'hero-form')">
-          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
-          <button type="submit">Subscribe Free →</button>
-        </form>
-        <p class="subscribe-note" id="hero-note">No spam. Unsubscribe anytime.</p>
-      </div>
+<!-- HERO -->
+<section class="relative pt-40 pb-24 overflow-hidden min-h-[700px] flex items-center justify-center data-grid-bg">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface to-surface"></div>
+  <div class="relative z-10 max-w-container-max mx-auto px-margin-desktop text-center">
+    <div class="inline-block px-4 py-1.5 mb-stack-lg border border-secondary text-secondary rounded-full font-label-caps uppercase">Institutional Research</div>
+    <h1 class="font-display-lg text-display-lg md:text-[72px] md:leading-[80px] mb-stack-md max-w-4xl mx-auto">Decoding the Global<br>Commodity Frontier</h1>
+    <p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-xl max-w-2xl mx-auto">Market Intelligence as a Geopolitical Force. We provide the institutional-grade clarity required to navigate today's volatile supply chains.</p>
+    <div class="glass-card max-w-xl mx-auto p-4 rounded-xl flex flex-col md:flex-row gap-4">
+      <form id="hero-form" class="flex flex-col md:flex-row gap-4 w-full" onsubmit="handleSubscribe(event,'hero-form')">
+        <input id="hero-email" class="flex-grow bg-white/50 border border-outline-variant rounded-lg px-6 py-3 font-body-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="your@email.com" type="email" name="email" required autocomplete="email">
+        <button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded-lg font-ui-button text-ui-button uppercase tracking-wider hover:bg-on-primary-container transition-all">subscribe free →</button>
+      </form>
     </div>
-  </section>
-
-  <!-- CEO QUOTE -->
-  <section class="quote-section">
-    <div class="quote-inner">
-      <img class="ceo-photo" src="ceo.webp" alt="Tejinder Singh Saraon" onerror="this.style.display='none'">
-      <div class="quote-body">
-        <blockquote>
-          Geopolitical awareness is no longer a privilege of the few. When AI distills the world's noise into signal, informed decision-making becomes possible for everyone.
-        </blockquote>
-        <div class="quote-attr">
-          <div class="quote-attr-line"></div>
-          <div class="quote-attr-text">
-            <div class="quote-attr-name">Tejinder Singh Saraon</div>
-            <div class="quote-attr-title">Managing Director & CEO, Cocoa</div>
-          </div>
-        </div>
-        <div class="cods-badge">A CODS Production</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EMAIL PREVIEW -->
-  <section class="preview-section">
-    <p class="section-label">In your inbox</p>
-    <h2 class="section-title">This is what you'll receive.</h2>
-
-    <div class="gmail-window">
-      <div class="gmail-chrome">
-        <div class="gmail-dots"><span></span><span></span><span></span></div>
-        <div class="gmail-hamburger"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
-        <div class="gmail-logo"><span class="gmail-logo-g">G</span><span class="gmail-logo-m">m</span><span class="gmail-logo-a">a</span><span class="gmail-logo-i">i</span><span class="gmail-logo-l">l</span></div>
-        <div class="gmail-search-bar">
-          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <span class="gmail-search-text">Search in mail</span>
-          <span class="gmail-search-filter"><svg viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg></span>
-        </div>
-        <div class="gmail-chrome-right">
-          <div class="gmail-icon-btn"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div>
-          <div class="gmail-icon-btn"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
-          <div class="gmail-icon-btn"><svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></div>
-          <div class="gmail-user-avatar">Y</div>
-        </div>
-      </div>
-      <div class="gmail-body">
-        <div class="gmail-sidebar">
-          <div class="gmail-compose-btn"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Compose</div>
-          <div class="gmail-nav-item active"><svg viewBox="0 0 24 24"><path d="M19 3H4.99C3.89 3 3 3.9 3 5L3.01 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg> Inbox <span class="gmail-nav-count">24</span></div>
-          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> Starred</div>
-          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Sent</div>
-          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg> Drafts <span class="gmail-nav-count">3</span></div>
-          <div class="gmail-nav-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> More</div>
-        </div>
-        <div class="gmail-inbox">
-          <div class="gmail-tab-bar">
-            <div class="gmail-tab active"><svg viewBox="0 0 24 24"><path d="M19 3H4.99C3.89 3 3 3.9 3 5L3.01 19c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg> Primary</div>
-            <div class="gmail-tab"><svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z"/></svg> Promotions</div>
-            <div class="gmail-tab"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> Updates</div>
-          </div>
-          <div class="gmail-email-row selected unread">
-            <div class="gmail-row-avatar" style="background:#1a1a2e">🌍</div>
-            <div class="gmail-row-content">
-              <div class="gmail-row-header"><span class="gmail-row-sender">Geopolitical Briefing</span><span class="gmail-row-time">8:00 AM</span></div>
-              <div class="gmail-row-subject">🌍 Geopolitical Briefing — May 3, 2026</div>
-              <div class="gmail-row-preview">Today's Overview: US–Iran ceasefire, NATO troop withdrawal, China sanctions...</div>
-            </div>
-            <span class="gmail-row-star">★</span>
-          </div>
-          <div class="gmail-email-row">
-            <div class="gmail-row-avatar" style="background:#0f9d58">L</div>
-            <div class="gmail-row-content">
-              <div class="gmail-row-header"><span class="gmail-row-sender">LinkedIn</span><span class="gmail-row-time">7:42 AM</span></div>
-              <div class="gmail-row-subject">3 new connection requests</div>
-              <div class="gmail-row-preview">Sarah Chen and 2 others want to connect with you</div>
-            </div>
-          </div>
-          <div class="gmail-email-row">
-            <div class="gmail-row-avatar" style="background:#4285f4">G</div>
-            <div class="gmail-row-content">
-              <div class="gmail-row-header"><span class="gmail-row-sender">Google Workspace</span><span class="gmail-row-time">Yesterday</span></div>
-              <div class="gmail-row-subject">Your May storage report</div>
-              <div class="gmail-row-preview">You're using 8.2 GB of your 15 GB storage</div>
-            </div>
-          </div>
-          <div class="gmail-email-row">
-            <div class="gmail-row-avatar" style="background:#ea4335">N</div>
-            <div class="gmail-row-content">
-              <div class="gmail-row-header"><span class="gmail-row-sender">Netflix</span><span class="gmail-row-time">May 2</span></div>
-              <div class="gmail-row-subject">New this week on Netflix</div>
-              <div class="gmail-row-preview">Watch what's new — curated just for you this weekend</div>
-            </div>
-          </div>
-          <div class="gmail-email-row">
-            <div class="gmail-row-avatar" style="background:#9c27b0">S</div>
-            <div class="gmail-row-content">
-              <div class="gmail-row-header"><span class="gmail-row-sender">Slack</span><span class="gmail-row-time">May 1</span></div>
-              <div class="gmail-row-subject">You have 5 unread messages</div>
-              <div class="gmail-row-preview">Messages from #general and #design channels</div>
-            </div>
-          </div>
-        </div>
-        <div class="gmail-email-panel">
-          <div class="gmail-email-header">
-            <div class="gmail-subject-line">🌍 Geopolitical Briefing — May 3, 2026</div>
-            <div class="gmail-meta">
-              <div class="gmail-sender-avatar">GB</div>
-              <div class="gmail-from">
-                <div class="gmail-from-name">Geopolitical Briefing</div>
-                <div class="gmail-from-addr">briefing@buttondown.email · to me</div>
-              </div>
-              <div class="gmail-time">8:00 AM</div>
-            </div>
-          </div>
-          <div class="gmail-email-body">
-            <div class="email-card">
-              <div class="email-card-header"><h2>🌍 Geopolitical Briefing</h2><p>May 3, 2026</p></div>
-              <div class="email-overview">
-                <div class="email-overview-label">Today's Overview</div>
-                <p>Today's geopolitical landscape is dominated by overlapping crises. The US–Iran ceasefire remains fragile as Trump argues congressional approval is unnecessary. The US has authorized $8.6B in emergency arms sales to Middle Eastern allies. In Europe, withdrawal of 5,000 US troops from Germany has alarmed NATO partners...</p>
-              </div>
-              <div class="email-articles">
-                <div class="email-article">
-                  <div class="email-article-meta"><span class="email-article-num">#1</span><span class="email-article-source">Reuters</span></div>
-                  <h4>Trump Claims Ceasefire Eliminates Need for Congressional War Authorization</h4>
-                  <p>President Trump argued that the US–Iran ceasefire obviates the need for congressional approval, as Iran proposed a new 14-point peace plan.</p>
-                  <div class="email-why"><strong>Why it matters</strong><p>A precedent on executive war powers could reshape US foreign policy for decades.</p></div>
-                </div>
-                <div class="email-article">
-                  <div class="email-article-meta"><span class="email-article-num">#2</span><span class="email-article-source">BBC</span></div>
-                  <h4>US Withdraws 5,000 Troops from Germany, NATO Partners Alarmed</h4>
-                  <p>The Pentagon announced withdrawal of troops from Germany with hints of deeper cuts, alarming NATO partners and senior Republicans.</p>
-                  <div class="email-why"><strong>Why it matters</strong><p>NATO cohesion faces its most serious stress test since the Cold War.</p></div>
-                </div>
-              </div>
-            </div>
-            <div class="email-fade"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS BAND -->
-  <div class="band">
-    <span class="band-stat"><strong>13</strong> global sources</span>
-    <span class="band-stat"><strong>8</strong> stories selected daily</span>
-    <span class="band-stat"><strong>AI</strong> analysis & context</span>
-    <span class="band-stat"><strong>08:00</strong> Amsterdam time</span>
+    <p id="hero-note" class="mt-4 text-xs text-on-surface-variant/50 font-label-caps">No spam · Free · Unsubscribe anytime</p>
   </div>
+</section>
 
-  <!-- TOPICS -->
-  <section class="section">
-    <p class="section-label">Coverage</p>
-    <h2 class="section-title">What we track,<br>so you don't have to.</h2>
-    <div class="topics-grid">
-      <div class="topic-chip"><span class="chip-icon">🕌</span> Middle East</div>
-      <div class="topic-chip"><span class="chip-icon">⚔️</span> Russia–Ukraine</div>
-      <div class="topic-chip"><span class="chip-icon">🐉</span> US–China Relations</div>
-      <div class="topic-chip"><span class="chip-icon">🛡️</span> NATO & Alliances</div>
-      <div class="topic-chip"><span class="chip-icon">🚫</span> Sanctions & Diplomacy</div>
-      <div class="topic-chip"><span class="chip-icon">☢️</span> Nuclear & Security</div>
-      <div class="topic-chip"><span class="chip-icon">📦</span> Trade Wars</div>
-      <div class="topic-chip"><span class="chip-icon">⚡</span> Energy & Resources</div>
+<!-- TICKER -->
+<div class="bg-primary-container text-on-primary-container py-3 border-y border-white/5">
+  <div class="max-w-container-max mx-auto px-margin-desktop flex overflow-hidden whitespace-nowrap gap-stack-xl text-label-caps items-center">
+    <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span> BRENT CRUDE $82.45 <span class="text-green-400">+1.2%</span></span>
+    <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span> WHEAT (CBOT) $562.25 <span class="text-red-400">-0.4%</span></span>
+    <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span> COPPER $3.84 <span class="text-green-400">+0.8%</span></span>
+    <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span> COFFEE KC $184.10 <span class="text-red-400">-2.1%</span></span>
+    <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span> COCOA ICE $12,048 <span class="text-green-400">+4.3%</span></span>
+    <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span> GOLD SPOT $2,165.40 <span class="text-green-400">+0.5%</span></span>
+  </div>
+</div>
+
+<!-- EMAIL PREVIEW -->
+<section class="py-24 bg-surface border-b border-primary/5">
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <div class="text-center mb-16">
+      <h2 class="font-headline-lg text-headline-lg mb-4">Precision Intelligence, Directly Injected.</h2>
+      <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">Experience the industry's most sophisticated morning briefing. Formatted for clarity, designed for decision-makers.</p>
     </div>
-  </section>
+    <div class="max-w-5xl mx-auto rounded-xl shadow-2xl overflow-hidden border border-primary/10 flex flex-col md:flex-row h-[700px] bg-white">
+      <!-- Gmail sidebar -->
+      <aside class="hidden md:flex flex-col w-64 bg-[#f6f8fc] p-3 border-r border-primary/5">
+        <button class="flex items-center gap-3 bg-[#c2e7ff] hover:shadow-md px-5 py-4 rounded-[1.25rem] mb-6 transition-all group">
+          <svg class="w-6 h-6" viewBox="0 0 36 36">
+            <path d="M16 16v14h4V20z" fill="#34A853"></path>
+            <path d="M30 16H20l-4 4h14z" fill="#4285F4"></path>
+            <path d="M6 16v4h10l4-4z" fill="#FBBC05"></path>
+            <rect fill="#EA4335" height="4" width="14" x="16" y="16"></rect>
+          </svg>
+          <span class="font-medium text-sm text-[#041e49]">Compose</span>
+        </button>
+        <nav class="space-y-0.5">
+          <div class="bg-[#d3e3fd] text-[#041e49] flex items-center gap-4 px-6 py-2 text-sm font-semibold rounded-full cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">inbox</span>
+            <span>Inbox</span><span class="ml-auto text-xs">12</span>
+          </div>
+          <div class="flex items-center gap-4 px-6 py-2 text-sm text-[#444746] hover:bg-[#e1e3e1] rounded-full cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]">star</span><span>Starred</span>
+          </div>
+          <div class="flex items-center gap-4 px-6 py-2 text-sm text-[#444746] hover:bg-[#e1e3e1] rounded-full cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]">schedule</span><span>Snoozed</span>
+          </div>
+          <div class="flex items-center gap-4 px-6 py-2 text-sm text-[#444746] hover:bg-[#e1e3e1] rounded-full cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]">send</span><span>Sent</span>
+          </div>
+          <div class="flex items-center gap-4 px-6 py-2 text-sm text-[#444746] hover:bg-[#e1e3e1] rounded-full cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]">draft</span><span>Drafts</span>
+          </div>
+          <div class="flex items-center gap-4 px-6 py-2 text-sm text-[#444746] hover:bg-[#e1e3e1] rounded-full cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]">expand_more</span><span>More</span>
+          </div>
+        </nav>
+      </aside>
+      <!-- Email content -->
+      <main class="flex-grow flex flex-col overflow-hidden">
+        <div class="px-4 py-2 border-b border-primary/5 flex items-center justify-between bg-[#f6f8fc]">
+          <div class="flex items-center gap-4 flex-grow">
+            <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-200 rounded-full">menu</span>
+            <div class="font-display-lg text-lg font-bold text-gray-700 mr-8 hidden sm:block">IntelMail</div>
+            <div class="flex items-center gap-4 bg-[#eaf1fb] rounded-full px-6 py-3 w-full max-w-2xl group focus-within:bg-white focus-within:shadow-md transition-all">
+              <span class="material-symbols-outlined text-gray-600">search</span>
+              <input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder-gray-600" placeholder="Search in mail" type="text">
+              <span class="material-symbols-outlined text-gray-600 cursor-pointer">tune</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 ml-4">
+            <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-200 rounded-full">help</span>
+            <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-200 rounded-full">settings</span>
+            <div class="w-8 h-8 rounded-full bg-[#1a73e8] flex items-center justify-center text-white text-xs font-bold ml-2">XW</div>
+          </div>
+        </div>
+        <div class="flex-grow overflow-y-auto bg-white p-6">
+          <div class="flex items-center justify-between mb-6 sticky top-0 bg-white z-10 py-2 border-b border-gray-100">
+            <div class="flex gap-2 items-center">
+              <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-100 rounded-full">arrow_back</span>
+              <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-100 rounded-full">archive</span>
+              <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-100 rounded-full">delete</span>
+              <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-100 rounded-full">mail</span>
+            </div>
+            <div class="flex gap-2">
+              <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-100 rounded-full">print</span>
+              <span class="material-symbols-outlined text-gray-600 cursor-pointer p-2 hover:bg-gray-100 rounded-full">open_in_new</span>
+            </div>
+          </div>
+          <div class="mb-6 pl-2">
+            <h3 class="text-2xl font-medium text-gray-800">INTEL REPORT #002: The Cocoa Crisis</h3>
+          </div>
+          <div class="max-w-2xl mx-auto border border-gray-100 shadow-sm rounded p-0 overflow-hidden font-body-md">
+            <div class="bg-primary text-on-primary p-8 text-center">
+              <div class="text-label-caps text-secondary mb-2 tracking-widest">COMMODITY FRONTIER NEWS</div>
+              <h1 class="font-display-lg text-2xl">Daily Strategic Briefing</h1>
+              <div class="mt-4 text-[10px] opacity-60">SATURDAY, MAY 9, 2026</div>
+            </div>
+            <img alt="Commodity markets — cocoa and supply chains" class="w-full h-64 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa56ezzWOFfit9bM5gilvrwlcRstseQYOvXythnxDgtVQhkTuewj2ygkkIEdZpM8Q2VwkskSSyFkI1uP3HXVaBGxIjv3OM_KmMxJ70JnJcnrBbjquYFyE1R3fssHXcSsPhWZNSZT0SCG0L03fr02uOhJvJGqdKwFUgcQOPhJYZ3bsZypB6DpvRvbiUGiE090Gb5USzAs0VHsLcaB25UxxLW8rUu5AwWjYBCdS0KWR-15kG8aKgxcV2As1rBcXKnsBQj7c4JPmgiw">
+            <div class="p-10 bg-white">
+              <div class="border-l-4 border-secondary pl-6 py-2 mb-8 bg-surface-container-lowest">
+                <p class="font-headline-md italic text-primary leading-relaxed text-lg">"West African cocoa supply is reaching a critical inflection point as mid-crop estimates fall 18% below the five-year average across the Ivory Coast and Ghana."</p>
+              </div>
+              <h4 class="font-bold text-lg mb-4 text-primary">I. The Macro Outlook</h4>
+              <p class="text-on-surface-variant leading-relaxed mb-6">ICE cocoa futures have surged to a record $12,048/t as El Niño-linked dry spells devastate mid-crop yields. Chocolate manufacturers are locking in forward contracts at historic premiums. Meanwhile, Brazil's soybean harvest remains two weeks behind schedule due to persistent rains in Mato Grosso, tightening the export window before the US crop comes online...</p>
+              <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-surface p-4 rounded border border-primary/5">
+                  <div class="text-[10px] font-bold text-secondary uppercase">Cocoa (ICE)</div>
+                  <div class="text-xl font-bold">$12,048/t</div>
+                </div>
+                <div class="bg-surface p-4 rounded border border-primary/5">
+                  <div class="text-[10px] font-bold text-red-500 uppercase">Harvest Deficit</div>
+                  <div class="text-xl font-bold">−18%</div>
+                </div>
+              </div>
+              <button class="w-full bg-primary text-on-primary py-4 rounded font-bold uppercase tracking-widest text-xs hover:bg-secondary transition-colors">Read Full Briefing</button>
+            </div>
+            <div class="bg-surface-container text-center p-6 border-t border-gray-100">
+              <p class="text-[10px] text-on-surface-variant">You are receiving this as a Commodity Frontier News subscriber.<br>© 2026 Commodity Frontier News · Free · Unsubscribe anytime</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
 
-  <hr class="rule">
-
-  <!-- HOW IT WORKS -->
-  <section class="section">
-    <p class="section-label">How it works</p>
-    <h2 class="section-title">Intelligence, automated.</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">Step 01</div>
-        <span class="step-icon">📡</span>
-        <h3>13 global sources monitored daily</h3>
-        <p>Reuters, BBC, Al Jazeera, The Guardian, CFR, Reddit, and Google News — scanned every morning for breaking developments.</p>
+<!-- PODCAST -->
+<section class="text-white py-24 relative overflow-hidden bg-[#0b0b0b]">
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <div class="grid lg:grid-cols-12 gap-12 items-start">
+      <!-- Left: Player -->
+      <div class="lg:col-span-5 bg-[#121212] border border-white/5 rounded-lg overflow-hidden shadow-2xl">
+        <div class="relative aspect-square">
+          <img alt="Commodity Frontier News Podcast" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uggm5GOwmSxdixnfkShMAr0Gy35Cf6074OwAU7_Z8udRKy5VU5Ou8fev4K_6qbnLs2dEBmj4_ALG9G4Z_4pD8JdhYEThiYeK6Gj4gFxGQkANHNK7u5KhQR_v6QP1d_yFcsBwrrd-3QroJe82t5J8oPQ1-SM1p8_4wf96VKxrgkf4_6W5c4awxRljFOFc7Rd13KhBj2f6a8UzJhlerLoDNXIHL14DObIRYj1r1YDW7MT2tsWMZPRaO_woe8uY1ofckuxzCsH3YzH">
+          <div class="absolute top-6 left-6 flex gap-3">
+            <div class="w-10 h-10 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10">
+              <span class="material-symbols-outlined text-[#1DB954] text-xl" style="font-variation-settings:'FILL' 1;">podcasts</span>
+            </div>
+            <span class="bg-[#1DB954] text-black text-[10px] font-bold px-2 py-0.5 rounded-sm flex items-center">LIVE</span>
+          </div>
+        </div>
+        <div class="p-8">
+          <div class="flex justify-between items-start mb-6">
+            <div>
+              <div class="text-[11px] font-bold text-[#b3b3b3] uppercase tracking-[0.15em] mb-2">Daily Briefing · May 9, 2026</div>
+              <h2 class="font-headline-lg text-3xl text-white mb-2 leading-tight">Commodity Frontier News</h2>
+              <p class="text-[#b3b3b3] text-sm">Sarah &amp; James · Weekday mornings</p>
+            </div>
+            <button class="material-symbols-outlined text-[#b3b3b3] hover:text-white transition-colors">add_circle</button>
+          </div>
+          <div class="space-y-3 mb-8">
+            <div class="flex justify-between text-[11px] font-medium text-[#b3b3b3]">
+              <span>00:00</span><span>03:45</span>
+            </div>
+            <div class="relative h-1 bg-white/10 rounded-full overflow-hidden">
+              <div class="absolute inset-y-0 left-0 bg-white w-0 rounded-full"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+              <button class="material-symbols-outlined text-[#b3b3b3] hover:text-white text-xl">shuffle</button>
+              <button class="material-symbols-outlined text-white text-3xl">skip_previous</button>
+            </div>
+            <button class="w-14 h-14 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 transition-transform">
+              <span class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1;">play_arrow</span>
+            </button>
+            <div class="flex items-center gap-6">
+              <button class="material-symbols-outlined text-white text-3xl">skip_next</button>
+              <button class="material-symbols-outlined text-[#1DB954] text-xl">repeat</button>
+            </div>
+          </div>
+        </div>
+        <div class="px-8 py-4 bg-black/40 border-t border-white/5 flex items-center justify-between">
+          <div class="flex items-center gap-3 text-[#b3b3b3]">
+            <span class="material-symbols-outlined text-lg">devices</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider">Connect to Device</span>
+          </div>
+          <div class="flex items-center gap-3 w-32">
+            <span class="material-symbols-outlined text-[#b3b3b3] text-lg">volume_up</span>
+            <div class="flex-grow h-1 bg-white/20 rounded-full">
+              <div class="h-full bg-white w-[70%]"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-num">Step 02</div>
-        <span class="step-icon">🤖</span>
-        <h3>AI selects the 8 most important stories</h3>
-        <p>Our AI ranks by geopolitical significance and writes concise, analyst-quality summaries with context and implications.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">Step 03</div>
-        <span class="step-icon">📬</span>
-        <h3>Delivered to your inbox by 8am</h3>
-        <p>Every weekday morning, your briefing arrives before the workday starts — ready to read in under 10 minutes.</p>
+      <!-- Right: Episodes + Spotify -->
+      <div class="lg:col-span-7">
+        <div class="flex items-center justify-between mb-8">
+          <h3 class="font-headline-md text-2xl text-white">Up Next on the Exchange</h3>
+          <button class="text-[11px] font-bold text-[#b3b3b3] hover:text-white uppercase tracking-widest">See All Episodes</button>
+        </div>
+        <div class="space-y-2 mb-12">
+          <div class="flex items-center gap-6 p-4 rounded-lg hover:bg-white/5 transition-colors group cursor-pointer">
+            <span class="w-4 text-center text-[#b3b3b3] font-medium">1</span>
+            <div class="w-12 h-12 bg-[#282828] rounded flex items-center justify-center text-[#b3b3b3]">
+              <span class="material-symbols-outlined">local_cafe</span>
+            </div>
+            <div class="flex-grow">
+              <h4 class="text-white font-medium group-hover:text-[#1DB954] transition-colors">Cocoa Crisis: Why $12,000/t Changes Everything</h4>
+              <div class="flex items-center gap-2 text-[12px] text-[#b3b3b3]">
+                <span class="bg-white/10 px-1 rounded-sm text-[10px]">May 9</span>
+                <span>•</span><span>3:45</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-6 p-4 rounded-lg hover:bg-white/5 transition-colors group cursor-pointer">
+            <span class="w-4 text-center text-[#b3b3b3] font-medium">2</span>
+            <div class="w-12 h-12 bg-[#282828] rounded flex items-center justify-center text-[#b3b3b3]">
+              <span class="material-symbols-outlined">grain</span>
+            </div>
+            <div class="flex-grow">
+              <h4 class="text-white font-medium group-hover:text-[#1DB954] transition-colors">Brazil Soy Delays &amp; US-Iran Strait Disruption</h4>
+              <div class="flex items-center gap-2 text-[12px] text-[#b3b3b3]">
+                <span class="bg-white/10 px-1 rounded-sm text-[10px]">May 8</span>
+                <span>•</span><span>4:01</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-6 p-4 rounded-lg hover:bg-white/5 transition-colors group cursor-pointer">
+            <span class="w-4 text-center text-[#b3b3b3] font-medium">3</span>
+            <div class="w-12 h-12 bg-[#282828] rounded flex items-center justify-center text-[#b3b3b3]">
+              <span class="material-symbols-outlined">electric_bolt</span>
+            </div>
+            <div class="flex-grow">
+              <h4 class="text-white font-medium group-hover:text-[#1DB954] transition-colors">Red Sea Shipping Rates &amp; European Energy Margins</h4>
+              <div class="flex items-center gap-2 text-[12px] text-[#b3b3b3]">
+                <span class="bg-white/10 px-1 rounded-sm text-[10px]">May 7</span>
+                <span>•</span><span>4:22</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Spotify promo -->
+        <div class="bg-gradient-to-r from-[#1DB954] via-[#1db954]/80 to-[#191414] p-8 rounded-lg flex items-center justify-between">
+          <div>
+            <img alt="Spotify" class="h-6 w-auto mb-4" src="https://lh3.googleusercontent.com/aida/ADBb0uilbHG3CQzo63xHhvDt-SJtjZNOtkBoewBUU-r1CAHRAv8tO3piMxSTgb95p8rvRLMfnA9yUgiMcek_bbbWjJ5Q76MC9fHSTPmi7V5YdTXTDWLY8dD1Pnkau1hRPQj8u9qu8ICrrWK-7ICM37iX_ugobSLZv1tccoujUTbyVP_JDnJa4_7BFXqEsXTpYvR8PbMOgj8UoGD0Un72GnLEMzxQeHsn0yZ6-InRxRydhyvFggWKprAVf986c5WOV3I-tZxHTR-DZZm2">
+            <p class="text-black text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Now Streaming</p>
+            <h4 class="text-black text-2xl font-bold">Get the full experience on Spotify</h4>
+          </div>
+          <button class="bg-black text-white px-8 py-3 rounded-full font-bold uppercase text-[11px] tracking-widest hover:scale-105 transition-transform flex items-center gap-2">
+            <img alt="Spotify" class="h-4 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0uilbHG3CQzo63xHhvDt-SJtjZNOtkBoewBUU-r1CAHRAv8tO3piMxSTgb95p8rvRLMfnA9yUgiMcek_bbbWjJ5Q76MC9fHSTPmi7V5YdTXTDWLY8dD1Pnkau1hRPQj8u9qu8ICrrWK-7ICM37iX_ugobSLZv1tccoujUTbyVP_JDnJa4_7BFXqEsXTpYvR8PbMOgj8UoGD0Un72GnLEMzxQeHsn0yZ6-InRxRydhyvFggWKprAVf986c5WOV3I-tZxHTR-DZZm2">
+            Open Player
+          </button>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-
-  <!-- CTA -->
-  <section class="cta-section">
-    <div class="cta-inner">
-      <div class="cta-text">
-        <h2>Start your morning<br>briefing today.</h2>
-        <p>Join readers who start every weekday<br>with a clear picture of the world.</p>
+<!-- INTELLIGENCE ARCHIVE + PREMIUM KB -->
+<section class="py-24 bg-[#fdfaf5]">
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <div class="flex flex-col lg:flex-row gap-16">
+      <!-- Archive -->
+      <div class="flex-grow lg:w-2/3">
+        <div class="mb-10">
+          <div class="text-label-caps text-secondary mb-2 tracking-widest flex items-center gap-2">
+            <span class="w-4 h-px bg-secondary inline-block"></span> HISTORICAL DATA REPOSITORY
+          </div>
+          <h2 class="font-headline-lg text-headline-lg text-primary mb-4">Intelligence Archive</h2>
+          <p class="text-body-lg text-on-surface-variant max-w-xl">A complete historical record of institutional reports, daily briefs, and podcasts spanning global commodity markets.</p>
+        </div>
+        <div class="bg-white border border-primary/10 rounded-xl shadow-sm overflow-hidden">
+          <div class="p-6 border-b border-primary/5 bg-surface flex justify-between items-center">
+            <div class="flex items-center gap-6">
+              <span class="text-label-caps font-bold text-primary">All Issues (854)</span>
+              <div class="h-4 w-px bg-primary/10"></div>
+              <span class="text-label-caps text-on-surface-variant">Filter by: <span class="text-secondary cursor-pointer">Sector ▾</span></span>
+            </div>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</span>
+              <input class="pl-9 py-1.5 text-xs bg-surface-container border-none rounded-full w-48 focus:ring-1 focus:ring-secondary focus:bg-white transition-all" placeholder="Search archive..." type="text">
+            </div>
+          </div>
+          <div class="archive-scroll max-h-[600px] overflow-y-auto">
+            <div class="grid grid-cols-12 gap-4 px-8 py-3 bg-surface-container-low text-[10px] font-bold text-on-surface-variant uppercase tracking-widest border-b border-primary/5">
+              <div class="col-span-2">Ref / ID</div>
+              <div class="col-span-2">Date</div>
+              <div class="col-span-8">Executive Summary</div>
+            </div>
+            <div class="divide-y divide-primary/5">
+              <div class="grid grid-cols-12 gap-4 px-8 py-6 hover:bg-surface-bright transition-colors group cursor-pointer items-start">
+                <div class="col-span-2 font-mono text-sm text-primary font-bold group-hover:text-secondary">#CFN-002</div>
+                <div class="col-span-2 text-xs text-on-surface-variant pt-0.5">May 9, 2026</div>
+                <div class="col-span-8">
+                  <div class="font-bold text-primary group-hover:underline underline-offset-4 decoration-secondary mb-1">The Cocoa Crisis: West Africa Harvest Collapse</div>
+                  <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-2">ICE cocoa futures surge above $12,000/t as Ivory Coast mid-crop estimates fall 18% below average. Chocolate manufacturers locking in record-cost forward contracts.</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-12 gap-4 px-8 py-6 hover:bg-surface-bright transition-colors group cursor-pointer items-start">
+                <div class="col-span-2 font-mono text-sm text-primary font-bold">#CFN-001</div>
+                <div class="col-span-2 text-xs text-on-surface-variant pt-0.5">May 8, 2026</div>
+                <div class="col-span-8">
+                  <div class="font-bold text-primary group-hover:underline decoration-secondary mb-1">US-Iran Strait of Hormuz &amp; Oil Market Shock</div>
+                  <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-2">Direct military exchanges send Brent crude sharply higher. Strait shipping routes disrupted, squeezing energy and grain importers across Europe and Asia.</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-12 gap-4 px-8 py-6 hover:bg-surface-bright transition-colors group cursor-pointer items-start opacity-60">
+                <div class="col-span-2 font-mono text-sm text-primary font-bold">#CFN-000</div>
+                <div class="col-span-2 text-xs text-on-surface-variant pt-0.5">May 7, 2026</div>
+                <div class="col-span-8">
+                  <div class="font-bold text-primary mb-1 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">lock</span> Red Sea Shipping: Container Rate Spike
+                  </div>
+                  <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-2">Houthi attacks push container rates 40% above seasonal norms, affecting coffee and grain importers across the Mediterranean.</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-12 gap-4 px-8 py-6 hover:bg-surface-bright transition-colors group cursor-pointer items-start opacity-60">
+                <div class="col-span-2 font-mono text-sm text-primary font-bold">#POD-002</div>
+                <div class="col-span-2 text-xs text-on-surface-variant pt-0.5">May 6, 2026</div>
+                <div class="col-span-8">
+                  <div class="font-bold text-primary mb-1 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">lock</span> Brazil Soy: Harvest Delays &amp; the Export Window
+                  </div>
+                  <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-2">Persistent Mato Grosso rains push soybean harvest two weeks late. Chicago futures pricing in tightness as US crop window approaches.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 bg-primary text-center text-white text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:bg-secondary transition-colors">
+            View 850 More Archived Reports
+          </div>
+        </div>
       </div>
-      <div class="cta-form-wrap">
-        <form class="cta-form" id="cta-form" onsubmit="handleSubscribe(event, 'cta-form')">
-          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
-          <button type="submit">Subscribe — it's free →</button>
-        </form>
-        <p class="subscribe-note" id="cta-note" style="text-align:center;margin-top:10px;"></p>
+      <!-- Premium KB -->
+      <div class="lg:w-1/3">
+        <div class="premium-gold-border rounded-xl p-8 bg-white shadow-2xl relative overflow-hidden">
+          <div class="absolute -top-10 -right-10 w-40 h-40 bg-secondary/5 rounded-full blur-3xl"></div>
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-secondary">
+              <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">workspace_premium</span>
+            </div>
+            <span class="font-label-caps text-secondary font-bold tracking-widest uppercase">Premium Access</span>
+          </div>
+          <h3 class="font-display-lg text-2xl mb-4">Knowledge Base Download</h3>
+          <p class="text-body-md text-on-surface-variant mb-6 leading-relaxed">Download our entire historical archive in a single, machine-readable package. One-time payment for lifetime access, optimized for AI models, LLMs, and knowledge tools like Obsidian.</p>
+          <ul class="space-y-3 mb-8 text-on-surface-variant">
+            <li class="flex items-center gap-3 font-medium text-sm">
+              <span class="material-symbols-outlined text-secondary text-lg">check_circle</span> All Past News Summaries (.md)
+            </li>
+            <li class="flex items-center gap-3 font-medium text-sm">
+              <span class="material-symbols-outlined text-secondary text-lg">check_circle</span> Full Podcast Audio Archive (.mp3)
+            </li>
+            <li class="flex items-center gap-3 font-medium text-sm">
+              <span class="material-symbols-outlined text-secondary text-lg">check_circle</span> Audio Transcripts &amp; Analysis (.md)
+            </li>
+          </ul>
+          <button class="w-full bg-primary text-white py-4 rounded-lg font-bold uppercase text-xs tracking-widest hover:bg-secondary transition-all flex items-center justify-center gap-3 shadow-lg">
+            <span class="material-symbols-outlined text-lg">lock</span> Full Download
+          </button>
+          <div class="mt-4 text-center">
+            <span class="text-[10px] text-on-surface-variant font-bold uppercase tracking-tighter opacity-60">One-time payment · Premium Tier Asset</span>
+          </div>
+        </div>
+        <div class="mt-8 px-4 flex flex-col gap-4">
+          <div class="flex items-center gap-4 text-on-surface-variant/40">
+            <span class="text-[10px] font-bold">FEED TO</span>
+            <div class="h-px flex-grow bg-primary/5"></div>
+          </div>
+          <div class="flex justify-between items-center opacity-30 px-2">
+            <span class="font-bold text-[10px] tracking-widest">OPENAI</span>
+            <span class="font-bold text-[10px] tracking-widest">Anthropic</span>
+            <span class="font-bold text-[10px] tracking-widest">GEMINI</span>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-brand">🌍 Geopolitical Briefing</div>
-    <div class="footer-meta">
-      <span>Free</span>
-      <span>Every weekday</span>
-      <span>Unsubscribe anytime</span>
-      <span>Powered by AI</span>
+<!-- BOTTOM CTA -->
+<section class="bg-primary text-on-primary py-stack-xl overflow-hidden relative">
+  <div class="absolute inset-0 data-grid-bg opacity-10"></div>
+  <div class="max-w-container-max mx-auto px-margin-desktop relative z-10 text-center">
+    <h2 class="font-display-lg text-display-lg mb-stack-md">Ready to subscribe?</h2>
+    <p class="font-body-lg text-white/60 mb-stack-xl max-w-2xl mx-auto">Join investment professionals who start their day with our intelligence.</p>
+    <form id="cta-form" class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto items-stretch" onsubmit="handleSubscribe(event,'cta-form')">
+      <input name="email" type="email" required autocomplete="email" placeholder="your@email.com" class="flex-grow bg-white/10 border border-white/20 text-white rounded-lg px-6 py-4 font-body-md focus:ring-2 focus:ring-secondary focus:border-transparent outline-none backdrop-blur-sm">
+      <button type="submit" class="bg-secondary text-on-secondary px-10 py-4 rounded-lg font-ui-button text-ui-button uppercase tracking-wider hover:brightness-110 transition-all font-bold">Subscribe free →</button>
+    </form>
+    <p id="cta-note" class="mt-4 text-xs text-white/30 font-label-caps"></p>
+    <div class="mt-8 flex flex-wrap justify-center gap-8 opacity-40">
+      <span class="font-bold tracking-widest text-sm uppercase">Google</span>
+      <span class="font-bold tracking-widest text-sm uppercase">Refinitiv Eikon</span>
+      <span class="font-bold tracking-widest text-sm uppercase">S&amp;P Global</span>
     </div>
-  </footer>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-surface-container-highest border-t border-primary/10">
+  <div class="max-w-container-max mx-auto px-margin-desktop py-stack-xl flex flex-col md:flex-row justify-between gap-stack-lg">
+    <div class="max-w-xs">
+      <div class="font-display-lg text-headline-md font-bold text-primary mb-4">Commodity Frontier News</div>
+      <p class="font-body-md text-on-surface-variant">Professional Grade Market Analysis.<br>Daily intelligence since 2026.</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-stack-lg">
+      <div class="flex flex-col gap-2">
+        <span class="font-bold text-primary mb-2 uppercase text-xs tracking-widest">Markets</span>
+        <a class="text-on-surface-variant hover:text-secondary underline decoration-secondary transition-all" href="#">Agriculture</a>
+        <a class="text-on-surface-variant hover:text-secondary transition-all" href="#">Energy</a>
+        <a class="text-on-surface-variant hover:text-secondary transition-all" href="#">Metals</a>
+      </div>
+      <div class="flex flex-col gap-2">
+        <span class="font-bold text-primary mb-2 uppercase text-xs tracking-widest">Resources</span>
+        <a class="text-on-surface-variant hover:text-secondary transition-all" href="#">Analysis</a>
+        <a class="text-on-surface-variant hover:text-secondary transition-all" href="#">Podcasts</a>
+        <a class="text-on-surface-variant hover:text-secondary transition-all" href="#">About</a>
+      </div>
+      <div class="flex flex-col gap-2">
+        <span class="font-bold text-primary mb-2 uppercase text-xs tracking-widest">Legal</span>
+        <a class="text-on-surface-variant hover:text-secondary transition-all" href="#">Privacy Policy</a>
+        <a class="text-on-surface-variant hover:text-secondary transition-all" href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-container-max mx-auto px-margin-desktop py-8 border-t border-primary/5 flex flex-col md:flex-row justify-between items-center gap-4 text-label-caps text-on-surface-variant/60">
+    <span>© 2026 Commodity Frontier News. All rights reserved.</span>
+    <div class="flex gap-4">
+      <a class="hover:text-primary transition-colors" href="#">LinkedIn</a>
+      <a class="hover:text-primary transition-colors" href="#">X</a>
+      <a class="hover:text-primary transition-colors" href="#">RSS Feed</a>
+    </div>
+  </div>
+</footer>
 
 <script>
 async function handleSubscribe(event, formId) {
@@ -1212,7 +539,7 @@ async function handleSubscribe(event, formId) {
   const noteId = formId === 'hero-form' ? 'hero-note' : 'cta-note';
   const note = document.getElementById(noteId);
   const email = form.querySelector('input[type="email"]').value;
-  const btn = form.querySelector('button');
+  const btn = form.querySelector('button[type="submit"]');
 
   btn.disabled = true;
   btn.textContent = 'Subscribing...';
@@ -1225,7 +552,6 @@ async function handleSubscribe(event, formId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     });
-    const data = await resp.json();
 
     if (resp.status === 201) {
       form.style.display = 'none';
@@ -1234,18 +560,18 @@ async function handleSubscribe(event, formId) {
     } else if (resp.status === 409) {
       form.style.display = 'none';
       note.style.color = '#b36b00';
-      note.textContent = '📬 You\'re already subscribed! Check your inbox — if you haven\'t confirmed yet, look for our confirmation email.';
+      note.textContent = '📬 You\'re already subscribed! Check your inbox for our confirmation email.';
     } else {
       note.style.color = '#cc0000';
       note.textContent = '⚠️ Something went wrong. Please try again.';
       btn.disabled = false;
-      btn.textContent = formId === 'hero-form' ? 'Subscribe Free →' : 'Subscribe — it\'s free →';
+      btn.textContent = formId === 'hero-form' ? 'subscribe free →' : 'Subscribe free →';
     }
   } catch (e) {
     note.style.color = '#cc0000';
     note.textContent = '⚠️ Network error. Please try again.';
     btn.disabled = false;
-    btn.textContent = formId === 'hero-form' ? 'Subscribe Free →' : 'Subscribe — it\'s free →';
+    btn.textContent = formId === 'hero-form' ? 'subscribe free →' : 'Subscribe free →';
   }
 }
 </script>

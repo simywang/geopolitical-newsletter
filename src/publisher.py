@@ -79,7 +79,7 @@ def render_html(data: dict, date_str: str) -> str:
   <div class="footer">
     <p>This briefing is generated automatically from public news sources and summarized by AI.<br>
     It is intended for informational purposes only.</p>
-    <p><a href="{{{{ unsubscribe_url }}}}">Unsubscribe</a></p>
+    <p><a href="https://open.spotify.com/show/033dFGpcN8nVTjTjR3uOuE">Listen on Spotify</a> &nbsp;·&nbsp; <a href="{{{{ unsubscribe_url }}}}">Unsubscribe</a></p>
   </div>
 </div>
 </body>

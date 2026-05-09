@@ -180,35 +180,30 @@ def render_html(data: dict, date_str: str) -> str:
 # Buttondown API
 # ---------------------------------------------------------------------------
 
-def _headers(api_key: str = "") -> dict:
-    key = api_key or config.BUTTONDOWN_API_KEY
-    return {"Authorization": f"Token {key}"}
+def _headers() -> dict:
+    return {"Authorization": f"Token {config.BUTTONDOWN_API_KEY}"}
 
 
-def _api_key_for_lang(lang: str) -> str:
-    return {
-        "nl": config.BUTTONDOWN_API_KEY_NL,
-        "zh": config.BUTTONDOWN_API_KEY_ZH,
-    }.get(lang, config.BUTTONDOWN_API_KEY)
-
-
-def _create_draft(html: str, subject: str, api_key: str) -> str:
+def _create_draft(html: str, subject: str, lang: str) -> str:
+    payload = {"subject": subject, "body": html, "status": "draft"}
+    if lang != "en":
+        payload["filters"] = [{"type": "tag", "value": f"lang:{lang}"}]
     resp = requests.post(
         f"{config.BUTTONDOWN_API_BASE}/emails",
-        headers=_headers(api_key),
-        json={"subject": subject, "body": html, "status": "draft"},
+        headers=_headers(),
+        json=payload,
         timeout=30,
     )
     resp.raise_for_status()
     email_id = resp.json()["id"]
-    print(f"[publisher] Draft created: id={email_id}")
+    print(f"[publisher] Draft created: id={email_id} (lang={lang})")
     return email_id
 
 
-def _trigger_send(email_id: str, api_key: str) -> None:
+def _trigger_send(email_id: str) -> None:
     resp = requests.patch(
         f"{config.BUTTONDOWN_API_BASE}/emails/{email_id}",
-        headers=_headers(api_key),
+        headers=_headers(),
         json={"status": "about_to_send"},
         timeout=30,
     )
@@ -218,7 +213,6 @@ def _trigger_send(email_id: str, api_key: str) -> None:
 
 def publish(data: dict, date_str: str, subject: str, lang: str = "en") -> None:
     html = render_html(data, date_str)
-    api_key = _api_key_for_lang(lang)
 
     if config.DRY_RUN:
         print(f"[publisher] DRY_RUN=true — skipping Buttondown API call [{lang}]")
@@ -226,10 +220,10 @@ def publish(data: dict, date_str: str, subject: str, lang: str = "en") -> None:
         print(html[:500])
         return
 
-    email_id = _create_draft(html, subject, api_key)
+    email_id = _create_draft(html, subject, lang)
 
     if config.SEND_MODE == "send":
-        _trigger_send(email_id, api_key)
+        _trigger_send(email_id)
         print(f"[publisher] Newsletter sent [{lang}]: '{subject}'")
     else:
         print(f"[publisher] Draft saved [{lang}] (SEND_MODE=draft). Subject: '{subject}'")

@@ -1,8 +1,4 @@
-const API_KEYS = {
-  en: process.env.BUTTONDOWN_API_KEY,
-  nl: process.env.BUTTONDOWN_API_KEY_NL || process.env.BUTTONDOWN_API_KEY,
-  zh: process.env.BUTTONDOWN_API_KEY_ZH || process.env.BUTTONDOWN_API_KEY,
-};
+const VALID_LANGS = new Set(['en', 'nl', 'zh']);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -14,10 +10,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Email is required' });
   }
 
-  const apiKey = API_KEYS[lang] || API_KEYS.en;
+  const apiKey = process.env.BUTTONDOWN_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'Server misconfigured' });
   }
+
+  const langTag = VALID_LANGS.has(lang) ? lang : 'en';
 
   try {
     const bdResp = await fetch('https://api.buttondown.email/v1/subscribers', {
@@ -26,7 +24,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         'Authorization': `Token ${apiKey}`,
       },
-      body: JSON.stringify({ email_address: email }),
+      body: JSON.stringify({ email_address: email, tags: [`lang:${langTag}`] }),
     });
 
     const data = await bdResp.json();

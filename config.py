@@ -43,8 +43,6 @@ LOOKBACK_HOURS = 24
 
 # --- Buttondown ---
 BUTTONDOWN_API_BASE = "https://api.buttondown.email/v1"
-BUTTONDOWN_API_KEY_NL = os.getenv("BUTTONDOWN_API_KEY_NL", "")
-BUTTONDOWN_API_KEY_ZH = os.getenv("BUTTONDOWN_API_KEY_ZH", "")
 
 # Languages to publish (comma-separated: en,nl,zh). en is always included.
 PUBLISH_LANGUAGES = [l.strip() for l in os.getenv("PUBLISH_LANGUAGES", "en").split(",") if l.strip()]

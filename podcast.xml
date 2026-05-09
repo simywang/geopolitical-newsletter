@@ -6,6 +6,10 @@
     <language>en-us</language>
     <description>Daily AI-curated geopolitical briefings delivered as a 5-minute two-host podcast every weekday. Hosted by Sarah and James.</description>
     <itunes:author>CODS_</itunes:author>
+    <itunes:owner>
+      <itunes:name>CODS_</itunes:name>
+      <itunes:email>wangxmsimy@gmail.com</itunes:email>
+    </itunes:owner>
     <itunes:category text="News" />
     <itunes:image href="https://geopolitical-newsletter-three.vercel.app/podcast-cover.jpg" />
     <itunes:explicit>false</itunes:explicit>

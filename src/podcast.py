@@ -366,7 +366,10 @@ def generate_episode_title(data: dict, date_str: str) -> str:
     """
     stories = data.get("articles", [])
     headlines = "\n".join(f"- {a.get('title', '')}" for a in stories[:8] if a.get("title"))
-    short_date = datetime.strptime(date_str, "%Y-%m-%d").strftime("%b %-d")
+    try:
+        short_date = datetime.strptime(date_str, "%Y-%m-%d").strftime("%b %-d")
+    except ValueError:
+        short_date = date_str  # already human-readable e.g. "May 9, 2026"
     fallback = f"Commodity Frontier — {date_str}"
 
     if not headlines or not config.ANTHROPIC_API_KEY:

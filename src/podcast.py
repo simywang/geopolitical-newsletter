@@ -235,48 +235,24 @@ def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
 # Step 3a: Generate episode cover image via StepFun
 # ---------------------------------------------------------------------------
 
-_IMAGE_PROMPT_SYSTEM = """You are a creative director for a geopolitical news podcast.
-Given today's top news stories, write a vivid image generation prompt for an episode cover.
-
-Style: flat vector illustration, editorial illustration style, bold graphic shapes, limited color palette (3-4 colors), clean lines, modern and sophisticated. Like a New Yorker cover or TIME magazine illustration.
-Format: a single English sentence, max 120 words. No text, no logos, no people's faces.
-Focus on symbolic and metaphorical imagery: abstract maps, symbolic objects, architectural silhouettes, geometric patterns representing geopolitical themes.
-Make it specific to today's stories — not generic."""
-
 def generate_episode_image(data: dict) -> bytes | None:
-    """Generate a 1024x1024 episode cover image using StepFun. Returns PNG bytes or None."""
+    """Generate a 1400x1400 episode cover image using StepFun. Returns JPEG bytes or None."""
     if not config.STEPFUN_API_KEY:
         print("[podcast] STEPFUN_API_KEY not set — skipping episode image")
         return None
 
     stories = data.get("articles", [])[:3]
-    headlines = "\n".join(f"- {a.get('title', '')}" for a in stories)
-    overview = data.get("overview", "")
+    topics = "; ".join(a.get("title", "")[:80] for a in stories if a.get("title"))
+    image_prompt = (
+        f"flat vector editorial illustration, bold graphic shapes, limited color palette of 3 colors, "
+        f"clean lines, modern sophisticated style, no text, no faces, no logos. "
+        f"Symbolic geopolitical imagery representing: {topics}"
+    )[:500]
+    print(f"[podcast] Image prompt: {image_prompt[:80]}...")
 
     import openai as _openai
 
-    # Step 1: Generate image prompt via AI
-    prompt_client = _openai.OpenAI(
-        base_url="https://api.deepseek.com", api_key=config.DEEPSEEK_API_KEY
-    ) if config.DEEPSEEK_API_KEY else _openai.OpenAI(api_key=config.OPENAI_API_KEY)
-    model = config.DEEPSEEK_MODEL if config.DEEPSEEK_API_KEY else "gpt-4o-mini"
-
-    resp = prompt_client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": _IMAGE_PROMPT_SYSTEM},
-            {"role": "user", "content": f"Overview: {overview}\n\nTop headlines:\n{headlines}"},
-        ],
-        max_tokens=200,
-        temperature=0.8,
-    )
-    image_prompt = resp.choices[0].message.content.strip()[:500]
-    if not image_prompt:
-        print("[podcast] Image prompt empty — skipping image")
-        return None
-    print(f"[podcast] Image prompt: {image_prompt[:80]}...")
-
-    # Step 2: Generate image via StepFun
+    # Generate image via StepFun
     img_client = _openai.OpenAI(
         api_key=config.STEPFUN_API_KEY,
         base_url="https://api.stepfun.com/v1",

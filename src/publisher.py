@@ -47,6 +47,13 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #e8e4dc; marg
 .watch-next-label { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #755b00; white-space: nowrap; margin-top: 2px; }
 .watch-next p { margin: 0; font-size: 13px; color: #555; line-height: 1.6; font-family: Arial, sans-serif; }
 
+.watch-week { background: #fafaf8; border-top: 2px solid #755b00; padding: 24px 40px; }
+.watch-week-label { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #755b00; margin: 0 0 14px 0; }
+.watch-week-list { margin: 0; padding: 0; list-style: none; }
+.watch-week-list li { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #e8e4dc; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.6; color: #444; }
+.watch-week-list li:last-child { border-bottom: none; }
+.watch-week-list li strong { color: #0a0a0a; white-space: nowrap; min-width: 0; }
+
 .podcast-banner { background: #0a0a0a; padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .podcast-banner-label { font-size: 10px; color: rgba(255,255,255,0.4); font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 5px 0; }
 .podcast-banner-title { font-size: 14px; color: #ffffff; margin: 0; font-family: Georgia, serif; line-height: 1.4; }
@@ -95,6 +102,20 @@ def render_html(data: dict, date_str: str) -> str:
     overview = data.get("overview", "")
     episode_title = data.get("episode_title", f"Commodity Frontier — {date_str}")
 
+    watch_items = data.get("watch_this_week", [])
+    if watch_items:
+        items_html = "".join(
+            f'<li><strong>{w.get("item", "")}</strong> — {w.get("detail", "")}</li>'
+            for w in watch_items
+        )
+        watch_section = f"""
+  <div class="watch-week">
+    <p class="watch-week-label">What to Watch This Week</p>
+    <ul class="watch-week-list">{items_html}</ul>
+  </div>"""
+    else:
+        watch_section = ""
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -125,6 +146,8 @@ def render_html(data: dict, date_str: str) -> str:
   <div class="articles">
     {articles_html}
   </div>
+
+  {watch_section}
 
   <div class="podcast-banner">
     <div>

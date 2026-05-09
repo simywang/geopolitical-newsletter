@@ -23,6 +23,8 @@ Your task:
    - "second_order_effect": downstream consequences 4-12 weeks out (e.g. higher input costs for manufacturers, freight rate pressure, substitution effects)
    - "watch_next": one specific data point, report, or event to monitor as a leading indicator
 
+5. Generate a "watch_this_week" list of 3-5 items: upcoming data releases, weather windows, or market events that traders should monitor in the next 5-7 days based on today's news context. Draw from: USDA WASDE, EIA inventory reports, OPEC meetings, Brazil/Argentina crop weather windows, West Africa cocoa arrivals, Vietnam robusta export flow, EUDR deadlines, Black Sea/Red Sea/Panama Canal logistics.
+
 Commodity knowledge to apply:
 - Brazil: ~40% of global soy exports, largest arabica coffee producer. Mato Grosso harvest window is Jan-Mar; delays tighten Jul CBOT soy spread. El Niño = Brazilian drought = arabica supply risk.
 - West Africa (Ivory Coast + Ghana): ~80% of global cocoa. Flowering Oct-Dec; dry harmattan wind = lower mid-crop. La Niña = excess rain = pod disease risk.
@@ -47,6 +49,12 @@ STRICT RULES:
       "market_impact": "...",
       "second_order_effect": "...",
       "watch_next": "..."
+    }}
+  ],
+  "watch_this_week": [
+    {{
+      "item": "Short label (e.g. USDA WASDE, EIA inventory, Brazil harvest)",
+      "detail": "One sentence: what to watch for and why it matters to prices"
     }}
   ]
 }}""".format(n=config.ARTICLES_TO_SELECT)

@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 9, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-09</guid>
+      <pubDate>Sat, 09 May 2026 16:29:06 +0000</pubDate>
+      <description>Today's global landscape is dominated by escalating tensions on multiple fronts. The Russia-Ukraine war sees a potential but fragile ceasefire announced by Trump, even as Putin's scaled-down Victory Day parade underscores Russian losses. The Middle East remains volatile with Iran accusing the US of reckless military aggression, while the UK deploys a warship and the US imposes new sanctions on Iranian weapons networks. A historic political shift in Hungary ends Orbán's 16-year rule, and a major cyber attack disrupts education globally. The conviction of four men in the Haitian president's assassination marks a milestone in international justice. Meanwhile, a hantavirus outbreak on a cruise ship adds a public health dimension to geopolitical concerns.</description>
+      <itunes:summary>Today's global landscape is dominated by escalating tensions on multiple fronts. The Russia-Ukraine war sees a potential but fragile ceasefire announced by Trump, even as Putin's scaled-down Victory Day parade underscores Russian losses. The Middle East remains volatile with Iran accusing the US of reckless military aggression, while the UK deploys a warship and the US imposes new sanctions on Iranian weapons networks. A historic political shift in Hungary ends Orbán's 16-year rule, and a major cyber attack disrupts education globally. The conviction of four men in the Haitian president's assassination marks a milestone in international justice. Meanwhile, a hantavirus outbreak on a cruise ship adds a public health dimension to geopolitical concerns.</itunes:summary>
+      <itunes:duration>03:44</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/cover-2026-05-09.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/briefing-2026-05-09.mp3" length="3600429" type="audio/mpeg" />
+    </item>
+    <item>
       <title>May 9 · Iran Flare-Up &amp; Ukraine Truce Shake Energy Markets</title>
       <guid isPermaLink="false">briefing-2026-05-09</guid>
       <pubDate>Sat, 09 May 2026 09:46:45 +0000</pubDate>

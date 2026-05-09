@@ -7,7 +7,7 @@
     <description>Daily AI-curated geopolitical briefings delivered as a 5-minute two-host podcast every weekday. Hosted by Sarah and James.</description>
     <itunes:author>CODS_</itunes:author>
     <itunes:category text="News" />
-    <itunes:image href="https://geopolitical-newsletter.vercel.app/podcast-cover.png" />
+    <itunes:image href="https://geopolitical-newsletter.vercel.app/podcast-cover.jpg" />
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
@@ -20,27 +20,6 @@
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/cover-2026-05-09.jpg" />
       <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/briefing-2026-05-09.mp3" length="3608493" type="audio/mpeg" />
-    </item>
-    <item>
-      <title>Geopolitical Briefing — May 9, 2026</title>
-      <guid isPermaLink="false">briefing-2026-05-09</guid>
-      <pubDate>Sat, 09 May 2026 09:32:37 +0000</pubDate>
-      <description>Today’s global landscape is dominated by multiple high-stakes confrontations and diplomatic maneuvers. The Russia-Ukraine war sees a rare three-day ceasefire announced by President Trump, coinciding with Moscow’s scaled-back Victory Day parade where Putin denounced NATO. Simultaneously, the Iran-US conflict intensifies with Tehran accusing Washington of reckless attacks and global food prices hitting a three-year high due to supply disruptions. In the Middle East, Israeli settler violence in the West Bank escalates tensions. A major cyber attack on the Canvas educational platform impacts millions worldwide, underscoring digital vulnerabilities. Ahead of a Trump-Xi summit, US-China relations remain steady yet competitive. Hungary’s political landscape shifts as a new prime minister prepares to take office after a landslide victory, signaling potential changes in EU dynamics. These events collectively point to a world grappling with multiple crises, from armed conflicts to economic shocks and cyber threats.</description>
-      <itunes:summary>Today’s global landscape is dominated by multiple high-stakes confrontations and diplomatic maneuvers. The Russia-Ukraine war sees a rare three-day ceasefire announced by President Trump, coinciding with Moscow’s scaled-back Victory Day parade where Putin denounced NATO. Simultaneously, the Iran-US conflict intensifies with Tehran accusing Washington of reckless attacks and global food prices hitting a three-year high due to supply disruptions. In the Middle East, Israeli settler violence in the West Bank escalates tensions. A major cyber attack on the Canvas educational platform impacts millions worldwide, underscoring digital vulnerabilities. Ahead of a Trump-Xi summit, US-China relations remain steady yet competitive. Hungary’s political landscape shifts as a new prime minister prepares to take office after a landslide victory, signaling potential changes in EU dynamics. These events collectively point to a world grappling with multiple crises, from armed conflicts to economic shocks and cyber threats.</itunes:summary>
-      <itunes:duration>04:43</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/briefing-2026-05-09.mp3" length="4540845" type="audio/mpeg" />
-    </item>
-    <item>
-      <title>Geopolitical Briefing — May 9, 2026</title>
-      <guid isPermaLink="false">briefing-2026-05-09</guid>
-      <pubDate>Sat, 09 May 2026 08:24:30 +0000</pubDate>
-      <description>Today's global landscape is dominated by multiple concurrent crises. A breakthrough three-day ceasefire between Russia and Ukraine, brokered by President Trump, begins amid Victory Day commemorations, offering a fragile pause but deep distrust remains. The Iran conflict continues to escalate, with Tehran accusing Washington of 'reckless military adventures' even as Iran imposes a new tax on ships transiting the Strait of Hormuz—a direct challenge to global energy flows. Violence in the West Bank spikes as Israeli settlers torch Palestinian homes, underscoring the unresolved Israeli-Palestinian tension. Political shifts in Europe: Hungary’s new PM takes office after a landslide victory, signaling a potential realignment. Australia expands counterterrorism sanctions against the Balochistan Liberation Army. The US targets Chinese entities over Iran procurement, further straining US-China relations. Meanwhile, the Iran war drives global food prices to a three-year high, amplifying economic pressure worldwide. These events collectively point to a volatile multipolar order where conflict, sanctions, and economic disruption intertwine.</description>
-      <itunes:summary>Today's global landscape is dominated by multiple concurrent crises. A breakthrough three-day ceasefire between Russia and Ukraine, brokered by President Trump, begins amid Victory Day commemorations, offering a fragile pause but deep distrust remains. The Iran conflict continues to escalate, with Tehran accusing Washington of 'reckless military adventures' even as Iran imposes a new tax on ships transiting the Strait of Hormuz—a direct challenge to global energy flows. Violence in the West Bank spikes as Israeli settlers torch Palestinian homes, underscoring the unresolved Israeli-Palestinian tension. Political shifts in Europe: Hungary’s new PM takes office after a landslide victory, signaling a potential realignment. Australia expands counterterrorism sanctions against the Balochistan Liberation Army. The US targets Chinese entities over Iran procurement, further straining US-China relations. Meanwhile, the Iran war drives global food prices to a three-year high, amplifying economic pressure worldwide. These events collectively point to a volatile multipolar order where conflict, sanctions, and economic disruption intertwine.</itunes:summary>
-      <itunes:duration>04:29</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/cover-2026-05-09.jpg" />
-      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/briefing-2026-05-09.mp3" length="4306221" type="audio/mpeg" />
     </item>
     <item>
       <title>Geopolitical Briefing — May 8, 2026</title>

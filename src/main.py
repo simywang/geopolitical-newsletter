@@ -8,6 +8,7 @@ import config
 from src.fetcher import fetch_all
 from src.summarizer import summarize
 from src.publisher import publish
+from src.podcast import generate_podcast
 
 
 def _ts() -> str:
@@ -37,11 +38,15 @@ def main():
     print(f"\n[{_ts()}] Step 2/3 — Summarizing with AI...")
     data = summarize(articles)
 
-    # Step 3: Publish
+    # Step 3: Publish newsletter
     date_str = _date_str()
     subject = f"🌍 Geopolitical Briefing — {date_str}"
-    print(f"\n[{_ts()}] Step 3/3 — Publishing...")
+    print(f"\n[{_ts()}] Step 3/4 — Publishing newsletter...")
     publish(data, date_str, subject)
+
+    # Step 4: Generate podcast (controlled by PODCAST_ENABLED)
+    print(f"\n[{_ts()}] Step 4/4 — Generating podcast...")
+    generate_podcast(data, date_str)
 
     print(f"\n[{_ts()}] === Done ===")
 

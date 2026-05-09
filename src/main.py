@@ -10,6 +10,7 @@ from src.summarizer import summarize
 from src.publisher import publish
 from src.podcast import generate_podcast, generate_episode_title
 from src.market_data import fetch_prices, build_price_context
+from src.translator import translate_data
 
 
 def _ts() -> str:
@@ -48,13 +49,25 @@ def main():
     print(f"\n[{_ts()}] Step 3/4 — Summarizing with AI...")
     data = summarize(articles, price_context)
 
-    # Step 4: Publish newsletter
+    # Step 4: Publish newsletter (all languages)
     date_str = _date_str()
     episode_title = generate_episode_title(data, date_str)
     data["episode_title"] = episode_title
-    subject = f"Commodity Frontier News — {date_str}"
-    print(f"\n[{_ts()}] Step 4/5 — Publishing newsletter...")
-    publish(data, date_str, subject)
+
+    lang_subjects = {
+        "en": f"Commodity Frontier News — {date_str}",
+        "nl": f"Commodity Frontier News — {date_str}",
+        "zh": f"大宗商品前沿 — {date_str}",
+    }
+
+    print(f"\n[{_ts()}] Step 4/5 — Publishing newsletter ({', '.join(config.PUBLISH_LANGUAGES)})...")
+    for lang in config.PUBLISH_LANGUAGES:
+        if lang == "en":
+            lang_data = data
+        else:
+            print(f"[{_ts()}] Translating to {lang}...")
+            lang_data = translate_data(data, lang)
+        publish(lang_data, date_str, lang_subjects.get(lang, lang_subjects["en"]), lang=lang)
 
     # Step 5: Generate podcast (controlled by PODCAST_ENABLED)
     print(f"\n[{_ts()}] Step 5/5 — Generating podcast...")

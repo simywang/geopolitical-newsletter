@@ -1,14 +1,20 @@
+const API_KEYS = {
+  en: process.env.BUTTONDOWN_API_KEY,
+  nl: process.env.BUTTONDOWN_API_KEY_NL || process.env.BUTTONDOWN_API_KEY,
+  zh: process.env.BUTTONDOWN_API_KEY_ZH || process.env.BUTTONDOWN_API_KEY,
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email } = req.body;
+  const { email, lang = 'en' } = req.body;
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
   }
 
-  const apiKey = process.env.BUTTONDOWN_API_KEY;
+  const apiKey = API_KEYS[lang] || API_KEYS.en;
   if (!apiKey) {
     return res.status(500).json({ error: 'Server misconfigured' });
   }

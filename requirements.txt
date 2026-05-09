@@ -4,3 +4,4 @@ openai>=1.0
 requests>=2.31
 python-dateutil>=2.9
 pydub>=0.25.1
+Pillow>=10.0

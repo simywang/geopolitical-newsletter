@@ -287,8 +287,16 @@ def generate_episode_image(data: dict) -> bytes | None:
         extra_body={"cfg_scale": 4.0, "steps": 20},
     )
     img_b64 = img_resp.data[0].b64_json
-    print("[podcast] Episode image generated")
-    return base64.b64decode(img_b64)
+    raw_bytes = base64.b64decode(img_b64)
+
+    # Upscale to 1400x1400 (Spotify minimum) and convert to JPEG
+    from PIL import Image
+    img = Image.open(io.BytesIO(raw_bytes)).convert("RGB")
+    img = img.resize((1400, 1400), Image.LANCZOS)
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=90)
+    print("[podcast] Episode image generated (1400x1400 JPEG)")
+    return buf.getvalue()
 
 
 # ---------------------------------------------------------------------------
@@ -354,7 +362,7 @@ def upload_mp3(mp3_bytes: bytes, date_str: str, img_bytes: bytes | None = None) 
     img_url = None
     if img_bytes:
         img_url = _upload_asset(upload_url, headers, release_id, base,
-                                f"cover-{iso_date}.png", "image/png", img_bytes)
+                                f"cover-{iso_date}.jpg", "image/jpeg", img_bytes)
 
     return mp3_url, img_url
 

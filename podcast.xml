@@ -11,6 +11,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Geopolitical Briefing — May 9, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-09</guid>
+      <pubDate>Sat, 09 May 2026 08:24:30 +0000</pubDate>
+      <description>Today's global landscape is dominated by multiple concurrent crises. A breakthrough three-day ceasefire between Russia and Ukraine, brokered by President Trump, begins amid Victory Day commemorations, offering a fragile pause but deep distrust remains. The Iran conflict continues to escalate, with Tehran accusing Washington of 'reckless military adventures' even as Iran imposes a new tax on ships transiting the Strait of Hormuz—a direct challenge to global energy flows. Violence in the West Bank spikes as Israeli settlers torch Palestinian homes, underscoring the unresolved Israeli-Palestinian tension. Political shifts in Europe: Hungary’s new PM takes office after a landslide victory, signaling a potential realignment. Australia expands counterterrorism sanctions against the Balochistan Liberation Army. The US targets Chinese entities over Iran procurement, further straining US-China relations. Meanwhile, the Iran war drives global food prices to a three-year high, amplifying economic pressure worldwide. These events collectively point to a volatile multipolar order where conflict, sanctions, and economic disruption intertwine.</description>
+      <itunes:summary>Today's global landscape is dominated by multiple concurrent crises. A breakthrough three-day ceasefire between Russia and Ukraine, brokered by President Trump, begins amid Victory Day commemorations, offering a fragile pause but deep distrust remains. The Iran conflict continues to escalate, with Tehran accusing Washington of 'reckless military adventures' even as Iran imposes a new tax on ships transiting the Strait of Hormuz—a direct challenge to global energy flows. Violence in the West Bank spikes as Israeli settlers torch Palestinian homes, underscoring the unresolved Israeli-Palestinian tension. Political shifts in Europe: Hungary’s new PM takes office after a landslide victory, signaling a potential realignment. Australia expands counterterrorism sanctions against the Balochistan Liberation Army. The US targets Chinese entities over Iran procurement, further straining US-China relations. Meanwhile, the Iran war drives global food prices to a three-year high, amplifying economic pressure worldwide. These events collectively point to a volatile multipolar order where conflict, sanctions, and economic disruption intertwine.</itunes:summary>
+      <itunes:duration>04:29</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/cover-2026-05-09.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-09/briefing-2026-05-09.mp3" length="4306221" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Geopolitical Briefing — May 8, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-08</guid>
       <pubDate>Fri, 08 May 2026 23:38:09 +0000</pubDate>

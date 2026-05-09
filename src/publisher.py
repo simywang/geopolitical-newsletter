@@ -9,78 +9,126 @@ import config
 # HTML rendering
 # ---------------------------------------------------------------------------
 
+_SPOTIFY_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>'
+
 _CSS = """
-body { font-family: Georgia, 'Times New Roman', serif; background: #f9f7f4; margin: 0; padding: 0; }
+body { font-family: Georgia, 'Times New Roman', serif; background: #e8e4dc; margin: 0; padding: 0; }
 .wrapper { max-width: 680px; margin: 0 auto; background: #ffffff; }
-.header { background: #ffffff; border-bottom: 3px solid #1a1a2e; padding: 32px 40px; }
-.header h1 { margin: 0 0 4px 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; color: #1a1a2e; }
-.header p { margin: 0; font-size: 13px; color: #888888; }
-.overview { background: #f0f4ff; border-left: 4px solid #3a5fc8; padding: 20px 40px; }
-.overview h2 { margin: 0 0 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #3a5fc8; }
-.overview p { margin: 0; font-size: 15px; line-height: 1.7; color: #333; }
-.articles { padding: 0 40px; }
-.article { border-bottom: 1px solid #eeeeee; padding: 28px 0; }
+
+.header { background: #0a0a0a; border-top: 3px solid #755b00; }
+.header-main { padding: 26px 40px 28px; }
+.header-brand { margin: 0 0 10px 0; font-size: 22px; font-weight: 700; letter-spacing: 0.3px; color: #ffffff; font-family: Georgia, serif; }
+.header-meta { font-size: 12px; color: rgba(255,255,255,0.45); font-family: Arial, sans-serif; letter-spacing: 0.5px; margin-bottom: 14px; }
+.header-meta .issue { color: #755b00; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.spotify-header-btn { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; background: #1DB954; padding: 7px 14px; }
+.spotify-header-btn span { font-size: 12px; color: #000000; font-family: Arial, sans-serif; font-weight: 700; letter-spacing: 0.3px; }
+
+.overview { background: #fffbf0; border-left: 4px solid #755b00; padding: 20px 40px; }
+.overview-label { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #755b00; margin: 0 0 8px 0; }
+.overview p { margin: 0; font-size: 15px; line-height: 1.75; color: #2a2a2a; }
+
+.articles { padding: 0 40px; background: #ffffff; }
+.article { border-bottom: 1px solid #e8e4dc; padding: 24px 0; }
 .article:last-child { border-bottom: none; }
-.article-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.article-num { font-size: 12px; font-weight: 700; color: #999; }
-.article-source { font-size: 11px; background: #eef2ff; color: #3a5fc8; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.article h3 { margin: 0 0 12px 0; font-size: 17px; line-height: 1.4; }
-.article h3 a { color: #1a1a2e; text-decoration: none; }
-.article h3 a:hover { text-decoration: underline; }
-.article p { margin: 0 0 10px 0; font-size: 14px; line-height: 1.75; color: #444; }
-.why { background: #fffbf0; border-left: 3px solid #f0a500; padding: 10px 14px; margin-top: 10px; }
-.why strong { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #c07800; display: block; margin-bottom: 4px; }
-.why p { margin: 0; font-size: 13px; color: #555; line-height: 1.6; }
-.footer { background: #f5f5f5; padding: 24px 40px; text-align: center; font-size: 12px; color: #999; line-height: 1.6; }
-.footer a { color: #3a5fc8; text-decoration: none; }
+.article-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.article-num { font-size: 11px; font-weight: 700; color: #755b00; font-family: Arial, sans-serif; }
+.article-source { font-size: 10px; background: #0a0a0a; color: #ffffff; padding: 2px 8px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+.article h3 { margin: 0 0 10px 0; font-size: 17px; line-height: 1.45; }
+.article h3 a { color: #0a0a0a; text-decoration: none; border-bottom: 1px solid transparent; }
+.article h3 a:hover { border-bottom-color: #755b00; }
+.article p { margin: 0 0 10px 0; font-size: 14px; line-height: 1.8; color: #444444; font-family: Arial, sans-serif; }
+.market-impact { background: #fffbf0; border-left: 3px solid #755b00; padding: 10px 14px; margin-top: 10px; }
+.market-impact strong { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #755b00; display: block; margin-bottom: 4px; }
+.market-impact p { margin: 0; font-size: 13px; color: #555; line-height: 1.6; font-family: Arial, sans-serif; }
+
+.podcast-banner { background: #0a0a0a; padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.podcast-banner-label { font-size: 10px; color: rgba(255,255,255,0.4); font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 5px 0; }
+.podcast-banner-title { font-size: 14px; color: #ffffff; margin: 0; font-family: Georgia, serif; line-height: 1.4; }
+.podcast-btn { display: inline-flex; align-items: center; gap: 8px; background: #1DB954; color: #000000; padding: 11px 20px; font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; letter-spacing: 0.3px; flex-shrink: 0; }
+
+.footer { background: #fafaf8; border-top: 1px solid #e8e4dc; padding: 18px 40px; text-align: center; }
+.footer p { margin: 0 0 5px 0; font-size: 11px; font-family: Arial, sans-serif; color: #aaa; line-height: 1.6; }
+.footer a { color: #755b00; text-decoration: none; font-weight: 600; }
+.footer a:hover { text-decoration: underline; }
+.footer-sep { color: #ccc; margin: 0 6px; }
 """
 
 def render_html(data: dict, date_str: str) -> str:
     articles_html = ""
     for i, article in enumerate(data.get("articles", []), 1):
-        why = article.get("why_it_matters", "").strip()
-        why_block = (
-            f'<div class="why"><strong>Why it matters</strong><p>{why}</p></div>'
-            if why else ""
+        impact = article.get("why_it_matters", "").strip()
+        impact_block = (
+            f'<div class="market-impact"><strong>Market Impact</strong><p>{impact}</p></div>'
+            if impact else ""
         )
         articles_html += f"""
         <div class="article">
           <div class="article-meta">
-            <span class="article-num">#{i}</span>
+            <span class="article-num">#{i:02d}</span>
             <span class="article-source">{article.get("source", "")}</span>
           </div>
           <h3><a href="{article.get("url", "#")}">{article.get("title", "")}</a></h3>
           <p>{article.get("summary", "")}</p>
-          {why_block}
+          {impact_block}
         </div>
         """
 
     overview = data.get("overview", "")
+    episode_title = data.get("episode_title", f"Commodity Frontier — {date_str}")
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Geopolitical Briefing — {date_str}</title>
+<title>Commodity Frontier News — {date_str}</title>
 <style>{_CSS}</style>
 </head>
 <body>
 <div class="wrapper">
+
   <div class="header">
-    <h1>🌍 Geopolitical Briefing</h1>
-    <p>{date_str}</p>
+    <div class="header-main">
+      <h1 class="header-brand">Commodity Frontier News</h1>
+      <div class="header-meta">
+        {date_str} &nbsp;·&nbsp; <span class="issue">Daily Briefing</span> &nbsp;·&nbsp; Creator Ximin
+      </div>
+      <a class="spotify-header-btn" href="https://open.spotify.com/show/033dFGpcN8nVTjTjR3uOuE">
+        {_SPOTIFY_SVG}
+        <span>Listen on Spotify</span>
+      </a>
+    </div>
   </div>
+
   <div class="overview">
-    <h2>Today's Overview</h2>
+    <p class="overview-label">Market Intelligence Brief</p>
     <p>{overview}</p>
   </div>
+
   <div class="articles">
     {articles_html}
   </div>
-  <div class="footer">
-    <p>This briefing is generated automatically from public news sources and summarized by AI.<br>
-    It is intended for informational purposes only.</p>
-    <p><a href="https://open.spotify.com/show/033dFGpcN8nVTjTjR3uOuE">Listen on Spotify</a> &nbsp;·&nbsp; <a href="{{{{ unsubscribe_url }}}}">Unsubscribe</a></p>
+
+  <div class="podcast-banner">
+    <div>
+      <p class="podcast-banner-label">Commodity Frontier · Daily Podcast</p>
+      <p class="podcast-banner-title">{episode_title}</p>
+    </div>
+    <a class="podcast-btn" href="https://open.spotify.com/show/033dFGpcN8nVTjTjR3uOuE">
+      {_SPOTIFY_SVG}
+      Open in Spotify
+    </a>
   </div>
+
+  <div class="footer">
+    <p>
+      <a href="https://geopolitical-newsletter-three.vercel.app">Commodity Frontier News</a>
+      <span class="footer-sep">·</span>
+      <a href="https://open.spotify.com/show/033dFGpcN8nVTjTjR3uOuE">Listen on Spotify</a>
+      <span class="footer-sep">·</span>
+      <a href="{{{{ unsubscribe_url }}}}">Unsubscribe</a>
+    </p>
+    <p>Daily market intelligence for commodity traders and supply chain professionals.</p>
+  </div>
+
 </div>
 </body>
 </html>"""

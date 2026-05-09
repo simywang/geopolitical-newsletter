@@ -8,7 +8,7 @@ import config
 from src.fetcher import fetch_all
 from src.summarizer import summarize
 from src.publisher import publish
-from src.podcast import generate_podcast
+from src.podcast import generate_podcast, generate_episode_title
 
 
 def _ts() -> str:
@@ -40,7 +40,9 @@ def main():
 
     # Step 3: Publish newsletter
     date_str = _date_str()
-    subject = f"🌍 Geopolitical Briefing — {date_str}"
+    episode_title = generate_episode_title(data, date_str)
+    data["episode_title"] = episode_title
+    subject = f"Commodity Frontier News — {date_str}"
     print(f"\n[{_ts()}] Step 3/4 — Publishing newsletter...")
     publish(data, date_str, subject)
 

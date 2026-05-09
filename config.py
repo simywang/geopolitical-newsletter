@@ -23,7 +23,7 @@ PODCAST_ENABLED = os.getenv("PODCAST_ENABLED", "false").lower() == "true"
 PODCAST_DRY_RUN = os.getenv("PODCAST_DRY_RUN", "true").lower() == "true"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 GITHUB_REPO = os.getenv("GITHUB_REPO", "simywang/geopolitical-newsletter")
-PODCAST_SITE_URL = os.getenv("PODCAST_SITE_URL", "https://geopolitical-newsletter.vercel.app")
+PODCAST_SITE_URL = os.getenv("PODCAST_SITE_URL", "https://geopolitical-newsletter-three.vercel.app")
 
 # Volcengine TTS — primary (豆包语音合成, V3 HTTP API, API Key only)
 VOLC_API_KEY = os.getenv("VOLC_API_KEY", "")

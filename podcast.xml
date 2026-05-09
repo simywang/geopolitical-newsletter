@@ -2,12 +2,12 @@
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
   <channel>
     <title>Geopolitical Briefing</title>
-    <link>https://geopolitical-newsletter.vercel.app</link>
+    <link>https://geopolitical-newsletter-three.vercel.app</link>
     <language>en-us</language>
     <description>Daily AI-curated geopolitical briefings delivered as a 5-minute two-host podcast every weekday. Hosted by Sarah and James.</description>
     <itunes:author>CODS_</itunes:author>
     <itunes:category text="News" />
-    <itunes:image href="https://geopolitical-newsletter.vercel.app/podcast-cover.jpg" />
+    <itunes:image href="https://geopolitical-newsletter-three.vercel.app/podcast-cover.jpg" />
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>

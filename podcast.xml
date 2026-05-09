@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
   <channel>
-    <title>Geopolitical Briefing</title>
+    <title>Commodity Frontier</title>
     <link>https://geopolitical-newsletter-three.vercel.app</link>
     <language>en-us</language>
-    <description>Daily AI-curated geopolitical briefings delivered as a 5-minute two-host podcast every weekday. Hosted by Sarah and James.</description>
-    <itunes:author>CODS_</itunes:author>
+    <description>Daily intelligence for commodity traders, procurement teams, and supply chain professionals. Each episode tracks the geopolitical developments, weather events, and global market shifts that move prices across coffee, cocoa, crude oil, corn, and agricultural commodities — giving trading desks and risk teams the context they need before markets open.</description>
+    <itunes:author>Ximin</itunes:author>
     <itunes:owner>
-      <itunes:name>CODS_</itunes:name>
+      <itunes:name>Ximin</itunes:name>
       <itunes:email>wangxmsimy@gmail.com</itunes:email>
     </itunes:owner>
     <itunes:category text="News" />

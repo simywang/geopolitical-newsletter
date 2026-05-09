@@ -347,6 +347,49 @@ def upload_mp3(mp3_bytes: bytes, date_str: str, img_bytes: bytes | None = None) 
 
 
 # ---------------------------------------------------------------------------
+# Step 3b: Generate episode title from top story
+# ---------------------------------------------------------------------------
+
+def generate_episode_title(data: dict, date_str: str) -> str:
+    """Pick the single most market-moving headline and return a short episode title.
+    Format: 'May 9 · <impactful headline under 55 chars>'
+    Falls back to 'Commodity Frontier — <date_str>' on any error.
+    """
+    stories = data.get("articles", [])
+    headlines = "\n".join(f"- {a.get('title', '')}" for a in stories[:8] if a.get("title"))
+    short_date = datetime.strptime(date_str, "%Y-%m-%d").strftime("%b %-d")
+    fallback = f"Commodity Frontier — {date_str}"
+
+    if not headlines or not config.ANTHROPIC_API_KEY:
+        return fallback
+
+    prompt = (
+        f"Today's date: {date_str}\n"
+        f"Headlines:\n{headlines}\n\n"
+        "Pick the single most market-moving story for commodity traders (coffee, cocoa, oil, corn, "
+        "agricultural commodities, supply chain, geopolitics). Write a podcast episode title: "
+        f"'{short_date} · <headline>'. "
+        "The part after '· ' must be under 55 characters. Be specific and punchy. "
+        "Return ONLY the title, nothing else."
+    )
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
+        msg = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=60,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        title = msg.content[0].text.strip().strip('"')
+        if len(title) > 80:
+            title = title[:77] + "..."
+        print(f"[podcast] Episode title: {title}")
+        return title
+    except Exception as e:
+        print(f"[podcast] Title generation failed: {e} — using fallback")
+        return fallback
+
+
 # Step 4: Update podcast.xml RSS feed
 # ---------------------------------------------------------------------------
 
@@ -357,6 +400,7 @@ def update_rss_feed(
     overview: str,
     date_str: str,
     img_url: str | None = None,
+    episode_title: str | None = None,
 ) -> None:
     """Prepend a new <item> to podcast.xml using the XML parser (not string ops)."""
     ET.register_namespace("", "")
@@ -371,7 +415,7 @@ def update_rss_feed(
     pub_date = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")
     iso_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     guid = f"briefing-{iso_date}"
-    title = f"Geopolitical Briefing — {date_str}"
+    title = episode_title or f"Commodity Frontier — {date_str}"
 
     item = ET.Element("item")
     ET.SubElement(item, "title").text = title
@@ -430,5 +474,6 @@ def generate_podcast(data: dict, date_str: str) -> None:
 
     img_bytes = generate_episode_image(data)
     mp3_url, img_url = upload_mp3(mp3_bytes, date_str, img_bytes)
-    update_rss_feed(mp3_url, len(mp3_bytes), duration_sec, data.get("overview", ""), date_str, img_url)
+    ep_title = generate_episode_title(data, date_str)
+    update_rss_feed(mp3_url, len(mp3_bytes), duration_sec, data.get("overview", ""), date_str, img_url, ep_title)
     print(f"[podcast] --- Done: {mp3_url} ---")

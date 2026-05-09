@@ -52,11 +52,11 @@ STRICT RULES:
 }}""".format(n=config.ARTICLES_TO_SELECT)
 
 _USER_TMPL = """Here are today's articles (JSON array). Select the {n} most important and return the briefing JSON.
-
+{price_context}
 {articles_json}"""
 
 
-def _build_prompt(articles: list[dict]) -> str:
+def _build_prompt(articles: list[dict], price_context: str = "") -> str:
     slim = [
         {
             "title": a["title"],
@@ -66,8 +66,10 @@ def _build_prompt(articles: list[dict]) -> str:
         }
         for a in articles
     ]
+    ctx = f"\n{price_context}\n" if price_context else ""
     return _USER_TMPL.format(
         n=config.ARTICLES_TO_SELECT,
+        price_context=ctx,
         articles_json=json.dumps(slim, ensure_ascii=True, indent=2),
     )
 
@@ -126,8 +128,8 @@ def _call_openai_compat(prompt: str, base_url: str, api_key: str, model: str) ->
 # Public interface
 # ---------------------------------------------------------------------------
 
-def summarize(articles: list[dict]) -> dict:
-    prompt = _build_prompt(articles)
+def summarize(articles: list[dict], price_context: str = "") -> dict:
+    prompt = _build_prompt(articles, price_context)
     provider = config.AI_MODEL
 
     print(f"[summarizer] Calling {provider} ({_model_name(provider)}) with {len(articles)} articles...")

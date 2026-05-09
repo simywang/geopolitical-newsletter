@@ -9,6 +9,7 @@ from src.fetcher import fetch_all
 from src.summarizer import summarize
 from src.publisher import publish
 from src.podcast import generate_podcast, generate_episode_title
+from src.market_data import fetch_prices, build_price_context
 
 
 def _ts() -> str:
@@ -34,20 +35,29 @@ def main():
     if len(articles) < 5:
         print(f"[{_ts()}] WARNING: Only {len(articles)} articles fetched — briefing may be thin.")
 
-    # Step 2: Summarize
-    print(f"\n[{_ts()}] Step 2/3 — Summarizing with AI...")
-    data = summarize(articles)
+    # Step 2: Fetch market prices
+    print(f"\n[{_ts()}] Step 2/4 — Fetching market prices...")
+    prices = fetch_prices()
+    price_context = build_price_context(prices)
+    if prices:
+        print(f"[{_ts()}] Prices loaded: {', '.join(prices.keys())}")
+    else:
+        print(f"[{_ts()}] WARNING: No prices fetched — continuing without price context")
 
-    # Step 3: Publish newsletter
+    # Step 3: Summarize
+    print(f"\n[{_ts()}] Step 3/4 — Summarizing with AI...")
+    data = summarize(articles, price_context)
+
+    # Step 4: Publish newsletter
     date_str = _date_str()
     episode_title = generate_episode_title(data, date_str)
     data["episode_title"] = episode_title
     subject = f"Commodity Frontier News — {date_str}"
-    print(f"\n[{_ts()}] Step 3/4 — Publishing newsletter...")
+    print(f"\n[{_ts()}] Step 4/5 — Publishing newsletter...")
     publish(data, date_str, subject)
 
-    # Step 4: Generate podcast (controlled by PODCAST_ENABLED)
-    print(f"\n[{_ts()}] Step 4/4 — Generating podcast...")
+    # Step 5: Generate podcast (controlled by PODCAST_ENABLED)
+    print(f"\n[{_ts()}] Step 5/5 — Generating podcast...")
     generate_podcast(data, date_str)
 
     print(f"\n[{_ts()}] === Done ===")

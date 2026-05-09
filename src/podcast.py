@@ -4,6 +4,8 @@ import re
 import json
 import base64
 import uuid
+import tempfile
+import os
 import requests
 from datetime import datetime, timezone
 from pathlib import Path
@@ -213,7 +215,14 @@ def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
                 response_format="mp3",
             )
             mp3_bytes_chunk = response.read()
-        seg = AudioSegment.from_mp3(io.BytesIO(mp3_bytes_chunk))
+        # Write to temp file so ffmpeg can seek (BytesIO pipe causes seek errors)
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
+            tmp.write(mp3_bytes_chunk)
+            tmp_path = tmp.name
+        try:
+            seg = AudioSegment.from_mp3(tmp_path)
+        finally:
+            os.unlink(tmp_path)
         segments.append(seg)
         segments.append(silence_long if speaker == "B" else silence_short)
 

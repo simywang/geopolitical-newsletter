@@ -270,7 +270,10 @@ def generate_episode_image(data: dict) -> bytes | None:
         max_tokens=200,
         temperature=0.8,
     )
-    image_prompt = resp.choices[0].message.content.strip()
+    image_prompt = resp.choices[0].message.content.strip()[:500]
+    if not image_prompt:
+        print("[podcast] Image prompt empty — skipping image")
+        return None
     print(f"[podcast] Image prompt: {image_prompt[:80]}...")
 
     # Step 2: Generate image via StepFun

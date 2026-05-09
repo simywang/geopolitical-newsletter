@@ -232,22 +232,71 @@ def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
 
 
 # ---------------------------------------------------------------------------
-# Step 3: Upload MP3 to GitHub Releases (idempotent)
+# Step 3a: Generate episode cover image via StepFun
 # ---------------------------------------------------------------------------
 
-def upload_mp3(mp3_bytes: bytes, date_str: str) -> str:
-    """Upload MP3 to a dated GitHub Release. Returns public download URL."""
-    iso_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    tag = f"briefing-{iso_date}"
-    filename = f"briefing-{iso_date}.mp3"
-    base = f"https://api.github.com/repos/{config.GITHUB_REPO}"
-    headers = {
-        "Authorization": f"Bearer {config.GITHUB_TOKEN}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
+_IMAGE_PROMPT_SYSTEM = """You are a creative director for a geopolitical news podcast.
+Given today's top news stories, write a vivid image generation prompt for an episode cover.
 
-    # Resolve or create release
+Style: dramatic editorial photography, cinematic, dark and moody, high contrast.
+Format: a single English sentence, max 120 words. No text, no logos, no people's faces.
+Focus on symbolic imagery: maps, flags, architecture, military equipment, diplomatic scenes, cityscapes.
+Make it specific to today's stories — not generic."""
+
+def generate_episode_image(data: dict) -> bytes | None:
+    """Generate a 1024x1024 episode cover image using StepFun. Returns PNG bytes or None."""
+    if not config.STEPFUN_API_KEY:
+        print("[podcast] STEPFUN_API_KEY not set — skipping episode image")
+        return None
+
+    stories = data.get("articles", [])[:3]
+    headlines = "\n".join(f"- {a.get('title', '')}" for a in stories)
+    overview = data.get("overview", "")
+
+    import openai as _openai
+
+    # Step 1: Generate image prompt via AI
+    prompt_client = _openai.OpenAI(
+        base_url="https://api.deepseek.com", api_key=config.DEEPSEEK_API_KEY
+    ) if config.DEEPSEEK_API_KEY else _openai.OpenAI(api_key=config.OPENAI_API_KEY)
+    model = config.DEEPSEEK_MODEL if config.DEEPSEEK_API_KEY else "gpt-4o-mini"
+
+    resp = prompt_client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": _IMAGE_PROMPT_SYSTEM},
+            {"role": "user", "content": f"Overview: {overview}\n\nTop headlines:\n{headlines}"},
+        ],
+        max_tokens=200,
+        temperature=0.8,
+    )
+    image_prompt = resp.choices[0].message.content.strip()
+    print(f"[podcast] Image prompt: {image_prompt[:80]}...")
+
+    # Step 2: Generate image via StepFun
+    img_client = _openai.OpenAI(
+        api_key=config.STEPFUN_API_KEY,
+        base_url="https://api.stepfun.com/v1",
+    )
+    img_resp = img_client.images.generate(
+        model="step-image-edit-2",
+        prompt=image_prompt,
+        response_format="b64_json",
+        size="1024x1024",
+        n=1,
+        extra_body={"cfg_scale": 4.0, "steps": 20},
+    )
+    img_b64 = img_resp.data[0].b64_json
+    print("[podcast] Episode image generated")
+    return base64.b64decode(img_b64)
+
+
+# ---------------------------------------------------------------------------
+# Step 3b: Upload assets to GitHub Releases (idempotent)
+# ---------------------------------------------------------------------------
+
+def _get_or_create_release(base: str, headers: dict, tag: str, date_str: str) -> tuple[int, str]:
+    """Return (release_id, upload_url_base) for the given tag."""
     r = requests.get(f"{base}/releases/tags/{tag}", headers=headers, timeout=30)
     if r.status_code == 200:
         release = r.json()
@@ -256,44 +305,58 @@ def upload_mp3(mp3_bytes: bytes, date_str: str) -> str:
         r = requests.post(
             f"{base}/releases",
             headers=headers,
-            json={
-                "tag_name": tag,
-                "name": f"Briefing {date_str}",
-                "draft": False,
-                "prerelease": False,
-            },
+            json={"tag_name": tag, "name": f"Briefing {date_str}", "draft": False, "prerelease": False},
             timeout=30,
         )
         r.raise_for_status()
         release = r.json()
         print(f"[podcast] Created release: {tag}")
+    return release["id"], release["upload_url"].split("{")[0]
 
-    release_id = release["id"]
-    upload_url = release["upload_url"].split("{")[0]
 
-    # Delete existing asset with same name (idempotent re-run)
-    assets = requests.get(
-        f"{base}/releases/{release_id}/assets", headers=headers, timeout=30
-    ).json()
+def _upload_asset(upload_url: str, headers: dict, release_id: int, base: str,
+                  filename: str, content_type: str, data: bytes) -> str:
+    """Upload a single asset, replacing any existing asset with the same name."""
+    assets = requests.get(f"{base}/releases/{release_id}/assets", headers=headers, timeout=30).json()
     for asset in assets:
         if asset["name"] == filename:
-            requests.delete(
-                f"{base}/releases/assets/{asset['id']}", headers=headers, timeout=30
-            )
+            requests.delete(f"{base}/releases/assets/{asset['id']}", headers=headers, timeout=30)
             print(f"[podcast] Replaced existing asset: {filename}")
 
-    # Upload
-    upload_headers = {**headers, "Content-Type": "audio/mpeg"}
     r = requests.post(
         f"{upload_url}?name={filename}",
-        headers=upload_headers,
-        data=mp3_bytes,
+        headers={**headers, "Content-Type": content_type},
+        data=data,
         timeout=120,
     )
     r.raise_for_status()
     url = r.json()["browser_download_url"]
     print(f"[podcast] Uploaded: {url}")
     return url
+
+
+def upload_mp3(mp3_bytes: bytes, date_str: str, img_bytes: bytes | None = None) -> tuple[str, str | None]:
+    """Upload MP3 (and optional cover image) to GitHub Releases. Returns (mp3_url, img_url)."""
+    iso_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    tag = f"briefing-{iso_date}"
+    base = f"https://api.github.com/repos/{config.GITHUB_REPO}"
+    headers = {
+        "Authorization": f"Bearer {config.GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+    release_id, upload_url = _get_or_create_release(base, headers, tag, date_str)
+
+    mp3_url = _upload_asset(upload_url, headers, release_id, base,
+                            f"briefing-{iso_date}.mp3", "audio/mpeg", mp3_bytes)
+
+    img_url = None
+    if img_bytes:
+        img_url = _upload_asset(upload_url, headers, release_id, base,
+                                f"cover-{iso_date}.png", "image/png", img_bytes)
+
+    return mp3_url, img_url
 
 
 # ---------------------------------------------------------------------------
@@ -306,6 +369,7 @@ def update_rss_feed(
     duration_sec: int,
     overview: str,
     date_str: str,
+    img_url: str | None = None,
 ) -> None:
     """Prepend a new <item> to podcast.xml using the XML parser (not string ops)."""
     ET.register_namespace("", "")
@@ -330,6 +394,8 @@ def update_rss_feed(
     ET.SubElement(item, f"{{{ITUNES_NS}}}summary").text = overview
     ET.SubElement(item, f"{{{ITUNES_NS}}}duration").text = duration_str
     ET.SubElement(item, f"{{{ITUNES_NS}}}episodeType").text = "full"
+    if img_url:
+        ET.SubElement(item, f"{{{ITUNES_NS}}}image", href=img_url)
     ET.SubElement(
         item,
         "enclosure",
@@ -375,6 +441,7 @@ def generate_podcast(data: dict, date_str: str) -> None:
         )
         return
 
-    mp3_url = upload_mp3(mp3_bytes, date_str)
-    update_rss_feed(mp3_url, len(mp3_bytes), duration_sec, data.get("overview", ""), date_str)
+    img_bytes = generate_episode_image(data)
+    mp3_url, img_url = upload_mp3(mp3_bytes, date_str, img_bytes)
+    update_rss_feed(mp3_url, len(mp3_bytes), duration_sec, data.get("overview", ""), date_str, img_url)
     print(f"[podcast] --- Done: {mp3_url} ---")

@@ -6,6 +6,7 @@ DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
 GLM_API_KEY = os.getenv("GLM_API_KEY", "")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 BUTTONDOWN_API_KEY = os.getenv("BUTTONDOWN_API_KEY", "")
+STEPFUN_API_KEY = os.getenv("STEPFUN_API_KEY", "")
 
 # --- AI Provider & Model ---
 AI_MODEL = os.getenv("AI_MODEL", "claude").lower()  # claude | deepseek | glm

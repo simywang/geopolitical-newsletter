@@ -238,9 +238,9 @@ def generate_audio(dialogue: list[dict]) -> tuple[bytes, int]:
 _IMAGE_PROMPT_SYSTEM = """You are a creative director for a geopolitical news podcast.
 Given today's top news stories, write a vivid image generation prompt for an episode cover.
 
-Style: dramatic editorial photography, cinematic, dark and moody, high contrast.
+Style: flat vector illustration, editorial illustration style, bold graphic shapes, limited color palette (3-4 colors), clean lines, modern and sophisticated. Like a New Yorker cover or TIME magazine illustration.
 Format: a single English sentence, max 120 words. No text, no logos, no people's faces.
-Focus on symbolic imagery: maps, flags, architecture, military equipment, diplomatic scenes, cityscapes.
+Focus on symbolic and metaphorical imagery: abstract maps, symbolic objects, architectural silhouettes, geometric patterns representing geopolitical themes.
 Make it specific to today's stories — not generic."""
 
 def generate_episode_image(data: dict) -> bytes | None:

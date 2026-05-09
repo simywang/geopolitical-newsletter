@@ -554,11 +554,24 @@ async function handleSubscribe(event, formId) {
   const note = document.getElementById(noteId);
   const email = form.querySelector('input[type="email"]').value;
   const btn = form.querySelector('button[type="submit"]');
+  const isHero = formId === 'hero-form';
 
   btn.disabled = true;
   btn.textContent = 'Subscribing...';
-  note.style.color = '';
+  note.style.cssText = '';
   note.textContent = '';
+
+  // Visual container: glass card wraps hero form; CTA form is standalone
+  const container = form.closest('.glass-card') || form;
+
+  function showInContainer(headline, body, headlineColor) {
+    container.innerHTML =
+      '<div style="width:100%;text-align:center;padding:12px 8px">' +
+        '<div style="font-size:0.95rem;font-weight:700;color:' + headlineColor + ';margin-bottom:4px">' + headline + '</div>' +
+        '<p style="font-size:0.72rem;color:' + (isHero ? '#666' : 'rgba(255,255,255,0.55)') + ';margin:0">' + body + '</p>' +
+      '</div>';
+    note.textContent = '';
+  }
 
   try {
     const resp = await fetch('/api/subscribe', {
@@ -568,24 +581,28 @@ async function handleSubscribe(event, formId) {
     });
 
     if (resp.status === 201) {
-      form.style.display = 'none';
-      note.style.color = '#2a7a2a';
-      note.textContent = '✅ Check your inbox — a confirmation email is on its way!';
+      showInContainer(
+        'Subscribed',
+        'Check your inbox — a confirmation email is on its way.',
+        isHero ? '#2a7a2a' : '#a8d5a2'
+      );
     } else if (resp.status === 409) {
-      form.style.display = 'none';
-      note.style.color = '#b36b00';
-      note.textContent = '📬 You\'re already subscribed! Check your inbox for our confirmation email.';
+      showInContainer(
+        'Already subscribed',
+        'Check your inbox for our latest issue.',
+        isHero ? '#b36b00' : '#e6c364'
+      );
     } else {
-      note.style.color = '#cc0000';
-      note.textContent = '⚠️ Something went wrong. Please try again.';
+      note.style.cssText = 'color:' + (isHero ? '#cc0000' : '#ff9999') + ';font-size:0.75rem;font-weight:600';
+      note.textContent = 'Something went wrong. Please try again.';
       btn.disabled = false;
-      btn.textContent = formId === 'hero-form' ? 'subscribe free →' : 'Subscribe free →';
+      btn.textContent = isHero ? 'subscribe free →' : 'Subscribe free →';
     }
   } catch (e) {
-    note.style.color = '#cc0000';
-    note.textContent = '⚠️ Network error. Please try again.';
+    note.style.cssText = 'color:' + (isHero ? '#cc0000' : '#ff9999') + ';font-size:0.75rem;font-weight:600';
+    note.textContent = 'Network error. Please try again.';
     btn.disabled = false;
-    btn.textContent = formId === 'hero-form' ? 'subscribe free →' : 'Subscribe free →';
+    btn.textContent = isHero ? 'subscribe free →' : 'Subscribe free →';
   }
 }
 </script>

@@ -70,10 +70,12 @@ def build_dialogue_script(data: dict, date_str: str) -> list[dict]:
             {
                 "title": a.get("title", ""),
                 "summary": a.get("summary", ""),
-                "why_it_matters": a.get("why_it_matters", ""),
+                "market_impact": a.get("market_impact") or a.get("why_it_matters", ""),
+                "second_order_effect": a.get("second_order_effect", ""),
             }
             for a in data.get("articles", [])
         ],
+        "watch_this_week": data.get("watch_this_week", []),
     }
     user_msg = _DIALOGUE_USER.format(
         date=date_str,

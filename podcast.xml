@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 10, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-10</guid>
+      <pubDate>Sun, 10 May 2026 09:07:03 +0000</pubDate>
+      <description>Crude oil markets face the heaviest pressure today as the Iran war and its aftermath dominate headlines, threatening supply through the Strait of Hormuz and complicating efforts to refill the U.S. Strategic Petroleum Reserve. Domestic drillers remain cautious despite political pressure to boost output, while geopolitical risk premiums widen across Middle East-linked energy routes. Meanwhile, signals from the Kremlin of a potential end to the Ukraine conflict could ease Black Sea grain supply fears, though renewed hostilities between Israel and Hezbollah remind traders that ceasefires remain fragile. In Central Asia, Kazakhstan’s power shortages risk derailing energy-intensive data center investments, adding a new demand-side strain on natural gas and electricity markets. Japan’s continued push into hybrid vehicles underscores a structural shift in oil demand, but near-term focus stays on the immediate supply squeeze. Wheat futures may soften if Ukrainian tensions de-escalate, but Brent crude remains bid above $100/bbl as the market prices in extended disruptions from the Iran theater. The combination of military risk, SPR depletion, and cautious upstream spending keeps the energy complex tight.</description>
+      <itunes:summary>Crude oil markets face the heaviest pressure today as the Iran war and its aftermath dominate headlines, threatening supply through the Strait of Hormuz and complicating efforts to refill the U.S. Strategic Petroleum Reserve. Domestic drillers remain cautious despite political pressure to boost output, while geopolitical risk premiums widen across Middle East-linked energy routes. Meanwhile, signals from the Kremlin of a potential end to the Ukraine conflict could ease Black Sea grain supply fears, though renewed hostilities between Israel and Hezbollah remind traders that ceasefires remain fragile. In Central Asia, Kazakhstan’s power shortages risk derailing energy-intensive data center investments, adding a new demand-side strain on natural gas and electricity markets. Japan’s continued push into hybrid vehicles underscores a structural shift in oil demand, but near-term focus stays on the immediate supply squeeze. Wheat futures may soften if Ukrainian tensions de-escalate, but Brent crude remains bid above $100/bbl as the market prices in extended disruptions from the Iran theater. The combination of military risk, SPR depletion, and cautious upstream spending keeps the energy complex tight.</itunes:summary>
+      <itunes:duration>04:16</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-10/cover-2026-05-10.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-10/briefing-2026-05-10.mp3" length="4105773" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 9, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-09</guid>
       <pubDate>Sat, 09 May 2026 18:32:25 +0000</pubDate>

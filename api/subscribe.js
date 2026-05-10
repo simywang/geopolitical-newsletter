@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         'Authorization': `Token ${apiKey}`,
       },
-      body: JSON.stringify({ email_address: email, tags: [`lang:${langTag}`] }),
+      body: JSON.stringify({ email_address: email, tags: [langTag] }),
     });
 
     const data = await bdResp.json();
@@ -38,6 +38,7 @@ export default async function handler(req, res) {
       return res.status(409).json({ status: 'already_subscribed' });
     }
 
+    console.error('[subscribe] Buttondown error:', bdResp.status, JSON.stringify(data));
     return res.status(400).json({ status: 'error', detail: data });
   } catch (e) {
     return res.status(500).json({ error: 'Network error' });

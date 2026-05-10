@@ -488,6 +488,12 @@ def update_rss_feed(
         type="audio/mpeg",
     )
 
+    # Remove existing item with the same guid (prevent duplicates on re-runs)
+    for old_item in channel.findall("item"):
+        old_guid = old_item.findtext("guid")
+        if old_guid == guid:
+            channel.remove(old_item)
+
     # Insert before first existing <item> (newest episode first)
     existing = channel.findall("item")
     if existing:

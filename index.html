@@ -104,12 +104,7 @@
     <div class="glass-card max-w-xl mx-auto p-4 rounded-xl flex flex-col gap-3">
       <form id="hero-form" class="flex flex-col md:flex-row gap-3 w-full" onsubmit="handleSubscribe(event,'hero-form')">
         <input id="hero-email" class="flex-grow bg-white/50 border border-outline-variant rounded-lg px-6 py-3 font-body-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="your@email.com" type="email" name="email" required autocomplete="email">
-        <select id="hero-lang" name="lang" class="bg-white/50 border border-outline-variant rounded-lg px-4 py-3 font-body-md focus:ring-2 focus:ring-primary outline-none text-sm">
-          <option value="en">English</option>
-          <option value="nl">Nederlands</option>
-          <option value="zh">中文</option>
-        </select>
-        <button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded-lg font-ui-button text-ui-button uppercase tracking-wider hover:bg-on-primary-container transition-all">subscribe free →</button>
+<button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded-lg font-ui-button text-ui-button uppercase tracking-wider hover:bg-on-primary-container transition-all">subscribe free →</button>
       </form>
     </div>
     <p id="hero-note" class="mt-4 text-xs text-on-surface-variant/50 font-label-caps">No spam · Free · Unsubscribe anytime</p>
@@ -571,8 +566,7 @@ async function handleSubscribe(event, formId) {
   const noteId = formId === 'hero-form' ? 'hero-note' : 'cta-note';
   const note = document.getElementById(noteId);
   const email = form.querySelector('input[type="email"]').value;
-  const langSelect = form.querySelector('select[name="lang"]');
-  const lang = langSelect ? langSelect.value : 'en';
+  const lang = 'en';
   const btn = form.querySelector('button[type="submit"]');
   const isHero = formId === 'hero-form';
 

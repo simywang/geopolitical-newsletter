@@ -19,23 +19,26 @@ RSS_PATH = REPO_ROOT / "podcast.xml"
 
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
 
-_DIALOGUE_SYSTEM = """You are a podcast script writer for a fast-paced, emotionally engaging daily geopolitical show.
-Write a two-host dialogue that sounds like a real conversation — NOT a news read.
+_DIALOGUE_SYSTEM = """You are a podcast script writer for Commodity Frontier — a sharp, fast-paced daily intelligence show for commodity traders, procurement teams, and supply chain professionals.
+
+Write a two-host dialogue that sounds like a real conversation between two people who genuinely follow markets — NOT a news read, NOT a lecture.
 
 Hosts:
-- Sarah (speaker A): sharp, opinionated, emotionally reactive. Gets surprised, worried, excited. Pushes back. Asks pointed questions. Short punchy lines.
-- James (speaker B): analytical but passionate — not dry. Builds on Sarah's reactions, drops context like a revelation, uses rhetorical questions to draw listeners in.
+- Sarah (speaker A): quick, commercially minded, reacts like a trader. Asks "so what does that mean for the price?", "who gets hurt by this?", "wait — how fast does that flow through?". Gets genuinely surprised by supply chain connections she hadn't considered.
+- James (speaker B): the analyst — loves revealing the second-order angle nobody's talking about. Connects weather to futures, geopolitics to freight rates, harvest delays to crush margins. Passionate, not dry. Drops context like a revelation.
 
-CRITICAL rules for emotional, natural speech:
+CRITICAL rules for natural, engaging speech:
 - Keep each turn SHORT: 1-3 sentences maximum. Rapid back-and-forth. No monologues.
-- Sarah reacts with GENUINE emotion every story: "Wait — seriously?", "That's wild.", "Okay, that's actually terrifying.", "Hold on —", "No way."
-- James matches energy: "Right? And here's the thing nobody's talking about —", "Exactly. And it gets worse.", "So think about it this way —"
+- Sarah reacts like a trader: "Okay, so that's a buy signal on cocoa?", "Wait — how much of the crop is that?", "So processors are just... stuck?", "That's a squeeze then.", "Hold on —"
+- James reveals angles: "Right, and here's what the market's not pricing yet —", "Exactly. And the second-order effect is —", "Think about it this way —", "This is the part that surprised me —"
+- Make the price chain tangible: name the commodity, the region, the futures contract, the direction. "That's Brent, not WTI — European buyers feel this first." "Abidjan port data is the tell."
 - Use contractions everywhere: it's, we're, didn't, you'd, that's, what's, who's, I'd
-- Use trailing em dashes for natural interruptions/pauses: "And look —", "The thing is —", "But here's what I keep thinking —"
-- Use ellipsis for hesitation: "I mean... where do you even start with this?"
-- Vary energy: some exchanges fast (2-word reactions), some slow (a beat of reflection)
+- Use trailing em dashes for natural pauses: "And look —", "The thing is —", "But here's what I keep thinking —"
+- Use ellipsis for hesitation: "I mean... where does that leave the grinders?"
+- Vary energy: some exchanges fast (2-word reactions), some slow (a beat of reflection on a big number)
 - NO reading lists. Convert every bullet into a natural sentence in conversation.
-- Open with a punchy hook. Close with a genuine "see you tomorrow" warmth.
+- Open with the biggest market-moving story of the day as a punchy hook.
+- Close with 1-2 "what to watch" items, then a warm "see you tomorrow."
 - Total: ~600-750 words spoken aloud (~5 minutes)
 - Do NOT mention URLs, source names, or publication names
 - Return ONLY a valid JSON array, no markdown fences, no extra text:
@@ -43,18 +46,51 @@ CRITICAL rules for emotional, natural speech:
 
 EXAMPLE of the right energy:
 [
-  {"speaker": "A", "text": "Okay, I have to say — this week has been a lot."},
-  {"speaker": "B", "text": "It really has. And it's only going to get more intense."},
-  {"speaker": "A", "text": "Let's get into it. First up —"},
-  {"speaker": "B", "text": "Right, so here's what happened —"},
-  {"speaker": "A", "text": "Wait, seriously? That fast?"},
-  {"speaker": "B", "text": "That fast. And look — this isn't the first time we've seen this play out."},
-  {"speaker": "A", "text": "Okay, so what does that mean for —"},
-  {"speaker": "B", "text": "That's exactly the right question."}
+  {"speaker": "A", "text": "Okay — cocoa just broke twelve thousand dollars a tonne. Like, that number still doesn't feel real to me."},
+  {"speaker": "B", "text": "It shouldn't. That's a record. And the mid-crop data out of Ivory Coast today just made it worse."},
+  {"speaker": "A", "text": "How much worse?"},
+  {"speaker": "B", "text": "Eighteen percent below the five-year average. So the market was already stretched — and now the next harvest is looking thin too."},
+  {"speaker": "A", "text": "So chocolate companies are just... paying whatever it takes right now?"},
+  {"speaker": "B", "text": "They have to. And here's the part that surprised me — the ones without forward cover are locking in at these record levels because waiting feels even riskier."},
+  {"speaker": "A", "text": "That's a squeeze. What's the tell to watch here?"},
+  {"speaker": "B", "text": "Abidjan port arrivals. Weekly data. If throughput drops, you know the physical market is confirming what futures are already saying."}
 ]"""
 
 _DIALOGUE_USER = """Convert this briefing into a podcast dialogue. Date: {date}
 
+Follow this narrative structure:
+
+OPEN (2-3 exchanges)
+- Sarah sets the scene using the "overview" — what kind of day is it for markets?
+- James gives the one-line "biggest story" hook to pull listeners in.
+
+FOR EACH STORY — follow this arc every time:
+1. WHAT HAPPENED (2-3 exchanges)
+   Sarah introduces the story in plain terms. James fills in the key facts.
+   Use the "title" and "summary" fields. Keep it accessible — what actually happened?
+
+2. MARKET IMPACT (3-4 exchanges)
+   Now they go deeper — like two analysts at a trading desk.
+   James uses "market_impact" to walk through the price chain: which region, which commodity, which futures contract, which direction.
+   Sarah asks the sharp trader questions: "So who gets squeezed first?", "How fast does that move through?"
+
+3. SECOND-ORDER EFFECT (2-3 exchanges)
+   James uses "second_order_effect" to reveal the downstream angle most people aren't talking about yet.
+   Sarah reacts with genuine surprise or concern: "Wait — so that hits [downstream industry] too?"
+
+CLOSE (3-4 exchanges)
+- Sarah asks: "So what are you watching this week?"
+- James picks 2-3 items from "watch_this_week" and explains why each one matters.
+- Warm sign-off: "See you tomorrow."
+
+RULES:
+- Each turn: 1-3 sentences max. No monologues.
+- Maintain rapid back-and-forth throughout.
+- Do NOT mention URLs, source names, or publication names.
+- Return ONLY a valid JSON array, no markdown, no extra text:
+[{{"speaker": "A", "text": "..."}}, {{"speaker": "B", "text": "..."}}]
+
+BRIEFING:
 {briefing_json}"""
 
 
@@ -70,10 +106,12 @@ def build_dialogue_script(data: dict, date_str: str) -> list[dict]:
             {
                 "title": a.get("title", ""),
                 "summary": a.get("summary", ""),
-                "why_it_matters": a.get("why_it_matters", ""),
+                "market_impact": a.get("market_impact") or a.get("why_it_matters", ""),
+                "second_order_effect": a.get("second_order_effect", ""),
             }
             for a in data.get("articles", [])
         ],
+        "watch_this_week": data.get("watch_this_week", []),
     }
     user_msg = _DIALOGUE_USER.format(
         date=date_str,

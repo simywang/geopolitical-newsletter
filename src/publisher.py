@@ -40,6 +40,19 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #e8e4dc; marg
 .market-impact { background: #fffbf0; border-left: 3px solid #755b00; padding: 10px 14px; margin-top: 10px; }
 .market-impact strong { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #755b00; display: block; margin-bottom: 4px; }
 .market-impact p { margin: 0; font-size: 13px; color: #555; line-height: 1.6; font-family: Arial, sans-serif; }
+.second-order { background: #f5f5f5; border-left: 3px solid #aaaaaa; padding: 10px 14px; margin-top: 8px; }
+.second-order strong { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; display: block; margin-bottom: 4px; }
+.second-order p { margin: 0; font-size: 13px; color: #666; line-height: 1.6; font-family: Arial, sans-serif; }
+.watch-next { background: #fff; border: 1px dashed #ccb97a; padding: 8px 14px; margin-top: 8px; display: flex; align-items: flex-start; gap: 8px; }
+.watch-next-label { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #755b00; white-space: nowrap; margin-top: 2px; }
+.watch-next p { margin: 0; font-size: 13px; color: #555; line-height: 1.6; font-family: Arial, sans-serif; }
+
+.watch-week { background: #fafaf8; border-top: 2px solid #755b00; padding: 24px 40px; }
+.watch-week-label { font-size: 10px; font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #755b00; margin: 0 0 14px 0; }
+.watch-week-list { margin: 0; padding: 0; list-style: none; }
+.watch-week-list li { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #e8e4dc; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.6; color: #444; }
+.watch-week-list li:last-child { border-bottom: none; }
+.watch-week-list li strong { color: #0a0a0a; white-space: nowrap; min-width: 0; }
 
 .podcast-banner { background: #0a0a0a; padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .podcast-banner-label { font-size: 10px; color: rgba(255,255,255,0.4); font-family: Arial, sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 5px 0; }
@@ -56,10 +69,21 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #e8e4dc; marg
 def render_html(data: dict, date_str: str) -> str:
     articles_html = ""
     for i, article in enumerate(data.get("articles", []), 1):
-        impact = article.get("why_it_matters", "").strip()
+        impact = (article.get("market_impact") or article.get("why_it_matters", "")).strip()
+        second = article.get("second_order_effect", "").strip()
+        watch = article.get("watch_next", "").strip()
+
         impact_block = (
             f'<div class="market-impact"><strong>Market Impact</strong><p>{impact}</p></div>'
             if impact else ""
+        )
+        second_block = (
+            f'<div class="second-order"><strong>Second-Order Effect</strong><p>{second}</p></div>'
+            if second else ""
+        )
+        watch_block = (
+            f'<div class="watch-next"><span class="watch-next-label">Watch&nbsp;Next</span><p>{watch}</p></div>'
+            if watch else ""
         )
         articles_html += f"""
         <div class="article">
@@ -70,11 +94,27 @@ def render_html(data: dict, date_str: str) -> str:
           <h3><a href="{article.get("url", "#")}">{article.get("title", "")}</a></h3>
           <p>{article.get("summary", "")}</p>
           {impact_block}
+          {second_block}
+          {watch_block}
         </div>
         """
 
     overview = data.get("overview", "")
     episode_title = data.get("episode_title", f"Commodity Frontier — {date_str}")
+
+    watch_items = data.get("watch_this_week", [])
+    if watch_items:
+        items_html = "".join(
+            f'<li><strong>{w.get("item", "")}</strong> — {w.get("detail", "")}</li>'
+            for w in watch_items
+        )
+        watch_section = f"""
+  <div class="watch-week">
+    <p class="watch-week-label">What to Watch This Week</p>
+    <ul class="watch-week-list">{items_html}</ul>
+  </div>"""
+    else:
+        watch_section = ""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -106,6 +146,8 @@ def render_html(data: dict, date_str: str) -> str:
   <div class="articles">
     {articles_html}
   </div>
+
+  {watch_section}
 
   <div class="podcast-banner">
     <div>
@@ -142,22 +184,23 @@ def _headers() -> dict:
     return {"Authorization": f"Token {config.BUTTONDOWN_API_KEY}"}
 
 
-def _create_draft(html: str, subject: str) -> str:
-    """Create a draft email and return its ID."""
+def _create_draft(html: str, subject: str, lang: str) -> str:
+    payload = {"subject": subject, "body": html, "status": "draft"}
+    if lang != "en":
+        payload["filters"] = [{"type": "tag", "value": f"lang:{lang}"}]
     resp = requests.post(
         f"{config.BUTTONDOWN_API_BASE}/emails",
         headers=_headers(),
-        json={"subject": subject, "body": html, "status": "draft"},
+        json=payload,
         timeout=30,
     )
     resp.raise_for_status()
     email_id = resp.json()["id"]
-    print(f"[publisher] Draft created: id={email_id}")
+    print(f"[publisher] Draft created: id={email_id} (lang={lang})")
     return email_id
 
 
 def _trigger_send(email_id: str) -> None:
-    """Move email to about_to_send, entering Buttondown's send queue."""
     resp = requests.patch(
         f"{config.BUTTONDOWN_API_BASE}/emails/{email_id}",
         headers=_headers(),
@@ -168,19 +211,19 @@ def _trigger_send(email_id: str) -> None:
     print(f"[publisher] Email queued for sending: id={email_id}")
 
 
-def publish(data: dict, date_str: str, subject: str) -> None:
+def publish(data: dict, date_str: str, subject: str, lang: str = "en") -> None:
     html = render_html(data, date_str)
 
     if config.DRY_RUN:
-        print("[publisher] DRY_RUN=true — skipping Buttondown API call")
+        print(f"[publisher] DRY_RUN=true — skipping Buttondown API call [{lang}]")
         print("[publisher] HTML preview (first 500 chars):")
         print(html[:500])
         return
 
-    email_id = _create_draft(html, subject)
+    email_id = _create_draft(html, subject, lang)
 
     if config.SEND_MODE == "send":
         _trigger_send(email_id)
-        print(f"[publisher] Newsletter sent: '{subject}'")
+        print(f"[publisher] Newsletter sent [{lang}]: '{subject}'")
     else:
-        print(f"[publisher] Draft saved (SEND_MODE=draft). Subject: '{subject}'")
+        print(f"[publisher] Draft saved [{lang}] (SEND_MODE=draft). Subject: '{subject}'")

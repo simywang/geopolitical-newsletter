@@ -613,9 +613,8 @@ async function handleSubscribe(event, formId) {
         isHero ? '#b36b00' : '#e6c364'
       );
     } else {
-      const errData = await resp.json().catch(() => ({}));
       note.style.cssText = 'color:' + (isHero ? '#cc0000' : '#ff9999') + ';font-size:0.75rem;font-weight:600';
-      note.textContent = 'Error ' + resp.status + ': ' + JSON.stringify(errData);
+      note.textContent = 'Something went wrong. Please try again.';
       btn.disabled = false;
       btn.textContent = isHero ? 'subscribe free →' : 'Subscribe free →';
     }

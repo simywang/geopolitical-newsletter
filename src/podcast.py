@@ -410,7 +410,7 @@ def generate_episode_title(data: dict, date_str: str) -> str:
         short_date = date_str  # already human-readable e.g. "May 9, 2026"
     fallback = f"Commodity Frontier — {date_str}"
 
-    if not headlines or not config.ANTHROPIC_API_KEY:
+    if not headlines:
         return fallback
 
     prompt = (
@@ -423,14 +423,17 @@ def generate_episode_title(data: dict, date_str: str) -> str:
         "Return ONLY the title, nothing else."
     )
     try:
-        import anthropic
-        client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
-        msg = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+        from openai import OpenAI
+        client = OpenAI(
+            api_key=config.DEEPSEEK_API_KEY,
+            base_url="https://api.deepseek.com",
+        )
+        resp = client.chat.completions.create(
+            model=config.DEEPSEEK_MODEL,
             max_tokens=60,
             messages=[{"role": "user", "content": prompt}],
         )
-        title = msg.content[0].text.strip().strip('"')
+        title = resp.choices[0].message.content.strip().strip('"')
         if len(title) > 80:
             title = title[:77] + "..."
         print(f"[podcast] Episode title: {title}")

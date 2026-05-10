@@ -1,11 +1,9 @@
-const VALID_LANGS = new Set(['en', 'nl', 'zh']);
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, lang = 'en' } = req.body;
+  const { email } = req.body;
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
   }
@@ -15,8 +13,6 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server misconfigured' });
   }
 
-  const langTag = VALID_LANGS.has(lang) ? lang : 'en';
-
   try {
     const bdResp = await fetch('https://api.buttondown.email/v1/subscribers', {
       method: 'POST',
@@ -24,7 +20,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         'Authorization': `Token ${apiKey}`,
       },
-      body: JSON.stringify({ email_address: email, tags: [langTag] }),
+      body: JSON.stringify({ email_address: email }),
     });
 
     const data = await bdResp.json();
@@ -38,7 +34,6 @@ export default async function handler(req, res) {
       return res.status(409).json({ status: 'already_subscribed' });
     }
 
-    console.error('[subscribe] Buttondown error:', bdResp.status, JSON.stringify(data));
     return res.status(400).json({ status: 'error', detail: data });
   } catch (e) {
     return res.status(500).json({ error: 'Network error' });

@@ -30,7 +30,10 @@ export default async function handler(req, res) {
     }
 
     const msg = JSON.stringify(data).toLowerCase();
-    if (bdResp.status === 400 && (msg.includes('already') || msg.includes('duplicate'))) {
+    const isAlready = msg.includes('already') || msg.includes('duplicate') ||
+                      msg.includes('unsubscribed') || msg.includes('removed') ||
+                      msg.includes('blocked') || msg.includes('exists');
+    if (bdResp.status === 400 && isAlready) {
       return res.status(409).json({ status: 'already_subscribed' });
     }
 

@@ -20,13 +20,14 @@ async function findSubscriber(email, apiKey) {
   return results.length > 0 ? results[0] : null;
 }
 
-// Reactivate a previously unsubscribed/removed subscriber
+// Reset a previously unsubscribed/removed subscriber to unactivated,
+// so Buttondown sends them a fresh confirmation email
 async function reactivateSubscriber(subscriberId, apiKey) {
   const headers = await bdHeaders(apiKey);
   const resp = await fetch(`${BD_API}/subscribers/${subscriberId}`, {
     method: 'PATCH',
     headers,
-    body: JSON.stringify({ subscriber_type: 'regular' }),
+    body: JSON.stringify({ subscriber_type: 'unactivated' }),
   });
   return resp;
 }
@@ -73,7 +74,8 @@ export default async function handler(req, res) {
         return res.status(409).json({ status: 'already_subscribed' });
       }
 
-      // Previously unsubscribed or removed — reactivate them
+      // Previously unsubscribed or removed — reset to unactivated so they
+      // receive a fresh confirmation email (same experience as a new subscriber)
       const patchResp = await reactivateSubscriber(existing.id, apiKey);
       if (patchResp.ok) {
         return res.status(201).json({ status: 'subscribed' });

@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 11, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-11</guid>
+      <pubDate>Mon, 11 May 2026 04:05:12 +0000</pubDate>
+      <description>Oil markets remain under acute stress as geopolitical risks in the Middle East and Eastern Europe converge. President Trump's rejection of Iran's peace proposal has all but confirmed the continued closure of the Strait of Hormuz, cutting off roughly 20% of global oil and LNG flows. Brent crude surged past $105/bbl and WTI above $99/bbl in early Asian trade, with the supply shock deepening as strategic reserves are drawn down unsustainably. Meanwhile, Ukrainian drone strikes on Russian refining and export infrastructure in Leningrad Oblast add a second front of supply pressure. Separately, perfectly timed oil bets worth $7 billion have raised insider trading concerns, amplifying market volatility. On the demand side, China's solar manufacturing oversupply points to a potential glut in clean energy equipment but does little to offset the immediate fossil fuel crunch. Traders should brace for further price spikes and watch for any diplomatic shifts or inventory reports.</description>
+      <itunes:summary>Oil markets remain under acute stress as geopolitical risks in the Middle East and Eastern Europe converge. President Trump's rejection of Iran's peace proposal has all but confirmed the continued closure of the Strait of Hormuz, cutting off roughly 20% of global oil and LNG flows. Brent crude surged past $105/bbl and WTI above $99/bbl in early Asian trade, with the supply shock deepening as strategic reserves are drawn down unsustainably. Meanwhile, Ukrainian drone strikes on Russian refining and export infrastructure in Leningrad Oblast add a second front of supply pressure. Separately, perfectly timed oil bets worth $7 billion have raised insider trading concerns, amplifying market volatility. On the demand side, China's solar manufacturing oversupply points to a potential glut in clean energy equipment but does little to offset the immediate fossil fuel crunch. Traders should brace for further price spikes and watch for any diplomatic shifts or inventory reports.</itunes:summary>
+      <itunes:duration>04:09</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-11/cover-2026-05-11.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-11/briefing-2026-05-11.mp3" length="3988269" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 10, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-10</guid>
       <pubDate>Sun, 10 May 2026 09:45:52 +0000</pubDate>

@@ -158,7 +158,23 @@ def build_dialogue_script(data: dict, date_str: str) -> list[dict]:
     raw = raw.strip()
     raw = re.sub(r"^```(?:json)?\s*", "", raw)
     raw = re.sub(r"\s*```$", "", raw)
-    dialogue = json.loads(raw.strip())
+    raw = raw.strip()
+
+    try:
+        dialogue = json.loads(raw)
+    except json.JSONDecodeError:
+        # DeepSeek sometimes uses single quotes — try to fix
+        import ast
+        try:
+            dialogue = ast.literal_eval(raw)
+        except Exception:
+            # Last resort: extract JSON array with regex
+            match = re.search(r'\[.*\]', raw, re.DOTALL)
+            if match:
+                dialogue = json.loads(match.group())
+            else:
+                raise ValueError(f"[podcast] Could not parse dialogue JSON:\n{raw[:300]}")
+
     print(f"[podcast] Dialogue: {len(dialogue)} lines")
     return dialogue
 
@@ -433,7 +449,9 @@ def generate_episode_title(data: dict, date_str: str) -> str:
             max_tokens=60,
             messages=[{"role": "user", "content": prompt}],
         )
-        title = resp.choices[0].message.content.strip().strip('"')
+        title = resp.choices[0].message.content.strip().strip('"').strip()
+        if not title:
+            return fallback
         if len(title) > 80:
             title = title[:77] + "..."
         print(f"[podcast] Episode title: {title}")

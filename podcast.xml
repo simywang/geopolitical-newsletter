@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 12, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-12</guid>
+      <pubDate>Tue, 12 May 2026 10:29:26 +0000</pubDate>
+      <description>Market attention is squarely on the escalating Strait of Hormuz crisis, where fading hopes of a U.S.-Iran ceasefire are tightening crude oil supplies and disrupting petrochemical flows. Brent crude is under upward pressure as the month-long ceasefire appears to collapse, while downstream impacts—including packaging ink shortages and collapsing refining margins in China—signal broad supply chain stress. Cocoa futures are under bearish pressure as abundant inventories trigger long liquidation, countering previous supply fears. Meanwhile, El Niño is already inflicting farm losses in the Philippines, raising risks for tropical soft commodities. China's LNG imports are rebounding from an eight-year low, but the lingering crisis in the Persian Gulf complicates supply logistics. Independent refineries in China are slashing output as margins turn negative, further tightening refined product markets. The overarching theme is one of energy and commodity supply disruption centered on the Persian Gulf, with spillover effects into food supply chains and manufacturing costs.</description>
+      <itunes:summary>Market attention is squarely on the escalating Strait of Hormuz crisis, where fading hopes of a U.S.-Iran ceasefire are tightening crude oil supplies and disrupting petrochemical flows. Brent crude is under upward pressure as the month-long ceasefire appears to collapse, while downstream impacts—including packaging ink shortages and collapsing refining margins in China—signal broad supply chain stress. Cocoa futures are under bearish pressure as abundant inventories trigger long liquidation, countering previous supply fears. Meanwhile, El Niño is already inflicting farm losses in the Philippines, raising risks for tropical soft commodities. China's LNG imports are rebounding from an eight-year low, but the lingering crisis in the Persian Gulf complicates supply logistics. Independent refineries in China are slashing output as margins turn negative, further tightening refined product markets. The overarching theme is one of energy and commodity supply disruption centered on the Persian Gulf, with spillover effects into food supply chains and manufacturing costs.</itunes:summary>
+      <itunes:duration>04:47</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-12/cover-2026-05-12.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-12/briefing-2026-05-12.mp3" length="4596525" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 11, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-11</guid>
       <pubDate>Mon, 11 May 2026 04:05:12 +0000</pubDate>

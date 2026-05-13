@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 13, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-13</guid>
+      <pubDate>Wed, 13 May 2026 04:04:44 +0000</pubDate>
+      <description>The Strait of Hormuz blockade continues to dominate energy markets, with Brent crude holding near $105/bbl despite a collapse in physical crude premiums as refiners bet on a diplomatic resolution. Shipping reroutes via the Cape of Good Hope are adding days to voyages and lifting freight rates across crude, LNG, and LPG. The EIA's new choke point tracking report will heighten scrutiny. Copper is defying recession fears, pressing toward record highs on a relentless supply crunch. Cocoa futures are retreating as a strong dollar and abundant inventories trigger long liquidation. In coffee, a production rebound in Guatemala is countered by EUDR compliance costs pressuring Colombian exports. Meanwhile, a looming El Niño threatens Southeast Asian crops, adding to agricultural supply uncertainty.</description>
+      <itunes:summary>The Strait of Hormuz blockade continues to dominate energy markets, with Brent crude holding near $105/bbl despite a collapse in physical crude premiums as refiners bet on a diplomatic resolution. Shipping reroutes via the Cape of Good Hope are adding days to voyages and lifting freight rates across crude, LNG, and LPG. The EIA's new choke point tracking report will heighten scrutiny. Copper is defying recession fears, pressing toward record highs on a relentless supply crunch. Cocoa futures are retreating as a strong dollar and abundant inventories trigger long liquidation. In coffee, a production rebound in Guatemala is countered by EUDR compliance costs pressuring Colombian exports. Meanwhile, a looming El Niño threatens Southeast Asian crops, adding to agricultural supply uncertainty.</itunes:summary>
+      <itunes:duration>04:46</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-13/cover-2026-05-13.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-13/briefing-2026-05-13.mp3" length="4581549" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 12, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-12</guid>
       <pubDate>Tue, 12 May 2026 10:29:26 +0000</pubDate>

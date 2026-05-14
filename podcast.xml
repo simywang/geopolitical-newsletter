@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 14, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-14</guid>
+      <pubDate>Thu, 14 May 2026 04:05:20 +0000</pubDate>
+      <description>Global commodity markets are under acute pressure from the Strait of Hormuz closure, which has slashed OPEC output by 30%, sent Brent above $100/bbl, and triggered IEA warnings of a supply deficit. Distillate fuel shortages are escalating shipping and manufacturing costs, while LNG cargoes face protracted rerouting and heightened spot premiums. Rare earth supply chains are bracing for a U.S. defense deadline that could ignite a scramble for non-Chinese material. Simultaneously, a widening arc of geopolitical risk—from Trump-Xi trade talks in Beijing to Israeli airstrikes in Lebanon and a collapsed Ukraine ceasefire—adds risk premiums to crude, grains, and energy products. Traders must navigate intersecting supply disruptions, demand downgrades, and policy catalysts this week.</description>
+      <itunes:summary>Global commodity markets are under acute pressure from the Strait of Hormuz closure, which has slashed OPEC output by 30%, sent Brent above $100/bbl, and triggered IEA warnings of a supply deficit. Distillate fuel shortages are escalating shipping and manufacturing costs, while LNG cargoes face protracted rerouting and heightened spot premiums. Rare earth supply chains are bracing for a U.S. defense deadline that could ignite a scramble for non-Chinese material. Simultaneously, a widening arc of geopolitical risk—from Trump-Xi trade talks in Beijing to Israeli airstrikes in Lebanon and a collapsed Ukraine ceasefire—adds risk premiums to crude, grains, and energy products. Traders must navigate intersecting supply disruptions, demand downgrades, and policy catalysts this week.</itunes:summary>
+      <itunes:duration>06:15</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-14/cover-2026-05-14.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-14/briefing-2026-05-14.mp3" length="6003501" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 13, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-13</guid>
       <pubDate>Wed, 13 May 2026 04:04:44 +0000</pubDate>

@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 15, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-15</guid>
+      <pubDate>Fri, 15 May 2026 04:05:32 +0000</pubDate>
+      <description>The energy complex remains under severe stress from the ongoing Strait of Hormuz blockade, with India’s crude oil supply crisis deepening and Taiwan’s LNG-dependent power grid facing imminent risk. While Chinese tankers have resumed transit under Iranian coordination, the broader disruption continues to push Brent crude premiums higher and tighten global LNG spot markets. Meanwhile, the growing probability of a very strong El Niño event is adding a weather risk premium to soft commodities, particularly coffee, as evidenced by El Salvador’s forecast for a 7.5% production decline. The convergence of geopolitical and climatic risks is creating a bullish cocktail across oil, gas, and key agricultural contracts.</description>
+      <itunes:summary>The energy complex remains under severe stress from the ongoing Strait of Hormuz blockade, with India’s crude oil supply crisis deepening and Taiwan’s LNG-dependent power grid facing imminent risk. While Chinese tankers have resumed transit under Iranian coordination, the broader disruption continues to push Brent crude premiums higher and tighten global LNG spot markets. Meanwhile, the growing probability of a very strong El Niño event is adding a weather risk premium to soft commodities, particularly coffee, as evidenced by El Salvador’s forecast for a 7.5% production decline. The convergence of geopolitical and climatic risks is creating a bullish cocktail across oil, gas, and key agricultural contracts.</itunes:summary>
+      <itunes:duration>04:59</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-15/cover-2026-05-15.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-15/briefing-2026-05-15.mp3" length="4801197" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 14, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-14</guid>
       <pubDate>Thu, 14 May 2026 04:05:20 +0000</pubDate>

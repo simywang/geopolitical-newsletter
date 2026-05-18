@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 18, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-18</guid>
+      <pubDate>Mon, 18 May 2026 04:04:55 +0000</pubDate>
+      <description>Commodity markets are under intense pressure today as a confluence of geopolitical and health risks threatens key supply chains. The Middle East crisis deepens with stalled Iran negotiations, drone strikes on UAE and Saudi Arabia, and a blocked Strait of Hormuz, pushing Brent above $111/bbl on fears of a global oil shortage. Meanwhile, a large-scale Ukrainian drone attack inside Russia escalates the war, raising renewed risks to Black Sea grain and sunflower oil exports. In soft commodities, long liquidation in cocoa futures due to abundant ICE inventories is weighing on prices, while the WHO's declaration of an Ebola outbreak in the Democratic Republic of Congo as an international emergency adds a new risk to copper and cobalt supply from the region. For traders, the combination of supply threats and demand uncertainty calls for heightened vigilance on crude, grains, and critical minerals.</description>
+      <itunes:summary>Commodity markets are under intense pressure today as a confluence of geopolitical and health risks threatens key supply chains. The Middle East crisis deepens with stalled Iran negotiations, drone strikes on UAE and Saudi Arabia, and a blocked Strait of Hormuz, pushing Brent above $111/bbl on fears of a global oil shortage. Meanwhile, a large-scale Ukrainian drone attack inside Russia escalates the war, raising renewed risks to Black Sea grain and sunflower oil exports. In soft commodities, long liquidation in cocoa futures due to abundant ICE inventories is weighing on prices, while the WHO's declaration of an Ebola outbreak in the Democratic Republic of Congo as an international emergency adds a new risk to copper and cobalt supply from the region. For traders, the combination of supply threats and demand uncertainty calls for heightened vigilance on crude, grains, and critical minerals.</itunes:summary>
+      <itunes:duration>03:58</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-18/cover-2026-05-18.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-18/briefing-2026-05-18.mp3" length="3821229" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 15, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-15</guid>
       <pubDate>Fri, 15 May 2026 04:05:32 +0000</pubDate>

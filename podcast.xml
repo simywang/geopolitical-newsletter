@@ -15,6 +15,17 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:type>episodic</itunes:type>
     <item>
+      <title>Commodity Frontier — May 19, 2026</title>
+      <guid isPermaLink="false">briefing-2026-05-19</guid>
+      <pubDate>Tue, 19 May 2026 04:04:16 +0000</pubDate>
+      <description>Oil markets remain the primary focus as geopolitical tensions in the Middle East ease slightly after President Trump paused a planned strike on Iran, sending Brent down 2.11% to $109.70/bbl. However, the Strait of Hormuz remains effectively closed, and the risk of renewed military action keeps the supply premium intact. The knock-on effect on fertilizer supply chains is now emerging as the Iran war disrupts Persian Gulf ammonia and urea exports, threatening global grain production costs with a lag. In Africa, an Ebola outbreak in DR Congo threatens copper and cobalt supplies from the Kasai region, while Kenyan fuel protests disrupt East African logistics. Meanwhile, arabica coffee futures have fallen to their lowest since November 2024, likely reflecting a strong Brazilian harvest. Finally, the UAE's potential exit from OPEC adds further uncertainty to crude supply dynamics, especially for Asian refineries in Singapore. Traders should watch for developments in Iran negotiations, DR Congo quarantine measures, and coffee harvest data.</description>
+      <itunes:summary>Oil markets remain the primary focus as geopolitical tensions in the Middle East ease slightly after President Trump paused a planned strike on Iran, sending Brent down 2.11% to $109.70/bbl. However, the Strait of Hormuz remains effectively closed, and the risk of renewed military action keeps the supply premium intact. The knock-on effect on fertilizer supply chains is now emerging as the Iran war disrupts Persian Gulf ammonia and urea exports, threatening global grain production costs with a lag. In Africa, an Ebola outbreak in DR Congo threatens copper and cobalt supplies from the Kasai region, while Kenyan fuel protests disrupt East African logistics. Meanwhile, arabica coffee futures have fallen to their lowest since November 2024, likely reflecting a strong Brazilian harvest. Finally, the UAE's potential exit from OPEC adds further uncertainty to crude supply dynamics, especially for Asian refineries in Singapore. Traders should watch for developments in Iran negotiations, DR Congo quarantine measures, and coffee harvest data.</itunes:summary>
+      <itunes:duration>04:34</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:image href="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-19/cover-2026-05-19.jpg" />
+      <enclosure url="https://github.com/simywang/geopolitical-newsletter/releases/download/briefing-2026-05-19/briefing-2026-05-19.mp3" length="4392237" type="audio/mpeg" />
+    </item>
+    <item>
       <title>Commodity Frontier — May 18, 2026</title>
       <guid isPermaLink="false">briefing-2026-05-18</guid>
       <pubDate>Mon, 18 May 2026 04:04:55 +0000</pubDate>
